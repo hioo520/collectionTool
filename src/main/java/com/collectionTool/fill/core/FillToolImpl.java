@@ -235,18 +235,18 @@ public class FillToolImpl {
         List<String> fieldsMap = new ArrayList<>();
         Class<E> clazz = (Class<E>) e.getClass();
 
-        Map<String, TypeCache> cache = ClassCache.getCache(clazz);
-        if (cache != null) {
-            field = new ArrayList<>(cache.keySet());
-        } else {
-            for (; clazz != Object.class; clazz = (Class<E>) clazz.getSuperclass()) {
-                Field[] fields = clazz.getDeclaredFields();
-                for (int i = 0; i < fields.length; i++) {
-                    field.add(fields[i].getName());
-                    ClassCache.get().add(e.getClass(), fields[i].getName());
-                }
+//        Map<String, TypeCache> cache = ClassCache.getCache(clazz);
+//        if (cache != null) {
+//            field = new ArrayList<>(cache.keySet());
+//        } else {
+        for (; clazz != Object.class; clazz = (Class<E>) clazz.getSuperclass()) {
+            Field[] fields = clazz.getDeclaredFields();
+            for (int i = 0; i < fields.length; i++) {
+                field.add(fields[i].getName());
+                ClassCache.get().add(e.getClass(), fields[i].getName());
             }
         }
+//        }
         int i = 0;
         Integer[] sort = config.getSortStyleEnum().getSort();
         if (StrUtils.isNNoEE(config) && StrUtils.isNNoEE(sort) && sort.length != 0) {

@@ -34,7 +34,6 @@ public class FillFactoryTest {
 
     /**
      * tips HttpServletRequest-->MAP
-     * 方法二 保存空值 并且舍弃str特定字段
      *
      * @author:hihuzi 2018/7/23 15:05
      */
@@ -133,9 +132,9 @@ public class FillFactoryTest {
         request.setParameter("doubleMin", "1.94");
         TestBean map1 = null;
         long start = System.currentTimeMillis();
-//        for (int i = 0; i < 10000000; i++) {
-            map1 = FillFactory.batch().fillEntity(request, new TestBean());
-//        }
+        for (int i = 0; i < 10000000; i++) {
+        map1 = FillFactory.batch().fillEntity(request, new TestBean());
+        }
         long end = System.currentTimeMillis();
         System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
 
@@ -162,6 +161,12 @@ public class FillFactoryTest {
         System.out.println(Arrays.asList(map).toString());
     }
 
+    /**
+     * tips Map--> obj
+     * tips 针对不同格式针对的处理
+     *
+     * @author:hihuzi 2018/6/14 14:50
+     */
     @Test
     public void fill_entity_map() throws Exception {
 
@@ -188,7 +193,6 @@ public class FillFactoryTest {
         /**tips 从对象中取出map*/
         Map map2 = FillFactory.batch().fillMap(bean, map1);
         System.out.println(bean.toString());
-        System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         map2.forEach((o, o2) -> System.out.print(o + " " + o2));
     }
 
@@ -277,13 +281,13 @@ public class FillFactoryTest {
         System.out.println(bean);
         Map map1 = new HashMap();
         /**tips 从对象中取出map*/
-         map1 = FillFactory.batch().fillMap(bean, map1);
-        map1.forEach((o, o2) -> System.out.print(o + "-->" + o2+" "));
+        map1 = FillFactory.batch().fillMap(bean, map1);
+        map1.forEach((o, o2) -> System.out.print(o + "-->" + o2 + " "));
         System.out.println("");
         System.out.println("fillMap从对象中取出不为空的属性 并且时间自定义");
         map1 = FillFactory.batch().fillMap(bean, map1,
                 new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
-        map1.forEach((o, o2) -> System.out.print(o + "-->" + o2+" "));
+        map1.forEach((o, o2) -> System.out.print(o + "-->" + o2 + " "));
     }
 
     /**
