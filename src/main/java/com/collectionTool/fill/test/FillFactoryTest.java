@@ -4,6 +4,7 @@ package com.collectionTool.fill.test;
 import com.collectionTool.cache.ClassCache;
 import com.collectionTool.cache.TypeCache;
 import com.collectionTool.fill.FillFactory;
+import com.collectionTool.fill.constant.StuffBase;
 import com.collectionTool.fill.constant.StuffConfig;
 import com.collectionTool.fill.core.FillTool;
 import org.junit.Before;
@@ -28,28 +29,7 @@ public class FillFactoryTest {
 
         request = new MockHttpServletRequest();
         request.setCharacterEncoding("utf-8");
-        fillTool = (FillFactory) new FillTool();
-    }
-
-    /**
-     * tips HttpServletRequest-->MAP
-     * 默认 方法一 保存空值
-     *
-     * @author:hihuzi 2018/6/14 14:51
-     */
-    @Test
-    public void requestFillMap() {
-
-        TestBean bean = new TestBean();
-        request.setParameter("integerMax", "123456");
-        request.setParameter("stringMax", "你好师姐!!!");
-        request.setParameter("longMax", "12.3");
-        request.setParameter("intMin", "   ");
-        request.setParameter("doubleMin", "");
-        Map map = FillFactory.batch().fill(request);
-        System.out.println(Arrays.asList(map).toString());
-
-
+        fillTool = new FillTool();
     }
 
     /**
@@ -59,7 +39,7 @@ public class FillFactoryTest {
      * @author:hihuzi 2018/7/23 15:05
      */
     @Test
-    public void requestFillMap1() {
+    public void fill() {
 
         request.setParameter("integerMax", "123456");
         request.setParameter("stringMax", "你好师姐!!!");
@@ -67,55 +47,35 @@ public class FillFactoryTest {
         request.setParameter("intMin", "   ");
         request.setParameter("intMin", "   ");
         request.setParameter("doubleMin", "");
+        /**tips 填充到request---->Map*/
         Map map = FillFactory.batch().fill(request);
-        Map map0 = FillFactory.batch().fill(request, "stringMax");
-        map.forEach((o, o2) -> System.out.print(o + "=" + o2));
-        System.out.println("");
-        map0.forEach((o, o2) -> System.out.print(o + "=" + o2));
-    }
-
-    /**
-     * tips HttpServletRequest-->MAP
-     * 方法三 是否舍弃空值 并且舍弃str特定字段(默认舍弃空值)
-     * 方法四 是否舍弃空值 并且舍弃str特定字段(默认保存空值)
-     *
-     * @author:hihuzi 2018/7/23 15:05
-     */
-    @Test
-    public void requestFillMap2() {
-
-        request.setParameter("integerMax", "123456");
-        request.setParameter("stringMax", "你好师姐!!!");
-        request.setParameter("longMax", "12.3");
-        request.setParameter("intMin", "   ");
-        request.setParameter("doubleMin", "");
-        // tips 舍弃"" 或者 "    " 空值
-        Map map1 = FillFactory.batch().fill(request, new StuffConfig(StuffConfig.SaveStyleEnum.DEFAULT));
-        Map map = FillFactory.batch().fill(request, new StuffConfig(StuffConfig.SaveStyleEnum.REMOVE_NULL_EMPTY), "stringMax");
-        /**tips 舍弃掉doubleMin*/
-        Map map0 = FillFactory.batch().fill(request, "doubleMin");
-        Map map2 = FillFactory.batch().fill(request);
-        System.out.println("");
-        System.out.println("舍弃\"\" 或者 \"    \" 空值");
-        map1.forEach((o, o2) -> System.out.print(o + "=" + o2 + " "));
-        System.out.println("");
-        System.out.println("舍弃\"\" 或者 \"    \" 空值并且去掉stringMax");
         map.forEach((o, o2) -> System.out.print(o + "=" + o2 + " "));
         System.out.println("");
-        System.out.println("舍弃掉doubleMin");
+        /**tips 舍弃掉特定字段*/
+        Map map0 = FillFactory.batch().fill(request, "stringMax");
         map0.forEach((o, o2) -> System.out.print(o + "=" + o2 + " "));
         System.out.println("");
-        System.out.println("全部显示");
+        /**tips 舍弃掉空值*/
+        Map map1 = FillFactory.batch().fill(request, new StuffConfig(StuffConfig.SaveStyleEnum.REMOVE_NULL_EMPTY));
+        map1.forEach((o, o2) -> System.out.print(o + "=" + o2 + " "));
+        System.out.println("");
+        /**tips 默认属性不舍弃空值*/
+        Map map2 = FillFactory.batch().fill(request, new StuffConfig(StuffConfig.SaveStyleEnum.DEFAULT));
         map2.forEach((o, o2) -> System.out.print(o + "=" + o2 + " "));
+        System.out.println("");
+        /**tips 舍弃空值 并且去掉特定字段*/
+        Map map3 = FillFactory.batch().fill(request, new StuffConfig(StuffConfig.SaveStyleEnum.REMOVE_NULL_EMPTY), "stringMax");
+        map3.forEach((o, o2) -> System.out.print(o + "=" + o2 + " "));
     }
 
     /**
      * tips HttpServletRequest--> obj
+     * tips 对于空字符串处理
      *
      * @author:hihuzi 2018/6/14 14:50
      */
     @Test
-    public void fillEntity0() throws Exception {
+    public void fill_entity_request() throws Exception {
 
         request.setParameter("booleanMax", "");
         request.setParameter("byteMax", "");
@@ -124,7 +84,7 @@ public class FillFactoryTest {
         request.setParameter("longMax", "");
         request.setParameter("floatMax", "");
         request.setParameter("doubleMax", "");
-        request.setParameter("stringMax", "");
+        request.setParameter("stringMax", "           ");
         request.setParameter("bigdecimalMax", "");
         request.setParameter("dateMax", "");
         request.setParameter("booleanMin", "");
@@ -141,8 +101,8 @@ public class FillFactoryTest {
             map1 = FillFactory.batch().fillEntity(request, new TestBean());
         }
         long end = System.currentTimeMillis();
-        System.err.println("一百万 耗时" + (end - start) / 1000);
-        System.out.println(Arrays.asList(map1).toString());
+        System.err.println("------>一百万 耗时" + (end - start) / 1000 + "秒<------");
+        System.out.println(Arrays.asList(map1));
     }
 
     /**
@@ -151,7 +111,7 @@ public class FillFactoryTest {
      * @author:hihuzi 2018/6/14 14:50
      */
     @Test
-    public void fillEntity2() throws Exception {
+    public void fill_entity_request1() throws Exception {
 
         request.setParameter("booleanMax", "true");
         request.setParameter("byteMax", "1");
@@ -174,17 +134,36 @@ public class FillFactoryTest {
         TestBean map1 = null;
         long start = System.currentTimeMillis();
 //        for (int i = 0; i < 10000000; i++) {
-
-        map1 = FillFactory.batch().fillEntity(request, new TestBean());
+            map1 = FillFactory.batch().fillEntity(request, new TestBean());
 //        }
         long end = System.currentTimeMillis();
-        System.err.println("一千万 耗时" + (end - start) / 1000);
+        System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
 
         System.out.println(Arrays.asList(map1).toString());
     }
 
+    /**
+     * tips HttpServletRequest--> obj
+     * tips 针对不同格式针对的处理
+     *
+     * @author:hihuzi 2018/6/14 14:50
+     */
     @Test
-    public void fillEntity1() throws Exception {
+    public void fill_entity_request2() throws Exception {
+        request.setParameter("stringMax", "你好师姐!!!");
+        request.setParameter("dateMax", "2012-12-12");
+        TestBean map = null;
+        map = FillFactory.batch().fillEntity(request, new TestBean(),
+                new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")));
+        System.out.println(Arrays.asList(map).toString());
+        request.setParameter("dateMax", "2012-12-12 22:21:20");
+        map = FillFactory.batch().fillEntity(request, new TestBean(),
+                new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
+        System.out.println(Arrays.asList(map).toString());
+    }
+
+    @Test
+    public void fill_entity_map() throws Exception {
 
         Map map = new HashMap(20);
         map.put("booleanMax", "true");
@@ -214,12 +193,42 @@ public class FillFactoryTest {
     }
 
     /**
+     * tips 针对不同时间格式处理不同时间配置(错误的属性直接丢掉)
+     */
+    @Test
+    public void fill_entity_map0() throws Exception {
+
+        Map map = new HashMap(20);
+        map.put("stringMax", "你好师姐!!!");
+        map.put("dateMax", "2012-12-12");
+        /**tips 错误的属性直接丢掉*/
+        map.put("dat32eMax", "2012-12-12");
+
+        TestBean bean = FillFactory.batch().fillEntity(map, new TestBean());
+        System.out.println(bean.toString() + "hashCode" + bean.hashCode());
+
+        map.put("dateMax", "2012-12-12 24:23:22");
+        TestBean bean0 = FillFactory.batch().fillEntity(map, new TestBean(),
+                new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
+        System.out.println(bean0.toString() + "hashCode" + bean.hashCode());
+
+
+        Map map1 = new HashMap();
+        /**tips 从对象中取出map*/
+        Map map2 = FillFactory.batch().fillMap(bean0, map1,
+                new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")));
+        System.out.println("fillMap从对象中取出不为空的属性");
+        map2.forEach((o, o2) -> System.out.print(o + "-->" + o2));
+    }
+
+    /**
      * tips List<Map> --> E --> List<E>
+     * tips 针对不同格式对应处理
      *
      * @author:hihuzi 2018/6/26 14:51
      */
     @Test
-    public void fillEntity() throws Exception {
+    public void fill_entity_list() throws Exception {
 
         List list = new ArrayList();
         Map map = new HashMap(20);
@@ -229,7 +238,6 @@ public class FillFactoryTest {
         map.put("integerMax", "123456");
         map.put("longMax", "132542435");
         map.put("floatMax", "12.99");
-        ;
         map.put("doubleMax", "3.55");
         map.put("stringMax", "你好师姐!!!");
         map.put("bigdecimalMax", "9825485.6");
@@ -244,7 +252,12 @@ public class FillFactoryTest {
         map.put("doubleMin", "1.94");
         list.add(map);
         List<TestBean> bean = FillFactory.batch().fillEntity(list, new TestBean());
+        /**tips 特殊的时间格式处理*/
+        map.put("dateMax", "2012!12@12#12-12:12");
+        List<TestBean> bean0 = FillFactory.batch().fillEntity(list, new TestBean(),
+                new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss")));
         System.out.println(bean.get(0).toString());
+        System.out.println(bean0.get(0).toString());
     }
 
     /**
@@ -254,29 +267,23 @@ public class FillFactoryTest {
      */
 
     @Test
-    public void listToEntity() throws Exception {
+    public void fill_map() throws Exception {
 
-        List list = new ArrayList();
-        list.add("true");
-        list.add("1");
-        list.add("129");
-        list.add("123456");
-        list.add("132542435");
-        list.add("12.99");
-        list.add("3.55");
-        list.add("你好师姐!!!");
-        list.add("9825485.6");
-        list.add("2012-12-12");
-        list.add("true");
-        list.add("a");
-        list.add("2");
-        list.add("5");
-        list.add("55");
-        list.add("555");
-        list.add("0.9");
-        list.add("1.94");
-        List<TestBean> bean = FillFactory.batch().listToEntity(list, new TestBean());
-        System.out.println(bean.get(0).toString());
+        Map map = new HashMap(20);
+        map.put("stringMax", "你好师姐!!!");
+        map.put("dateMax", "2012-12-12");
+        map.put("booleanMin", "");
+        TestBean bean = FillFactory.batch().fillEntity(map, new TestBean());
+        System.out.println(bean);
+        Map map1 = new HashMap();
+        /**tips 从对象中取出map*/
+         map1 = FillFactory.batch().fillMap(bean, map1);
+        map1.forEach((o, o2) -> System.out.print(o + "-->" + o2+" "));
+        System.out.println("");
+        System.out.println("fillMap从对象中取出不为空的属性 并且时间自定义");
+        map1 = FillFactory.batch().fillMap(bean, map1,
+                new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
+        map1.forEach((o, o2) -> System.out.print(o + "-->" + o2+" "));
     }
 
     /**
@@ -289,7 +296,7 @@ public class FillFactoryTest {
      */
 
     @Test
-    public void fillMap() throws Exception {
+    public void list_to_entity() throws Exception {
 
         List list = new ArrayList();
         list.add("true");
@@ -312,8 +319,6 @@ public class FillFactoryTest {
         list.add("1.94");
         List<TestBean> bean = FillFactory.batch().listToEntity(list, new TestBean());
         System.out.println(bean.get(0).toString());
-        Map map = FillFactory.batch().fillMap(bean.get(0), new HashMap(1));
-        System.out.println(map.toString());
         Map<String, Map<String, TypeCache>> classCache = ClassCache.cache;
         classCache.forEach((s, typeCache) -> System.err.println(typeCache.size()));
     }

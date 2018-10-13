@@ -1,11 +1,41 @@
 package com.collectionTool.fill.constant;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * tips 控制常量
  *
  * @author:hihuzi 2018/9/23 15:17
  */
 public interface StuffBase {
+    /**
+     * tips: 时间规则
+     *
+     * @notice: 通用枚举
+     * @author: hihuzi 2018/9/29 14:54
+     **/
+    enum DateStyleEnum {
+        /**
+         * 默认时间风格规则
+         */
+        DEFAULT("");
+        private String formartStyle;
+
+        DateStyleEnum(String formartStyle) {
+            this.formartStyle = formartStyle;
+        }
+
+        public SimpleDateFormat getFormartStyle() {
+            return new SimpleDateFormat(DateStyleEnum.DEFAULT.formartStyle);
+        }
+
+        public DateStyleEnum setFormartStyle(String formartStyle) {
+            this.formartStyle = formartStyle;
+            return this;
+        }
+    }
+
     /**
      * tips: 排序规则
      *

@@ -3,7 +3,9 @@ package com.collectionTool.pick.core;
 
 import com.collectionTool.cache.ClassCache;
 import com.collectionTool.cache.TypeCache;
+import com.collectionTool.fill.common.ValueHandleCache;
 import com.collectionTool.pick.constant.PickConfig;
+import com.collectionTool.utils.Constants;
 import com.collectionTool.utils.StrUtils;
 
 import java.lang.reflect.Method;
@@ -70,11 +72,13 @@ public class PickToolImpl {
                     Method method = cache.getMethodGet();
                     method.setAccessible(true);
                     invoke = method.invoke(t);
+                    invoke = processingTimeType(cache.getParamtertype(), config, invoke);
                 } else {
                     try {
                         Method method = clazz.getMethod(name);
                         method.setAccessible(true);
                         invoke = method.invoke(t);
+                        invoke = processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
                         ClassCache.get().add(t.getClass(), property);
                     } catch (Exception e) {
                         System.out.println("对应的实体里面没有方法: " + name);
@@ -159,5 +163,18 @@ public class PickToolImpl {
                 break;
         }
         return null;
+    }
+
+    /**
+     * tips 只针对时间类型转化
+     *
+     * @notice : 0 是预留数据类型 表示没有匹配
+     * @author: hihuzi 2018/10/10 19:30
+     */
+    public static Object processingTimeType(Class<?> type, PickConfig config, Object obj) {
+        if (Constants.TypeEnum.DATE.getValue().equals(type.getSimpleName())) {
+            return config.getDateStyleEnum().getFormartStyle().format(obj);
+        }
+        return obj;
     }
 }

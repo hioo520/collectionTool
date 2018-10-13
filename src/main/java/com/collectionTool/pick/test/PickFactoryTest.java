@@ -29,34 +29,27 @@ public class PickFactoryTest {
             userPost.setAddress("    ");
             list.add(userPost);
         }
-        // tips 默认转态
+         /**tips 默认转态*/
         List<Map> batch0 = PickFactory.batch().pick(list, "id", "name", "email", "address");
         batch0.forEach(map -> System.out.println(map));
-        // tips 和 默认一样 首字母大写
+         /**tips 和 默认一样 首字母大写*/
         List<Map> batch = PickFactory.batch().pick(list, new PickConfig(
-                PickBase.ReturnStyleEnum.LIST_MAP,
-                PickBase.ReturnNameEnum.INITIAL_CAPITAL,
-                PickBase.SaveStyleEnum.DEFAULT), "id", "name", "email", "date");
+                PickBase.ReturnNameEnum.INITIAL_CAPITAL), "id", "name", "email", "date");
         batch.forEach(map -> System.out.println(map));
-        // tips 空值丢掉(null 或者 "" "  ") 并且全部大写
+/**         tips 空值丢掉(null 或者 "" "  ") 并且全部大写*/
 
         List<Map> batch3 = PickFactory.batch().pick(list, new PickConfig(
-                PickBase.ReturnStyleEnum.LIST_MAP,
                 PickBase.ReturnNameEnum.UPPER_CASE,
                 PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "date");
         batch3.forEach(map -> System.out.println(map));
-        // tips 空值不丢掉 并且全部小写
+         /**tips 空值不丢掉 并且全部小写*/
         List<Map> batch2 = PickFactory.batch().pick(list, new PickConfig(
-                PickBase.ReturnStyleEnum.LIST_MAP,
-                PickBase.ReturnNameEnum.LOWER_CASE,
-                PickBase.SaveStyleEnum.DEFAULT), "id", "name", "email", "date", "address");
+                PickBase.ReturnNameEnum.LOWER_CASE), "id", "name", "email", "date", "address");
         batch2.forEach(map -> System.out.println(map));
 
-        // tips 空值不丢掉 重新命名Key
+         /**tips 空值不丢掉 重新命名Key*/
         List<Map> batch4 = PickFactory.batch().pick(list, new PickConfig(
-                PickBase.ReturnStyleEnum.LIST_MAP,
-                PickBase.ReturnNameEnum.CUSTOM_SUFFIX.setKey("我就是我!!"),
-                PickBase.SaveStyleEnum.DEFAULT), "id", "name", "email", "date", "address");
+                PickBase.ReturnNameEnum.CUSTOM_SUFFIX.setKey("我就是我!!")), "id", "name", "email", "date", "address");
         batch4.forEach(map -> System.out.println(map));
 
     }
@@ -78,13 +71,11 @@ public class PickFactoryTest {
             userPost.setAddress("    ");
             list.add(userPost);
         }
-        // tips 默认设置
+         /**tips 默认设置*/
         Set batch1 = PickFactory.batch().pickValue(list, "id", "name", "email");
         System.out.println(Arrays.asList(batch1).toString());
-        // tips (去掉 NUll)
+         /**tips (去掉 NUll)*/
         Set batch = PickFactory.batch().pickValue(list, new PickConfig(
-                PickBase.ReturnStyleEnum.SET,
-                PickBase.ReturnNameEnum.DEFAULT,
                 PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "address");
         System.out.println(Arrays.asList(batch).toString());
 
@@ -103,19 +94,15 @@ public class PickFactoryTest {
         bean.setId(UUID.randomUUID().toString());
         bean.setEmail(null);
         bean.setAddress(UUID.randomUUID().toString().substring(32) + "@163.com");
-        // tips 默认 保留 空值
+         /**tips 默认 保留 空值*/
         Map batch0 = PickFactory.batch().pickValue(bean, "id", "name", "email", "date", "address");
         System.out.println(batch0.toString());
-        // tips 保留 空值
+         /**tips 保留 空值*/
         Map batch1 = PickFactory.batch().pickValue(bean, new PickConfig(
-                PickBase.ReturnStyleEnum.MAP,
-                PickBase.ReturnNameEnum.DEFAULT,
-                PickBase.SaveStyleEnum.DEFAULT), "id", "name", "email", "date", "address");
+                PickBase.ReturnNameEnum.DEFAULT), "id", "name", "email", "date", "address");
         System.out.println(batch1.toString());
-        // tips 舍弃 空值
+         /**tips 舍弃 空值*/
         Map batch = PickFactory.batch().pickValue(bean, new PickConfig(
-                PickBase.ReturnStyleEnum.MAP,
-                PickBase.ReturnNameEnum.DEFAULT,
                 PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "date", "address");
         System.out.println(batch.toString());
         Map<String, Map<String, TypeCache>> classCache = ClassCache.cache;

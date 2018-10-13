@@ -1,6 +1,6 @@
-package com.collectionTool.cache;
+package com.collectionTool.fill.common;
 
-import com.collectionTool.utils.DateUtils;
+import com.collectionTool.fill.constant.StuffConfig;
 import com.collectionTool.utils.StrUtils;
 
 import java.lang.reflect.Method;
@@ -13,7 +13,6 @@ import java.math.BigDecimal;
  * @author: hihuzi 2018/9/24 20:57
  */
 public class ValueHandleCache {
-
     /**
      * tips 注入对对象注入值
      *
@@ -25,7 +24,7 @@ public class ValueHandleCache {
      * @return:
      * @author: hihuzi 2018/7/19 10:26
      */
-    public static <E> void handle(E e, Method method, String value, TypeEnum typeEnum) throws Exception {
+    public static <E> void invokeValueCache(E e, Method method, String value, TypeEnum typeEnum, StuffConfig config) throws Exception {
 
         if (StrUtils.isNNoE(value)) {
             switch (typeEnum) {
@@ -33,11 +32,7 @@ public class ValueHandleCache {
                     method.invoke(e, String.valueOf(value));
                     break;
                 case DATE:
-                    if (DateUtils.isDate(value)) {
-                        method.invoke(e, DateUtils.parse(value));
-                    } else {
-                        System.err.println("日期处理错误[ YYYY-MM-DD ] 不能处理 [ " + value + " ] 请转换");
-                    }
+                    method.invoke(e, config.getDateStyleEnum().getFormartStyle().parse(value));
                     break;
                 case CHAR:
                     method.invoke(e, value.toCharArray()[0]);
@@ -123,6 +118,133 @@ public class ValueHandleCache {
                     break;
             }
         }
+    }
+
+    /**
+     * tips 注入对对象注入值
+     *
+     * @parameter: E e
+     * @parameter: Method method
+     * @parameter: String value
+     * @parameter: String fieldType
+     * @parameter: StuffConfig config
+     * @return:
+     * @author: hihuzi 2018/7/19 10:26
+     */
+    public static <E> void invokeValue(E e, Method method, String value, String fieldType, StuffConfig config) throws Exception {
+
+        TypeEnum configs = null;
+        for (TypeEnum typeEnum : TypeEnum.values()) {
+            if (typeEnum.getValue().equals(fieldType)) {
+                configs = typeEnum;
+            }
+        }
+        if (StrUtils.isNNoE(value)) {
+            switch (configs) {
+                case STRING:
+                    method.invoke(e, value);
+                    break;
+                case DATE:
+                    method.invoke(e, config.getDateStyleEnum().getFormartStyle().parse(value));
+                    break;
+                case CHAR:
+                    method.invoke(e, value.toCharArray()[0]);
+                    break;
+                case BYTE:
+                    method.invoke(e, Byte.valueOf(value));
+                    break;
+                case BYTE_MIN:
+                    method.invoke(e, Byte.valueOf(value));
+                    break;
+                case LONG:
+                    method.invoke(e, Long.parseLong(value));
+                    break;
+                case LONG_MIN:
+                    method.invoke(e, Long.parseLong(value));
+                    break;
+                case SHORT:
+                    method.invoke(e, Short.parseShort(value));
+                    break;
+                case SHORT_MIN:
+                    method.invoke(e, Short.parseShort(value));
+                    break;
+                case FLOAT:
+                    method.invoke(e, Float.parseFloat(value));
+                    break;
+                case FLOAT_MIN:
+                    method.invoke(e, Float.parseFloat(value));
+                    break;
+                case DOUBLE:
+                    method.invoke(e, Double.parseDouble(value));
+                    break;
+                case DOUBLE_MIN:
+                    method.invoke(e, Double.parseDouble(value));
+                    break;
+                case INTEGER:
+                    method.invoke(e, Integer.parseInt(value));
+                    break;
+                case INT:
+                    method.invoke(e, Integer.parseInt(value));
+                    break;
+                case BOOLEAN:
+                    method.invoke(e, Boolean.parseBoolean(value));
+                    break;
+                case BOOLEAN_MIN:
+                    method.invoke(e, Boolean.parseBoolean(value));
+                    break;
+                case BIGDECIMAL:
+                    method.invoke(e, new BigDecimal(value));
+                    break;
+                default:
+                    System.out.println("类型错误" + fieldType);
+                    break;
+            }
+        } else {
+            switch (configs) {
+                case STRING:
+                    method.invoke(e, value);
+                    break;
+                case INT:
+                    method.invoke(e, 0);
+                    break;
+                case FLOAT_MIN:
+                    method.invoke(e, 0);
+                    break;
+                case LONG_MIN:
+                    method.invoke(e, 0);
+                    break;
+                case DOUBLE_MIN:
+                    method.invoke(e, 0);
+                    break;
+                case BOOLEAN_MIN:
+                    method.invoke(e, false);
+                    break;
+                case SHORT_MIN:
+                    method.invoke(e, (short) 0);
+                    break;
+                case BYTE_MIN:
+                    method.invoke(e, Byte.parseByte("0"));
+                    break;
+                case CHAR:
+                    break;
+                default:
+                    method.invoke(e, new Object[]{null});
+                    break;
+            }
+        }
+    }
+
+    /**
+     * tips 只针对时间类型转化
+     *
+     * @notice : 0 是预留数据类型 表示没有匹配
+     * @author: hihuzi 2018/10/10 19:30
+     */
+    public static Object processingTimeType(Class<?> type, StuffConfig config, Object obj) {
+        if (TypeEnum.DATE.getValue().equals(type.getSimpleName())) {
+            return config.getDateStyleEnum().getFormartStyle().format(obj);
+        }
+        return obj;
     }
 
     /**

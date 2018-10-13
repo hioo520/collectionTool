@@ -10,3 +10,4 @@ target/
 /.iml
 src/main/resources/
 src/test/
+collectionTool.iml

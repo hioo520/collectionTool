@@ -14,6 +14,7 @@ public class ClassCache {
      * 缓存class 全限定名 参数类型 参数
      * 第一个 String: class 全限定名
      * 第二个String: class 属性名
+     * cache--->"Map<class 全限定名称,Map<属性名称,[各个属性的方法,属性类型]>>"
      */
 
     public static Map<String, Map<String, TypeCache>> cache = null;

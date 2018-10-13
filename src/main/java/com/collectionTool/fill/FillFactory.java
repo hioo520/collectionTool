@@ -86,6 +86,16 @@ public interface FillFactory {
     <E> E fillEntity(HttpServletRequest request, E e) throws Exception;
 
     /**
+     * tips HttpServletRequest--> obj
+     *
+     * @parameter: HttpServletRequest request
+     * @parameter: E e
+     * @return: E
+     * @author: hihuzi 2018/6/14 14:50
+     */
+    <E> E fillEntity(HttpServletRequest request, E e, StuffConfig config) throws Exception;
+
+    /**
      * tips 对MAP数据装填--> 对象
      *
      * @parameter: Map map
@@ -94,6 +104,16 @@ public interface FillFactory {
      * @author: hihuzi 2018/6/14 14:50
      */
     <E> E fillEntity(Map map, E e) throws Exception;
+
+    /**
+     * tips 对MAP数据装填--> 对象
+     *
+     * @parameter: Map map
+     * @parameter: E e
+     * @return: E
+     * @author: hihuzi 2018/6/14 14:50
+     */
+    <E> E fillEntity(Map map, E e, StuffConfig config) throws Exception;
 
     /**
      * tips List<Map> --> E --> List<E>
@@ -114,8 +134,7 @@ public interface FillFactory {
      * @return: List<E>
      * @author: hihuzi 2018/6/26 14:51
      */
-
-    <E> List<E> listToEntity(List<String> list, E e) throws Exception;
+    <E> List<E> fillEntity(List<Map> list, E e, StuffConfig config) throws Exception;
 
     /**
      * tips E --> Map  针对E的属性属性值填充到map
@@ -137,4 +156,26 @@ public interface FillFactory {
      * @author: hihuzi 2018/6/26 14:51
      */
     <E> Map fillMap(E e, Map map, StuffConfig config) throws Exception;
+
+    /**
+     * tips list<String> --> E --> list<E> 针对数据库与实体类名有区别
+     *
+     * @parameter: List<String> list
+     * @parameter: E e
+     * @return: List<E>
+     * @author: hihuzi 2018/6/26 14:51
+     */
+
+    <E> List<E> listToEntity(List<String> list, E e) throws Exception;
+
+    /**
+     * tips E --> Map  针对E的属性属性值填充到map
+     *
+     * @notice: 属性值为空的舍弃
+     * @parameter: E e
+     * @parameter: map map
+     * @return: map
+     * @author: hihuzi 2018/6/26 14:51
+     */
+    <E> List<E> listToEntity(List<String> list, E e, StuffConfig config) throws Exception;
 }

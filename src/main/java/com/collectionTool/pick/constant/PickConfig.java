@@ -1,5 +1,7 @@
 package com.collectionTool.pick.constant;
 
+import com.collectionTool.fill.constant.StuffConfig;
+
 /**
  * tips:构造器
  *
@@ -7,6 +9,10 @@ package com.collectionTool.pick.constant;
  * @author: hihuzi 2018/9/29 16:43
  **/
 public class PickConfig implements PickBase {
+    /**
+     * tips 默认可以处理的时间类型
+     */
+    private static final String DATE_FORMART = "yyyy-MM-dd";
     /**
      * 返回名自定义
      */
@@ -19,6 +25,19 @@ public class PickConfig implements PickBase {
      * 对于空值得管理
      */
     private SaveStyleEnum saveStyleEnum;
+    /**
+     * 对于时间管理器
+     */
+    private DateStyleEnum dateStyleEnum;
+
+    /**
+     * 重置枚举对象
+     * 对枚举静态变量一定要初始化
+     */
+    public static void reset() {
+        DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
+        ReturnNameEnum.CUSTOM_SUFFIX.setKey("");
+    }
 
     /**
      * tips: 使用这个构造器所有值都是调用默认值
@@ -26,6 +45,7 @@ public class PickConfig implements PickBase {
      * @notice: this.returnNameEnum = ReturnNameEnum.DEFAULT;
      * @notice: this.saveStyleEnum = SaveStyleEnum.DEFAULT;
      * @notice: this.returnNameEnum = ReturnNameEnum.DEFAULT;
+     * @notice: this.dateStyleEnum = DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
      * @author: hihuzi 2018/9/30 8:59
      **/
     public PickConfig() {
@@ -39,6 +59,37 @@ public class PickConfig implements PickBase {
         this.returnNameEnum = returnNameEnum;
         this.returnStyleEnum = returnStyleEnum;
         this.saveStyleEnum = saveStyleEnum;
+    }
+
+    public PickConfig(ReturnNameEnum returnNameEnum) {
+        this.returnNameEnum = returnNameEnum;
+    }
+
+    public PickConfig(SaveStyleEnum saveStyleEnum, DateStyleEnum dateStyleEnum) {
+        this.saveStyleEnum = saveStyleEnum;
+        this.dateStyleEnum = dateStyleEnum;
+    }
+
+    public PickConfig(ReturnNameEnum returnNameEnum, SaveStyleEnum saveStyleEnum) {
+        this.returnNameEnum = returnNameEnum;
+        this.saveStyleEnum = saveStyleEnum;
+    }
+
+    public PickConfig(ReturnNameEnum returnNameEnum, SaveStyleEnum saveStyleEnum, DateStyleEnum dateStyleEnum) {
+        this.returnNameEnum = returnNameEnum;
+        this.saveStyleEnum = saveStyleEnum;
+        this.dateStyleEnum = dateStyleEnum;
+    }
+
+    public PickConfig(DateStyleEnum dateStyleEnum) {
+        this.dateStyleEnum = dateStyleEnum;
+    }
+
+    public PickConfig(ReturnNameEnum returnNameEnum, ReturnStyleEnum returnStyleEnum, SaveStyleEnum saveStyleEnum, DateStyleEnum dateStyleEnum) {
+        this.returnNameEnum = returnNameEnum;
+        this.returnStyleEnum = returnStyleEnum;
+        this.saveStyleEnum = saveStyleEnum;
+        this.dateStyleEnum = dateStyleEnum;
     }
 
     public ReturnNameEnum getReturnNameEnum() {
@@ -66,5 +117,13 @@ public class PickConfig implements PickBase {
     public PickConfig setSaveStyleEnum(SaveStyleEnum saveStyleEnum) {
         this.saveStyleEnum = saveStyleEnum != null ? saveStyleEnum : SaveStyleEnum.DEFAULT;
         return this;
+    }
+
+    public DateStyleEnum getDateStyleEnum() {
+        return dateStyleEnum != null ? dateStyleEnum : DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
+    }
+
+    public void setDateStyleEnum(DateStyleEnum dateStyleEnum) {
+        this.dateStyleEnum = dateStyleEnum;
     }
 }
