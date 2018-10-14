@@ -32,13 +32,11 @@ public class PickToolImpl {
         }
         Map result = new HashMap<>(str.length);
         for (String property : str) {
-            Object str0 = map.get(property);
-            if (StrUtils.isNNoEE(str0)) {
-                result.put(property, str0);
+            Object value = map.get(property);
+            if (StrUtils.isNNoEE(value) && !"".equals(String.valueOf(value))) {
+                result.put(property, value);
             } else if (config.getSaveStyleEnum().getHaving()) {
                 result.put(property, "");
-            } else {
-                throw new RuntimeException("数据输出超出范围 参考PickEnum定义");
             }
         }
         return result;

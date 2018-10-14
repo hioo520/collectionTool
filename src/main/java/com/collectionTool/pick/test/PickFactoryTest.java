@@ -10,7 +10,7 @@ import org.junit.Test;
 import java.util.*;
 
 /**
- * tips
+ * tips 测试工具
  *
  * @author: hihuzi 2018/7/20 8:42
  */
@@ -18,7 +18,7 @@ public class PickFactoryTest {
 
 
     @Test
-    public void batch() throws Exception {
+    public void pick() throws Exception {
 
         List<TestBean> list = new ArrayList<>();
         for (int i = 0; i < 1; i++) {
@@ -92,7 +92,7 @@ public class PickFactoryTest {
         TestBean bean = new TestBean();
         bean.setName("你好师姐");
         bean.setId(UUID.randomUUID().toString());
-        bean.setEmail(null);
+        bean.setEmail("");
         bean.setAddress(UUID.randomUUID().toString().substring(32) + "@163.com");
          /**tips 默认 保留 空值*/
         Map batch0 = PickFactory.batch().pickValue(bean, "id", "name", "email", "date", "address");
@@ -104,6 +104,34 @@ public class PickFactoryTest {
          /**tips 舍弃 空值*/
         Map batch = PickFactory.batch().pickValue(bean, new PickConfig(
                 PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "date", "address");
+        System.out.println(batch.toString());
+        Map<String, Map<String, TypeCache>> classCache = ClassCache.cache;
+        classCache.forEach((s, typeCacheMap) -> System.err.println(typeCacheMap.size()));
+    }
+
+/**
+     * tips 单个对象 返回选定字段
+     *
+     * @author: hihuzi 2018/4/30 15:49
+     */
+    @Test
+    public void pickMap() throws Exception {
+
+        Map bean = new HashMap();
+        bean.put("id",UUID.randomUUID());
+        bean.put("name","你好师姐");
+        bean.put("age","");
+        bean.put("email","54465@163.com");
+         /**tips 默认 保留 空值*/
+        Map batch0 = PickFactory.batch().pickMap(bean, "id", "name", "email", "age");
+        System.out.println(batch0.toString());
+         /**tips 保留 空值*/
+        Map batch1 = PickFactory.batch().pickMap(bean, new PickConfig(
+                PickBase.ReturnNameEnum.DEFAULT), "id", "name", "email", "age");
+        System.out.println(batch1.toString());
+         /**tips 舍弃 空值*/
+        Map batch = PickFactory.batch().pickMap(bean, new PickConfig(
+                PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "age");
         System.out.println(batch.toString());
         Map<String, Map<String, TypeCache>> classCache = ClassCache.cache;
         classCache.forEach((s, typeCacheMap) -> System.err.println(typeCacheMap.size()));
