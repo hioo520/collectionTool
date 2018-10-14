@@ -6,9 +6,10 @@ import java.util.Date;
 /**
  * tips 控制常量
  *
- * @author:hihuzi 2018/9/23 15:17
+ * @author: hihuzi 2018/9/23 15:17
  */
 public interface StuffBase {
+
     /**
      * tips: 时间规则
      *
@@ -20,17 +21,21 @@ public interface StuffBase {
          * 默认时间风格规则
          */
         DEFAULT("");
+
         private String formartStyle;
 
         DateStyleEnum(String formartStyle) {
+
             this.formartStyle = formartStyle;
         }
 
         public SimpleDateFormat getFormartStyle() {
+
             return new SimpleDateFormat(DateStyleEnum.DEFAULT.formartStyle);
         }
 
         public DateStyleEnum setFormartStyle(String formartStyle) {
+
             this.formartStyle = formartStyle;
             return this;
         }
@@ -47,17 +52,21 @@ public interface StuffBase {
          * 默认排序规则
          */
         DEFAULT(new Integer[]{});
+
         private Integer[] sort;
 
         SortStyleEnum(Integer[] sort) {
+
             this.sort = sort;
         }
 
         public Integer[] getSort() {
+
             return sort;
         }
 
         public SortStyleEnum setSort(Integer[] sort) {
+
             this.sort = sort;
             return this;
         }
@@ -85,9 +94,11 @@ public interface StuffBase {
          * @author: hihuzi 2018/9/29 17:21
          **/
         REMOVE_NULL_EMPTY(false);
+
         private Boolean isHaving;
 
         SaveStyleEnum(Boolean having) {
+
             this.isHaving = having;
         }
 
@@ -98,7 +109,9 @@ public interface StuffBase {
          * @author: hihuzi 2018/9/30 8:52
          **/
         public Boolean getHaving() {
+
             return isHaving;
         }
     }
+
 }

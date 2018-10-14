@@ -74,7 +74,7 @@ public class PickFactoryTest {
          /**tips 默认设置*/
         Set batch1 = PickFactory.batch().pickValue(list, "id", "name", "email");
         System.out.println(Arrays.asList(batch1).toString());
-         /**tips (去掉 NUll)*/
+        /**tips (去掉 NUll 和 "" or "      ")*/
         Set batch = PickFactory.batch().pickValue(list, new PickConfig(
                 PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "address");
         System.out.println(Arrays.asList(batch).toString());

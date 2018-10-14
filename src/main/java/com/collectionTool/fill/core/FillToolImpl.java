@@ -150,10 +150,16 @@ public class FillToolImpl {
         List<String> fieldsMap = new ArrayList<>();
         List<Map> entityMaps = new ArrayList<>();
         Class<E> clazz = (Class<E>) t.getClass();
-        for (; clazz != Object.class; clazz = (Class<E>) clazz.getSuperclass()) {
-            Field[] fields = clazz.getDeclaredFields();
-            for (int i = 0; i < fields.length; i++) {
-                fieldsMap.add(fields[i].getName());
+        Map<String, TypeCache> cache = ClassCache.getCache(clazz);
+        if (cache != null) {
+            fieldsMap = new ArrayList<>(cache.keySet());
+        } else {
+            for (; clazz != Object.class; clazz = (Class<E>) clazz.getSuperclass()) {
+                Field[] fields = clazz.getDeclaredFields();
+                for (int i = 0; i < fields.length; i++) {
+                    fieldsMap.add(fields[i].getName());
+                    ClassCache.get().add(clazz, fields[i].getName());
+                }
             }
         }
         for (Map map : list) {

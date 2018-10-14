@@ -93,7 +93,7 @@ public class PickToolImpl {
                         achieveMap(maps, property, invoke, config);
                         break;
                     case SET:
-                        if (invoke != null) {
+                        if (invoke != null && !"".equals(String.valueOf(invoke)) && !"".equals(String.valueOf(invoke).trim())) {
                             sets.add(invoke);
                         } else if (config.getSaveStyleEnum().getHaving()) {
                             sets.add(invoke);
@@ -127,13 +127,13 @@ public class PickToolImpl {
      * @return:
      * @author: hihuzi 2018/9/28 16:03
      */
-    private void achieveMap(Map map, String key, Object invoke, PickConfig bean) {
+    private void achieveMap(Map map, String key, Object invoke, PickConfig config) {
 
 
-        if (invoke != null) {
-            map.put(achieveKey(key, bean), invoke);
-        } else if (bean.getSaveStyleEnum().getHaving()) {
-            map.put(achieveKey(key, bean), "");
+        if (invoke != null && !"".equals(String.valueOf(invoke))) {
+            map.put(achieveKey(key, config), invoke);
+        } else if (config.getSaveStyleEnum().getHaving()) {
+            map.put(achieveKey(key, config), "");
         }
     }
 

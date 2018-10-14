@@ -232,6 +232,8 @@ public class FillTool extends FillToolImpl implements FillFactory {
      */
     @Override
     public <E> List<E> listToEntity(List<String> list, E e, StuffConfig config) throws Exception {
+
         return listToEntityDefault(list, e, config);
     }
+
 }

@@ -269,6 +269,6 @@
 #####TestBean(booleanMax=true, byteMax=1, shortMax=129, integerMax=123456, longMax=132542435, floatMax=12.99, doubleMax=3.55, stringMax=你好师姐!!!, bigdecimalMax=9825485.6, dateMax=Wed Dec 12 00:00:00 CST 2012, booleanMin=true, charMin=a, byteMin=2, shortMin=5, intMin=55, longMin=555, floatMin=0.9, doubleMin=1.94)
 #####TestBean(booleanMax=true, byteMax=1, shortMax=129, integerMax=123456, longMax=132542435, floatMax=12.99, doubleMax=3.55, stringMax=你好师姐!!!, bigdecimalMax=9825485.6, dateMax=Wed Dec 12 12:12:12 CST 2012, booleanMin=true, charMin=a, byteMin=2, shortMin=5, intMin=55, longMin=555, floatMin=0.9, doubleMin=1.94)
 #####加入缓存 一百万 耗时1秒 一千万 耗时30
-#引入缓存   ClassCache.get().add( e.getClass(), name,paramtertype);
-#调用缓存1.ClassCache.get().add(e.getClass(), name, paramtertype);
-#调用缓存2.ClassCache.get().add(e.getClass(), name);
+#引入缓存   ClassCache.get().add( clazz, fieldsName,paramtertype);
+#引入缓存   ClassCache.get().add(clazz, fieldsName);
+#调用缓存1.Map<String, TypeCache> cache = ClassCache.getCache(clazz);

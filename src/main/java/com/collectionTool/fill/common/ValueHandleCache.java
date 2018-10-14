@@ -13,6 +13,7 @@ import java.math.BigDecimal;
  * @author: hihuzi 2018/9/24 20:57
  */
 public class ValueHandleCache {
+
     /**
      * tips 注入对对象注入值
      *
@@ -241,6 +242,7 @@ public class ValueHandleCache {
      * @author: hihuzi 2018/10/10 19:30
      */
     public static Object processingTimeType(Class<?> type, StuffConfig config, Object obj) {
+
         if (TypeEnum.DATE.getValue().equals(type.getSimpleName())) {
             return config.getDateStyleEnum().getFormartStyle().format(obj);
         }
@@ -254,7 +256,6 @@ public class ValueHandleCache {
      * @author: hihuzi 2018/9/24 19:30
      */
     public enum TypeEnum {
-
         /**
          * 数据类型
          */
@@ -267,7 +268,6 @@ public class ValueHandleCache {
          * 数据类型
          */
         SHORT(3, "Short"),
-
         /**
          * 数据类型
          */
@@ -280,7 +280,6 @@ public class ValueHandleCache {
          * 数据类型
          */
         FLOAT(6, "Float"),
-
         /**
          * 数据类型
          */
@@ -293,7 +292,6 @@ public class ValueHandleCache {
          * 数据类型
          */
         BIGDECIMAL(9, "BigDecimal"),
-
         /**
          * 数据类型
          */
@@ -306,7 +304,6 @@ public class ValueHandleCache {
          * 数据类型
          */
         INT(12, "int"),
-
         /**
          * 数据类型
          */
@@ -319,7 +316,6 @@ public class ValueHandleCache {
          * 数据类型
          */
         SHORT_MIN(15, "short"),
-
         /**
          * 数据类型
          */

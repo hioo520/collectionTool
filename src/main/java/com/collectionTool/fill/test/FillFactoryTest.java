@@ -229,7 +229,7 @@ public class FillFactoryTest {
      * tips List<Map> --> E --> List<E>
      * tips 针对不同格式对应处理
      *
-     * @author:hihuzi 2018/6/26 14:51
+     * @author: hihuzi 2018/6/26 14:51
      */
     @Test
     public void fill_entity_list() throws Exception {
