@@ -1,6 +1,8 @@
 # hihuzi_collection_tool
 
 #### 集合工具提取和填充器
+#使用方法-->FillFactory.beach().需要方法()
+#使用方法-->PickFactoryTest.beach().需要方法()
  /**
      * tips HttpServletRequest-->MAP
      * 默认 方法一 保存空值
