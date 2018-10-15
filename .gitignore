@@ -1,8 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 
 target/
-.idea/markdown-navigator.xml
-.idea/markdown-navigator/
 
 /.idea/
 /highSpeedCache.iml

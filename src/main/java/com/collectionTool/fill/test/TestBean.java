@@ -31,6 +31,8 @@ public class TestBean {
     private float floatMin;
     private double doubleMin;
 
+    private Character character;
+
     public TestBean() {
 
     }
@@ -39,5 +41,6 @@ public class TestBean {
 
         return booleanMin;
     }
+
 
 }

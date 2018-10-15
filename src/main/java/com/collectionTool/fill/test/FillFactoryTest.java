@@ -133,7 +133,7 @@ public class FillFactoryTest {
         TestBean map1 = null;
         long start = System.currentTimeMillis();
         for (int i = 0; i < 10000000; i++) {
-        map1 = FillFactory.batch().fillEntity(request, new TestBean());
+            map1 = FillFactory.batch().fillEntity(request, new TestBean());
         }
         long end = System.currentTimeMillis();
         System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
@@ -149,6 +149,7 @@ public class FillFactoryTest {
      */
     @Test
     public void fill_entity_request2() throws Exception {
+
         request.setParameter("stringMax", "你好师姐!!!");
         request.setParameter("dateMax", "2012-12-12");
         TestBean map = null;

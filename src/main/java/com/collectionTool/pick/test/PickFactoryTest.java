@@ -109,7 +109,7 @@ public class PickFactoryTest {
         classCache.forEach((s, typeCacheMap) -> System.err.println(typeCacheMap.size()));
     }
 
-/**
+    /**
      * tips 单个对象 返回选定字段
      *
      * @author: hihuzi 2018/4/30 15:49
@@ -118,18 +118,18 @@ public class PickFactoryTest {
     public void pickMap() throws Exception {
 
         Map bean = new HashMap();
-        bean.put("id",UUID.randomUUID());
-        bean.put("name","你好师姐");
-        bean.put("age","");
-        bean.put("email","54465@163.com");
-         /**tips 默认 保留 空值*/
+        bean.put("id", UUID.randomUUID());
+        bean.put("name", "你好师姐");
+        bean.put("age", "");
+        bean.put("email", "54465@163.com");
+        /**tips 默认 保留 空值*/
         Map batch0 = PickFactory.batch().pickMap(bean, "id", "name", "email", "age");
         System.out.println(batch0.toString());
-         /**tips 保留 空值*/
+        /**tips 保留 空值*/
         Map batch1 = PickFactory.batch().pickMap(bean, new PickConfig(
                 PickBase.ReturnNameEnum.DEFAULT), "id", "name", "email", "age");
         System.out.println(batch1.toString());
-         /**tips 舍弃 空值*/
+        /**tips 舍弃 空值*/
         Map batch = PickFactory.batch().pickMap(bean, new PickConfig(
                 PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "age");
         System.out.println(batch.toString());
