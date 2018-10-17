@@ -52,6 +52,11 @@ public class PickFactoryTest {
                 PickBase.ReturnNameEnum.CUSTOM_SUFFIX.setKey("我就是我!!")), "id", "name", "email", "date", "address");
         batch4.forEach(map -> System.out.println(map));
 
+        /**tips 时间格式化*/
+        List<Map> batch5 = PickFactory.batch().pick(list, new PickConfig(
+                PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date");
+        batch5.forEach(map -> System.out.println(map));
+
     }
 
     /**
