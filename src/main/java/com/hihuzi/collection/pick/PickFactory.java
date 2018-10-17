@@ -72,7 +72,7 @@ public interface PickFactory {
      * @return: Set<String>
      * @author: hihuzi 2018/4/30 15:49
      */
-    <E> Set<String> pickValue(List<E> list, PickConfig config, String... parameter) throws Exception;
+    <E> Set pickValue(List<E> list, PickConfig config, String... parameter) throws Exception;
 
     /**
      * tips 单个对象取出特定字段

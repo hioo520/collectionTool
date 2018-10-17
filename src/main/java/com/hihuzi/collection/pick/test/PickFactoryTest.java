@@ -97,7 +97,7 @@ public class PickFactoryTest {
      * @author: hihuzi 2018/4/30 15:49
      */
     @Test
-    public void pickSingle() throws Exception {
+    public void pickValue0() throws Exception {
 
         TestBean bean = new TestBean();
         bean.setName("你好师姐");
