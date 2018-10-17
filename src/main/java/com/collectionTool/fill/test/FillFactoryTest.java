@@ -190,7 +190,7 @@ public class FillFactoryTest {
         map.put("floatMin", "0.9");
         map.put("doubleMin", "1.94");
         TestBean bean = FillFactory.batch().fillEntity(map, new TestBean());
-        Map map1 = new HashMap();
+        Map map1 = new HashMap(5);
         /**tips 从对象中取出map*/
         Map map2 = FillFactory.batch().fillMap(bean, map1);
         System.out.println(bean.toString());
@@ -218,7 +218,7 @@ public class FillFactoryTest {
         System.out.println(bean0.toString() + "hashCode" + bean.hashCode());
 
 
-        Map map1 = new HashMap();
+        Map map1 = new HashMap(5);
         /**tips 从对象中取出map*/
         Map map2 = FillFactory.batch().fillMap(bean0, map1,
                 new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")));
@@ -280,7 +280,7 @@ public class FillFactoryTest {
         map.put("booleanMin", "");
         TestBean bean = FillFactory.batch().fillEntity(map, new TestBean());
         System.out.println(bean);
-        Map map1 = new HashMap();
+        Map map1 = new HashMap(5);
         /**tips 从对象中取出map*/
         map1 = FillFactory.batch().fillMap(bean, map1);
         map1.forEach((o, o2) -> System.out.print(o + "-->" + o2 + " "));

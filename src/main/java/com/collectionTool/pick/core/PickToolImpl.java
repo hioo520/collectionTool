@@ -3,7 +3,6 @@ package com.collectionTool.pick.core;
 
 import com.collectionTool.cache.ClassCache;
 import com.collectionTool.cache.TypeCache;
-import com.collectionTool.fill.common.ValueHandleCache;
 import com.collectionTool.pick.constant.PickConfig;
 import com.collectionTool.utils.Constants;
 import com.collectionTool.utils.StrUtils;
@@ -17,6 +16,19 @@ import java.util.*;
  * @Author:hihuzi 2018/7/19 17:54
  */
 public class PickToolImpl {
+    /**
+     * tips 只针对时间类型转化
+     *
+     * @notice : 0 是预留数据类型 表示没有匹配
+     * @author: hihuzi 2018/10/10 19:30
+     */
+    public static Object processingTimeType(Class<?> type, PickConfig config, Object obj) {
+        if (Constants.TypeEnum.DATE.getValue().equals(type.getSimpleName())) {
+            return config.getDateStyleEnum().getFormartStyle().format(obj);
+        }
+        return obj;
+    }
+
     /**
      * TIPS 集合Map 取出选定字段 默认 value为空时 保存
      *
@@ -79,7 +91,17 @@ public class PickToolImpl {
                         invoke = processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
                         ClassCache.get().add(t.getClass(), property);
                     } catch (Exception e) {
-                        System.out.println("对应的实体里面没有方法: " + name);
+                        try {
+                            for (clazz = clazz.getSuperclass(); clazz != Object.class; clazz = (Class<T>) clazz.getSuperclass()) {
+                                Method method = clazz.getMethod(name);
+                                method.setAccessible(true);
+                                invoke = method.invoke(t);
+                                invoke = processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
+                                ClassCache.get().add(t.getClass(), property);
+                            }
+                        } catch (Exception e0) {
+                            System.out.println("对应的实体里面没有方法: " + name);
+                        }
                     }
                 }
                 switch (config.getReturnStyleEnum()) {
@@ -161,18 +183,5 @@ public class PickToolImpl {
                 break;
         }
         return null;
-    }
-
-    /**
-     * tips 只针对时间类型转化
-     *
-     * @notice : 0 是预留数据类型 表示没有匹配
-     * @author: hihuzi 2018/10/10 19:30
-     */
-    public static Object processingTimeType(Class<?> type, PickConfig config, Object obj) {
-        if (Constants.TypeEnum.DATE.getValue().equals(type.getSimpleName())) {
-            return config.getDateStyleEnum().getFormartStyle().format(obj);
-        }
-        return obj;
     }
 }

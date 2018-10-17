@@ -21,7 +21,7 @@ public class PickFactoryTest {
     public void pick() throws Exception {
 
         List<TestBean> list = new ArrayList<>();
-        for (int i = 0; i < 1; i++) {
+        for (int i = 2; i < 3; i++) {
             TestBean userPost = new TestBean();
             userPost.setName("你好师姐");
             userPost.setId(12345 * i + "");
@@ -54,8 +54,13 @@ public class PickFactoryTest {
 
         /**tips 时间格式化*/
         List<Map> batch5 = PickFactory.batch().pick(list, new PickConfig(
-                PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date");
+                PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date", "date0");
         batch5.forEach(map -> System.out.println(map));
+
+        /**tips 时间格式化*/
+//        List<Map> batch6 = PickFactory.batch().pick(list, new PickConfig(
+//                PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date","date0");
+//        batch6.forEach(map -> System.out.println(map));
 
     }
 
@@ -122,7 +127,7 @@ public class PickFactoryTest {
     @Test
     public void pickMap() throws Exception {
 
-        Map bean = new HashMap();
+        Map bean = new HashMap(5);
         bean.put("id", UUID.randomUUID());
         bean.put("name", "你好师姐");
         bean.put("age", "");

@@ -10,7 +10,7 @@ import java.util.Date;
  * @author: hihuzi  2018/6/27 6:39
  */
 @Data
-public class TestBean {
+public class TestBean extends Base {
 
     private String id;
 
@@ -19,7 +19,5 @@ public class TestBean {
     private String email;
 
     private String address;
-
     private Date date = new Date();
-
 }
