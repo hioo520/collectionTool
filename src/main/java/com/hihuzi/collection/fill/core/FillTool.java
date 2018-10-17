@@ -1,6 +1,6 @@
 package com.hihuzi.collection.fill.core;
 
-import com.hihuzi.collection.fill.constant.StuffConfig;
+import com.hihuzi.collection.fill.constant.FillConfig;
 import com.hihuzi.collection.fill.FillFactory;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +25,8 @@ public class FillTool extends FillToolImpl implements FillFactory {
     @Override
     public Map fill(HttpServletRequest request) {
 
-        Map map = fillDefault(request, new StuffConfig());
-        StuffConfig.reset();
+        Map map = fillDefault(request, new FillConfig());
+        FillConfig.reset();
         return map;
     }
 
@@ -41,8 +41,8 @@ public class FillTool extends FillToolImpl implements FillFactory {
     @Override
     public Map fill(HttpServletRequest request, String... str) {
 
-        Map map = fillDefault(request, new StuffConfig(), str);
-        StuffConfig.reset();
+        Map map = fillDefault(request, new FillConfig(), str);
+        FillConfig.reset();
         return map;
     }
 
@@ -50,15 +50,15 @@ public class FillTool extends FillToolImpl implements FillFactory {
      * tips HttpServletRequest-->MAP   是否舍弃空值  默认舍弃空字符
      *
      * @parameter: HttpServletRequest request
-     * @parameter: StuffConfig config
+     * @parameter: FillConfig config
      * @return: Map
      * @author: hihuzi 2018/6/14 14:51
      */
     @Override
-    public Map fill(HttpServletRequest request, StuffConfig config) {
+    public Map fill(HttpServletRequest request, FillConfig config) {
 
         Map map = fillDefault(request, config);
-        StuffConfig.reset();
+        FillConfig.reset();
         return map;
     }
 
@@ -66,16 +66,16 @@ public class FillTool extends FillToolImpl implements FillFactory {
      * tips HttpServletRequest-->MAP    是否舍弃空值 并且舍弃str特定字段
      *
      * @parameter: HttpServletRequest request
-     * @parameter: StuffConfig config
+     * @parameter: FillConfig config
      * @parameter: String[] key
      * @return: Map
      * @author: hihuzi 2018/6/14 14:51
      */
     @Override
-    public Map fill(HttpServletRequest request, StuffConfig config, String... key) {
+    public Map fill(HttpServletRequest request, FillConfig config, String... key) {
 
         Map map = fillDefault(request, config, key);
-        StuffConfig.reset();
+        FillConfig.reset();
         return map;
     }
 
@@ -90,8 +90,8 @@ public class FillTool extends FillToolImpl implements FillFactory {
     @Override
     public <E> E fillEntity(HttpServletRequest request, E e) throws Exception {
 
-        E entity = requestFillEntityDefault(request, e, new StuffConfig(StuffConfig.SaveStyleEnum.DEFAULT));
-        StuffConfig.reset();
+        E entity = requestFillEntityDefault(request, e, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
+        FillConfig.reset();
         return entity;
     }
 
@@ -104,10 +104,10 @@ public class FillTool extends FillToolImpl implements FillFactory {
      * @author: hihuzi 2018/6/14 14:50
      */
     @Override
-    public <E> E fillEntity(HttpServletRequest request, E e, StuffConfig config) throws Exception {
+    public <E> E fillEntity(HttpServletRequest request, E e, FillConfig config) throws Exception {
 
         E entity = requestFillEntityDefault(request, e, config);
-        StuffConfig.reset();
+        FillConfig.reset();
         return entity;
     }
 
@@ -122,8 +122,8 @@ public class FillTool extends FillToolImpl implements FillFactory {
     @Override
     public <E> E fillEntity(Map map, E e) throws Exception {
 
-        E entity = mapFillEntity(map, e, new StuffConfig(StuffConfig.SaveStyleEnum.DEFAULT));
-        StuffConfig.reset();
+        E entity = mapFillEntity(map, e, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
+        FillConfig.reset();
         return entity;
     }
 
@@ -136,10 +136,10 @@ public class FillTool extends FillToolImpl implements FillFactory {
      * @author: hihuzi 2018/6/14 14:50
      */
     @Override
-    public <E> E fillEntity(Map map, E e, StuffConfig config) throws Exception {
+    public <E> E fillEntity(Map map, E e, FillConfig config) throws Exception {
 
         E entity = mapFillEntity(map, e, config);
-        StuffConfig.reset();
+        FillConfig.reset();
         return entity;
     }
 
@@ -154,8 +154,8 @@ public class FillTool extends FillToolImpl implements FillFactory {
     @Override
     public <E> List<E> fillEntity(List<Map> list, E e) throws Exception {
 
-        List<E> entitys = listFillEntity(list, e, new StuffConfig(StuffConfig.SaveStyleEnum.DEFAULT));
-        StuffConfig.reset();
+        List<E> entitys = listFillEntity(list, e, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
+        FillConfig.reset();
         return entitys;
     }
 
@@ -168,10 +168,10 @@ public class FillTool extends FillToolImpl implements FillFactory {
      * @author: hihuzi 2018/6/26 14:51
      */
     @Override
-    public <E> List<E> fillEntity(List<Map> list, E e, StuffConfig config) throws Exception {
+    public <E> List<E> fillEntity(List<Map> list, E e, FillConfig config) throws Exception {
 
         List<E> entitys = listFillEntity(list, e, config);
-        StuffConfig.reset();
+        FillConfig.reset();
         return entitys;
     }
 
@@ -186,8 +186,8 @@ public class FillTool extends FillToolImpl implements FillFactory {
     @Override
     public <E> Map fillMap(E e, Map map) throws Exception {
 
-        Map map1 = fillMapDefault(e, map, new StuffConfig(StuffConfig.SaveStyleEnum.DEFAULT));
-        StuffConfig.reset();
+        Map map1 = fillMapDefault(e, map, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
+        FillConfig.reset();
         return map1;
     }
 
@@ -200,10 +200,10 @@ public class FillTool extends FillToolImpl implements FillFactory {
      * @author: hihuzi 2018/6/26 14:51
      */
     @Override
-    public <E> Map fillMap(E e, Map map, StuffConfig config) throws Exception {
+    public <E> Map fillMap(E e, Map map, FillConfig config) throws Exception {
 
         Map map1 = fillMapDefault(e, map, config);
-        StuffConfig.reset();
+        FillConfig.reset();
         return map1;
     }
 
@@ -218,7 +218,7 @@ public class FillTool extends FillToolImpl implements FillFactory {
     @Override
     public <E> List<E> listToEntity(List<String> list, E e) throws Exception {
 
-        return listToEntityDefault(list, e, new StuffConfig(StuffConfig.SaveStyleEnum.DEFAULT));
+        return listToEntityDefault(list, e, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
     }
 
     /**
@@ -230,7 +230,7 @@ public class FillTool extends FillToolImpl implements FillFactory {
      * @author: hihuzi 2018/6/26 14:51
      */
     @Override
-    public <E> List<E> listToEntity(List<String> list, E e, StuffConfig config) throws Exception {
+    public <E> List<E> listToEntity(List<String> list, E e, FillConfig config) throws Exception {
 
         return listToEntityDefault(list, e, config);
     }

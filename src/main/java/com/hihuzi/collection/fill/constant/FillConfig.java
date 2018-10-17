@@ -6,7 +6,7 @@ package com.hihuzi.collection.fill.constant;
  * @notices: 默认时间类型是 yyyy-MM-dd
  * @author: hihuzi 2018/9/30 10:08
  **/
-public class StuffConfig implements StuffBase {
+public class FillConfig implements FillBase {
 
     /**
      * tips 默认可以处理的时间类型
@@ -34,8 +34,8 @@ public class StuffConfig implements StuffBase {
      */
     public static void reset() {
 
-        StuffConfig.SortStyleEnum.DEFAULT.setSort(new Integer[]{});
-        StuffConfig.DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
+        FillConfig.SortStyleEnum.DEFAULT.setSort(new Integer[]{});
+        FillConfig.DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
     }
 
     /**
@@ -44,29 +44,29 @@ public class StuffConfig implements StuffBase {
      * @notice: saveStyleEnum=SaveStyleEnum.DEFAULT
      * @author: hihuzi 2018/9/30 10:59
      **/
-    public StuffConfig() {
+    public FillConfig() {
 
     }
 
-    public StuffConfig(SaveStyleEnum saveStyleEnum, SortStyleEnum sortStyleEnum) {
+    public FillConfig(SaveStyleEnum saveStyleEnum, SortStyleEnum sortStyleEnum) {
 
         this.saveStyleEnum = saveStyleEnum;
         this.sortStyleEnum = sortStyleEnum;
     }
 
-    public StuffConfig(SaveStyleEnum saveStyleEnum, SortStyleEnum sortStyleEnum, DateStyleEnum dateStyleEnum) {
+    public FillConfig(SaveStyleEnum saveStyleEnum, SortStyleEnum sortStyleEnum, DateStyleEnum dateStyleEnum) {
 
         this.saveStyleEnum = saveStyleEnum;
         this.sortStyleEnum = sortStyleEnum;
         this.dateStyleEnum = dateStyleEnum;
     }
 
-    public StuffConfig(SaveStyleEnum saveStyleEnum) {
+    public FillConfig(SaveStyleEnum saveStyleEnum) {
 
         this.saveStyleEnum = saveStyleEnum;
     }
 
-    public StuffConfig(DateStyleEnum dateStyleEnum) {
+    public FillConfig(DateStyleEnum dateStyleEnum) {
 
         this.dateStyleEnum = dateStyleEnum;
     }
@@ -76,7 +76,7 @@ public class StuffConfig implements StuffBase {
         return saveStyleEnum != null ? saveStyleEnum : SaveStyleEnum.DEFAULT;
     }
 
-    public StuffConfig setSaveStyleEnum(SaveStyleEnum saveStyleEnum) {
+    public FillConfig setSaveStyleEnum(SaveStyleEnum saveStyleEnum) {
 
         this.saveStyleEnum = saveStyleEnum;
         return this;

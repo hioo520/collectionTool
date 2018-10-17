@@ -1,7 +1,7 @@
 package com.hihuzi.collection.fill;
 
 
-import com.hihuzi.collection.fill.constant.StuffConfig;
+import com.hihuzi.collection.fill.constant.FillConfig;
 import com.hihuzi.collection.fill.core.FillTool;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,24 +56,24 @@ public interface FillFactory {
      * 方法三 是否舍弃空值 并且舍弃str特定字段(默认舍弃空值)
      *
      * @parameter: HttpServletRequest
-     * @parameter: StuffConfig
+     * @parameter: FillConfig
      * @return: Map
      * @author: hihuzi 2018/7/23 15:05
      */
-    Map fill(HttpServletRequest request, StuffConfig config);
+    Map fill(HttpServletRequest request, FillConfig config);
 
     /**
      * tips HttpServletRequest-->MAP
      * 方法四 是否舍弃空值 并且舍弃str特定字段(默认保存空值)
      *
      * @parameter: HttpServletRequest request
-     * @parameter: StuffConfig config
+     * @parameter: FillConfig config
      * @parameter: String[] key
      * @return: Map
      * @author: hihuzi 2018/7/23 15:05
      */
 
-    Map fill(HttpServletRequest request, StuffConfig config, String... key);
+    Map fill(HttpServletRequest request, FillConfig config, String... key);
 
     /**
      * tips HttpServletRequest--> obj
@@ -93,7 +93,7 @@ public interface FillFactory {
      * @return: E
      * @author: hihuzi 2018/6/14 14:50
      */
-    <E> E fillEntity(HttpServletRequest request, E e, StuffConfig config) throws Exception;
+    <E> E fillEntity(HttpServletRequest request, E e, FillConfig config) throws Exception;
 
     /**
      * tips 对MAP数据装填--> 对象
@@ -113,7 +113,7 @@ public interface FillFactory {
      * @return: E
      * @author: hihuzi 2018/6/14 14:50
      */
-    <E> E fillEntity(Map map, E e, StuffConfig config) throws Exception;
+    <E> E fillEntity(Map map, E e, FillConfig config) throws Exception;
 
     /**
      * tips List<Map> --> E --> List<E>
@@ -134,7 +134,7 @@ public interface FillFactory {
      * @return: List<E>
      * @author: hihuzi 2018/6/26 14:51
      */
-    <E> List<E> fillEntity(List<Map> list, E e, StuffConfig config) throws Exception;
+    <E> List<E> fillEntity(List<Map> list, E e, FillConfig config) throws Exception;
 
     /**
      * tips E --> Map  针对E的属性属性值填充到map
@@ -155,7 +155,7 @@ public interface FillFactory {
      * @return: map
      * @author: hihuzi 2018/6/26 14:51
      */
-    <E> Map fillMap(E e, Map map, StuffConfig config) throws Exception;
+    <E> Map fillMap(E e, Map map, FillConfig config) throws Exception;
 
     /**
      * tips list<String> --> E --> list<E> 针对数据库与实体类名有区别
@@ -177,5 +177,5 @@ public interface FillFactory {
      * @return: map
      * @author: hihuzi 2018/6/26 14:51
      */
-    <E> List<E> listToEntity(List<String> list, E e, StuffConfig config) throws Exception;
+    <E> List<E> listToEntity(List<String> list, E e, FillConfig config) throws Exception;
 }

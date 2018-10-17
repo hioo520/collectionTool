@@ -1,6 +1,6 @@
 package com.hihuzi.collection.fill.common;
 
-import com.hihuzi.collection.fill.constant.StuffConfig;
+import com.hihuzi.collection.fill.constant.FillConfig;
 import com.hihuzi.collection.utils.StrUtils;
 
 import java.lang.reflect.Method;
@@ -21,11 +21,11 @@ public class ValueHandleCache {
      * @parameter: Method method
      * @parameter: String value
      * @parameter: String fieldType
-     * @parameter: StuffEnum enums
+     * @parameter: FillEnum enums
      * @return:
      * @author: hihuzi 2018/7/19 10:26
      */
-    public static <E> void invokeValueCache(E e, Method method, String value, TypeEnum typeEnum, StuffConfig config) throws Exception {
+    public static <E> void invokeValueCache(E e, Method method, String value, TypeEnum typeEnum, FillConfig config) throws Exception {
 
         if (StrUtils.isNNoE(value)) {
             switch (typeEnum) {
@@ -128,11 +128,11 @@ public class ValueHandleCache {
      * @parameter: Method method
      * @parameter: String value
      * @parameter: String fieldType
-     * @parameter: StuffConfig config
+     * @parameter: FillConfig config
      * @return:
      * @author: hihuzi 2018/7/19 10:26
      */
-    public static <E> void invokeValue(E e, Method method, String value, String fieldType, StuffConfig config) throws Exception {
+    public static <E> void invokeValue(E e, Method method, String value, String fieldType, FillConfig config) throws Exception {
 
         TypeEnum configs = null;
         for (TypeEnum typeEnum : TypeEnum.values()) {
@@ -241,7 +241,7 @@ public class ValueHandleCache {
      * @notice : 0 是预留数据类型 表示没有匹配
      * @author: hihuzi 2018/10/10 19:30
      */
-    public static Object processingTimeType(Class<?> type, StuffConfig config, Object obj) {
+    public static Object processingTimeType(Class<?> type, FillConfig config, Object obj) {
 
         if (TypeEnum.DATE.getValue().equals(type.getSimpleName())) {
             return config.getDateStyleEnum().getFormartStyle().format(obj);

@@ -8,7 +8,7 @@ import java.util.Date;
  *
  * @author: hihuzi 2018/9/23 15:17
  */
-public interface StuffBase {
+public interface FillBase {
 
     /**
      * tips: 时间规则

@@ -1,10 +1,10 @@
 package com.hihuzi.collection.fill.core;
 
-import com.hihuzi.collection.fill.common.Invoke;
-import com.hihuzi.collection.fill.constant.StuffConfig;
 import com.hihuzi.collection.cache.ClassCache;
 import com.hihuzi.collection.cache.TypeCache;
+import com.hihuzi.collection.fill.common.Invoke;
 import com.hihuzi.collection.fill.common.ValueHandleCache;
+import com.hihuzi.collection.fill.constant.FillConfig;
 import com.hihuzi.collection.utils.StrUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ public class FillToolImpl {
      * @return: Map
      * @author: hihuzi 2018/9/24 9:36
      */
-    public Map fillDefault(HttpServletRequest request, StuffConfig config, String... key) {
+    public Map fillDefault(HttpServletRequest request, FillConfig config, String... key) {
 
         Map map = new HashMap(key.length);
         List<String> exclude = null;
@@ -71,7 +71,7 @@ public class FillToolImpl {
      * @return: E
      * @author: hihuzi 2018/6/14 14:50
      */
-    public <E> E requestFillEntityDefault(HttpServletRequest request, E e, StuffConfig config) throws Exception {
+    public <E> E requestFillEntityDefault(HttpServletRequest request, E e, FillConfig config) throws Exception {
 
         Enumeration pars = request.getParameterNames();
         Class<E> clazz = (Class<E>) e.getClass();
@@ -107,7 +107,7 @@ public class FillToolImpl {
      * @return: E
      * @author: hihuzi 2018/6/14 14:50
      */
-    public <E> E mapFillEntity(Map map, E e, StuffConfig config) throws Exception {
+    public <E> E mapFillEntity(Map map, E e, FillConfig config) throws Exception {
 
         Iterator iterator = map.entrySet().iterator();
         Class<E> clazz = (Class<E>) e.getClass();
@@ -144,7 +144,7 @@ public class FillToolImpl {
      * @return: List<E>
      * @author: hihuzi 2018/6/26 14:51
      */
-    public <E> List<E> listFillEntity(List<Map> list, E t, StuffConfig config) throws Exception {
+    public <E> List<E> listFillEntity(List<Map> list, E t, FillConfig config) throws Exception {
 
         List<E> result = new ArrayList<>();
         List<String> fieldsMap = new ArrayList<>();
@@ -192,7 +192,7 @@ public class FillToolImpl {
      *
      * @author:hihuzi 2018/6/26 14:51
      */
-    public <E> Map fillMapDefault(E e, Map map, StuffConfig config) throws Exception {
+    public <E> Map fillMapDefault(E e, Map map, FillConfig config) throws Exception {
 
         Map<String, TypeCache> caches = ClassCache.getCache(e.getClass());
         if (caches != null) {
@@ -234,7 +234,7 @@ public class FillToolImpl {
      * @return: List<E>
      * @author: hihuzi 2018/6/26 14:51
      */
-    public <E> List<E> listToEntityDefault(List<String> list, E e, StuffConfig config) throws Exception {
+    public <E> List<E> listToEntityDefault(List<String> list, E e, FillConfig config) throws Exception {
 
         List<E> result = new ArrayList<>();
         List<String> field = new ArrayList<>();

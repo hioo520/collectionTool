@@ -1,7 +1,7 @@
 package com.hihuzi.collection.fill.common;
 
-import com.hihuzi.collection.fill.constant.StuffConfig;
 import com.hihuzi.collection.cache.ClassCache;
+import com.hihuzi.collection.fill.constant.FillConfig;
 import com.hihuzi.collection.utils.StrUtils;
 
 import java.lang.reflect.Method;
@@ -21,11 +21,11 @@ public class Invoke {
      * @parameter: E obj
      * @parameter: String names
      * @parameter: String value
-     * @parameter: StuffConfig config
+     * @parameter: FillConfig config
      * @return:
      * @author: hihuzi 2018/6/22 9:22
      */
-    public static <E> void injectionParameters(E obj, String names, String value, StuffConfig config) throws
+    public static <E> void injectionParameters(E obj, String names, String value, FillConfig config) throws
             Exception {
 
         Class clazz = obj.getClass();
@@ -57,12 +57,12 @@ public class Invoke {
      * @parameter: String name
      * @parameter: String value
      * @parameter: Class<?> paramtertype
-     * @parameter: StuffConfig config
+     * @parameter: FillConfig config
      * @return:
      * @author: hihuzi 2018/7/19 10:26
      */
 
-    public static <E> void putValue(E e, String name, String value, Class<?> paramtertype, StuffConfig config) throws Exception {
+    public static <E> void putValue(E e, String name, String value, Class<?> paramtertype, FillConfig config) throws Exception {
 
         if (StrUtils.isNoEE(paramtertype)) {
             paramtertype = e.getClass().getDeclaredField(name).getType();

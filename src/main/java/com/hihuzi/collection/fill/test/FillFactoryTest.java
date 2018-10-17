@@ -1,12 +1,12 @@
 package com.hihuzi.collection.fill.test;
 
 
-import com.hihuzi.collection.fill.constant.StuffBase;
-import com.hihuzi.collection.fill.constant.StuffConfig;
-import com.hihuzi.collection.fill.core.FillTool;
 import com.hihuzi.collection.cache.ClassCache;
 import com.hihuzi.collection.cache.TypeCache;
 import com.hihuzi.collection.fill.FillFactory;
+import com.hihuzi.collection.fill.constant.FillBase;
+import com.hihuzi.collection.fill.constant.FillConfig;
+import com.hihuzi.collection.fill.core.FillTool;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -55,15 +55,15 @@ public class FillFactoryTest {
         map0.forEach((o, o2) -> System.out.print(o + "=" + o2 + " "));
         System.out.println("");
         /**tips 舍弃掉空值*/
-        Map map1 = FillFactory.batch().fill(request, new StuffConfig(StuffConfig.SaveStyleEnum.REMOVE_NULL_EMPTY));
+        Map map1 = FillFactory.batch().fill(request, new FillConfig(FillConfig.SaveStyleEnum.REMOVE_NULL_EMPTY));
         map1.forEach((o, o2) -> System.out.print(o + "=" + o2 + " "));
         System.out.println("");
         /**tips 默认属性不舍弃空值*/
-        Map map2 = FillFactory.batch().fill(request, new StuffConfig(StuffConfig.SaveStyleEnum.DEFAULT));
+        Map map2 = FillFactory.batch().fill(request, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
         map2.forEach((o, o2) -> System.out.print(o + "=" + o2 + " "));
         System.out.println("");
         /**tips 舍弃空值 并且去掉特定字段*/
-        Map map3 = FillFactory.batch().fill(request, new StuffConfig(StuffConfig.SaveStyleEnum.REMOVE_NULL_EMPTY), "stringMax");
+        Map map3 = FillFactory.batch().fill(request, new FillConfig(FillConfig.SaveStyleEnum.REMOVE_NULL_EMPTY), "stringMax");
         map3.forEach((o, o2) -> System.out.print(o + "=" + o2 + " "));
     }
 
@@ -154,11 +154,11 @@ public class FillFactoryTest {
         request.setParameter("dateMax", "2012-12-12");
         TestBean map = null;
         map = FillFactory.batch().fillEntity(request, new TestBean(),
-                new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")));
+                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")));
         System.out.println(Arrays.asList(map).toString());
         request.setParameter("dateMax", "2012-12-12 22:21:20");
         map = FillFactory.batch().fillEntity(request, new TestBean(),
-                new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
+                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
         System.out.println(Arrays.asList(map).toString());
     }
 
@@ -214,14 +214,14 @@ public class FillFactoryTest {
 
         map.put("dateMax", "2012-12-12 24:23:22");
         TestBean bean0 = FillFactory.batch().fillEntity(map, new TestBean(),
-                new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
+                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
         System.out.println(bean0.toString() + "hashCode" + bean.hashCode());
 
 
         Map map1 = new HashMap(5);
         /**tips 从对象中取出map*/
         Map map2 = FillFactory.batch().fillMap(bean0, map1,
-                new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")));
+                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")));
         System.out.println("fillMap从对象中取出不为空的属性");
         map2.forEach((o, o2) -> System.out.print(o + "-->" + o2));
     }
@@ -260,7 +260,7 @@ public class FillFactoryTest {
         /**tips 特殊的时间格式处理*/
         map.put("dateMax", "2012!12@12#12-12:12");
         List<TestBean> bean0 = FillFactory.batch().fillEntity(list, new TestBean(),
-                new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss")));
+                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss")));
         System.out.println(bean.get(0).toString());
         System.out.println(bean0.get(0).toString());
     }
@@ -287,7 +287,7 @@ public class FillFactoryTest {
         System.out.println("");
         System.out.println("fillMap从对象中取出不为空的属性 并且时间自定义");
         map1 = FillFactory.batch().fillMap(bean, map1,
-                new StuffConfig(StuffBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
+                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
         map1.forEach((o, o2) -> System.out.print(o + "-->" + o2 + " "));
     }
 

@@ -1,6 +1,7 @@
 package com.hihuzi.collection.pick.test;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import java.util.Date;
  * @author: hihuzi  2018/6/27 6:39
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class TestBean extends Base {
 
     private String id;
