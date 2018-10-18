@@ -11,6 +11,6 @@ import java.util.Date;
  * @author: hihuzi 2018/10/17 17:25
  **/
 @Data
-public class Base {
+public class Base extends Root {
     private Date date0 = new Date();
 }

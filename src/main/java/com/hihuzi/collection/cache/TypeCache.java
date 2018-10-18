@@ -81,8 +81,7 @@ public class TypeCache {
      */
     public static TypeCache add(Class<?> clazz, String paramterName, Class<?> paramtertype) {
 
-        TypeCache cacheAttribute = new TypeCache(clazz, paramterName, paramtertype);
-        return cacheAttribute;
+        return new TypeCache(clazz, paramterName, paramtertype);
     }
 
     /**
@@ -104,7 +103,7 @@ public class TypeCache {
         if (paramterType != null) {
             return paramterType;
         } else {
-            for (clazz = clazz.getSuperclass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
+            for (clazz = clazz.getSuperclass(); Object.class != clazz; clazz = clazz.getSuperclass()) {
                 try {
                     paramterType = clazz.getDeclaredField(paramterName).getType();
                 } catch (Exception e) {
@@ -142,7 +141,7 @@ public class TypeCache {
         if (method != null) {
             return method;
         } else {
-            for (clazz = clazz.getSuperclass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
+            for (clazz = clazz.getSuperclass(); Object.class != clazz; clazz = clazz.getSuperclass()) {
                 try {
                     method = clazz.getMethod(paramter, paramtertype);
                 } catch (NoSuchMethodException e) {
@@ -151,7 +150,7 @@ public class TypeCache {
                     } catch (NoSuchMethodException e1) {
                     }
                 }
-                if (method != null) {
+                if (null != method) {
                     return method;
                 }
             }

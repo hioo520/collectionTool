@@ -16,15 +16,24 @@ import java.util.*;
  * @Author:hihuzi 2018/7/19 17:54
  */
 public class PickToolImpl {
+
     /**
-     * tips 只针对时间类型转化
+     * tips 只针对时间类型 和字符串类型 转化
      *
      * @notice : 0 是预留数据类型 表示没有匹配
      * @author: hihuzi 2018/10/10 19:30
      */
     public static Object processingTimeType(Class<?> type, PickConfig config, Object obj) {
+
         if (Constants.TypeEnum.DATE.getValue().equals(type.getSimpleName())) {
             return config.getDateStyleEnum().getFormartStyle().format(obj);
+        }
+        if (Constants.TypeEnum.STRING.getValue().equals(type.getSimpleName())) {
+            if (config.getSaveStyleEnum().getHaving()) {
+                return obj;
+            } else {
+                return "".equals(String.valueOf(obj).trim()) ? null : obj;
+            }
         }
         return obj;
     }
@@ -39,7 +48,7 @@ public class PickToolImpl {
      */
     public Map batchMap(Map map, PickConfig config, String... str) {
 
-        if (map == null || map.size() == 0) {
+        if (null == map || 0 == map.size()) {
             throw new IndexOutOfBoundsException("调用batch: 输入的是null! 或者为空值");
         }
         Map result = new HashMap<>(str.length);
@@ -68,7 +77,7 @@ public class PickToolImpl {
         if (list == null) {
             throw new IndexOutOfBoundsException("调用batch: 输入的是null!");
         }
-        Class<?> clazz = list.get(0).getClass();
+        Class clazz = list.get(0).getClass();
         List<Map> lists = new ArrayList<>(list.size());
         Set sets = new HashSet<>(list.size());
         Map maps = new HashMap(list.size());
@@ -77,15 +86,16 @@ public class PickToolImpl {
             for (String property : key) {
                 String name = StrUtils.achieveGetFunction(property);
                 Object invoke = null;
+                Method method = null;
                 TypeCache cache = ClassCache.getCache(clazz, property);
-                if (cache != null) {
-                    Method method = cache.getMethodGet();
+                if (null != cache) {
+                    method = cache.getMethodGet();
                     method.setAccessible(true);
                     invoke = method.invoke(t);
                     invoke = processingTimeType(cache.getParamtertype(), config, invoke);
                 } else {
                     try {
-                        Method method = clazz.getMethod(name);
+                        method = clazz.getMethod(name);
                         method.setAccessible(true);
                         invoke = method.invoke(t);
                         invoke = processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
@@ -93,7 +103,7 @@ public class PickToolImpl {
                     } catch (Exception e) {
                         try {
                             for (clazz = clazz.getSuperclass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
-                                Method method = clazz.getMethod(name);
+                                method = clazz.getMethod(name);
                                 method.setAccessible(true);
                                 invoke = method.invoke(t);
                                 invoke = processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
@@ -115,7 +125,7 @@ public class PickToolImpl {
                         achieveMap(maps, property, invoke, config);
                         break;
                     case SET:
-                        if (invoke != null && !"".equals(String.valueOf(invoke)) && !"".equals(String.valueOf(invoke).trim())) {
+                        if (invoke != null) {
                             sets.add(invoke);
                         } else if (config.getSaveStyleEnum().getHaving()) {
                             sets.add(invoke);
@@ -125,17 +135,17 @@ public class PickToolImpl {
                         throw new Exception("数据输出超出范围 参考PickEnum定义" + list.toString());
                 }
             }
-            if (config.getReturnStyleEnum().getKey() == 0 || config.getReturnStyleEnum().getKey() == 1) {
+            if (0 == config.getReturnStyleEnum().getKey() || 1 == config.getReturnStyleEnum().getKey()) {
                 lists.add(map);
             }
         }
-        if (sets != null && sets.size() != 0) {
+        if (null != sets && 0 != sets.size()) {
             return sets;
         }
-        if (lists != null && lists.size() != 0) {
+        if (null != lists && 0 != lists.size()) {
             return lists;
         }
-        if (maps != null && maps.size() != 0) {
+        if (null != maps && 0 != maps.size()) {
             lists.add(maps);
             return lists;
         }
@@ -152,7 +162,7 @@ public class PickToolImpl {
     private void achieveMap(Map map, String key, Object invoke, PickConfig config) {
 
 
-        if (invoke != null && !"".equals(String.valueOf(invoke))) {
+        if (null != invoke) {
             map.put(achieveKey(key, config), invoke);
         } else if (config.getSaveStyleEnum().getHaving()) {
             map.put(achieveKey(key, config), "");
@@ -184,4 +194,5 @@ public class PickToolImpl {
         }
         return null;
     }
+
 }

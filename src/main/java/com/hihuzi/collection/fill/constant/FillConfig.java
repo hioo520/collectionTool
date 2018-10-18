@@ -34,8 +34,8 @@ public class FillConfig implements FillBase {
      */
     public static void reset() {
 
-        FillConfig.SortStyleEnum.DEFAULT.setSort(new Integer[]{});
-        FillConfig.DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
+        SortStyleEnum.DEFAULT.setSort(new Integer[]{});
+        DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
     }
 
     /**
@@ -73,7 +73,7 @@ public class FillConfig implements FillBase {
 
     public SaveStyleEnum getSaveStyleEnum() {
 
-        return saveStyleEnum != null ? saveStyleEnum : SaveStyleEnum.DEFAULT;
+        return null != saveStyleEnum ? saveStyleEnum : SaveStyleEnum.DEFAULT;
     }
 
     public FillConfig setSaveStyleEnum(SaveStyleEnum saveStyleEnum) {
@@ -84,7 +84,7 @@ public class FillConfig implements FillBase {
 
     public SortStyleEnum getSortStyleEnum() {
 
-        return sortStyleEnum != null ? sortStyleEnum : SortStyleEnum.DEFAULT;
+        return null != sortStyleEnum ? sortStyleEnum : SortStyleEnum.DEFAULT;
     }
 
     public void setSortStyleEnum(SortStyleEnum sortStyleEnum) {
@@ -94,7 +94,7 @@ public class FillConfig implements FillBase {
 
     public DateStyleEnum getDateStyleEnum() {
 
-        return dateStyleEnum != null ? dateStyleEnum : DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
+        return null != dateStyleEnum ? dateStyleEnum : DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
     }
 
     public void setDateStyleEnum(DateStyleEnum dateStyleEnum) {

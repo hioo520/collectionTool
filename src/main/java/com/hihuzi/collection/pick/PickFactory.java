@@ -26,10 +26,7 @@ public interface PickFactory {
      */
     static PickFactory batch() {
 
-        if (PICK_TOOL == null) {
-            return new PickTool();
-        }
-        return PICK_TOOL;
+        return new PickTool();
     }
 
     /**

@@ -91,20 +91,20 @@ public class PickConfig implements PickBase {
     }
 
     public ReturnNameEnum getReturnNameEnum() {
-        return returnNameEnum != null ? returnNameEnum : ReturnNameEnum.DEFAULT;
+        return null != returnNameEnum ? returnNameEnum : ReturnNameEnum.DEFAULT;
     }
 
     public PickConfig setReturnNameEnum(ReturnNameEnum returnNameEnum) {
-        this.returnNameEnum = returnNameEnum != null ? returnNameEnum : ReturnNameEnum.DEFAULT;
+        this.returnNameEnum = null != returnNameEnum ? returnNameEnum : ReturnNameEnum.DEFAULT;
         return this;
     }
 
     public ReturnStyleEnum getReturnStyleEnum() {
-        return returnStyleEnum != null ? returnStyleEnum : ReturnStyleEnum.DEFAULT;
+        return null != returnStyleEnum ? returnStyleEnum : ReturnStyleEnum.DEFAULT;
     }
 
     public PickConfig setReturnStyleEnum(ReturnStyleEnum returnStyleEnum) {
-        this.returnStyleEnum = returnStyleEnum != null ? returnStyleEnum : ReturnStyleEnum.DEFAULT;
+        this.returnStyleEnum = null != returnStyleEnum ? returnStyleEnum : ReturnStyleEnum.DEFAULT;
         return this;
     }
 
@@ -113,12 +113,12 @@ public class PickConfig implements PickBase {
     }
 
     public PickConfig setSaveStyleEnum(SaveStyleEnum saveStyleEnum) {
-        this.saveStyleEnum = saveStyleEnum != null ? saveStyleEnum : SaveStyleEnum.DEFAULT;
+        this.saveStyleEnum = null != saveStyleEnum ? saveStyleEnum : SaveStyleEnum.DEFAULT;
         return this;
     }
 
     public DateStyleEnum getDateStyleEnum() {
-        return dateStyleEnum != null ? dateStyleEnum : DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
+        return null != dateStyleEnum ? dateStyleEnum : DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
     }
 
     public void setDateStyleEnum(DateStyleEnum dateStyleEnum) {

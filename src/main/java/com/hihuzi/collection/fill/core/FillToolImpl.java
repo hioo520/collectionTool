@@ -74,13 +74,13 @@ public class FillToolImpl {
     public <E> E requestFillEntityDefault(HttpServletRequest request, E e, FillConfig config) throws Exception {
 
         Enumeration pars = request.getParameterNames();
-        Class<E> clazz = (Class<E>) e.getClass();
+        Class clazz =  e.getClass();
         while (pars.hasMoreElements()) {
             String name = pars.nextElement().toString().trim();
             String value = request.getParameter(name);
             if (StrUtils.isNNoE(value)) {
                 TypeCache cache = ClassCache.getCache(clazz, name);
-                if (cache != null) {
+                if (null != cache) {
                     ValueHandleCache.invokeValueCache(e, cache.getMethodSet(), value, cache.getType(), config);
                 } else {
                     Invoke.injectionParameters(e, name, value, config);
@@ -88,7 +88,7 @@ public class FillToolImpl {
             } else {
                 if (config.getSaveStyleEnum().getHaving()) {
                     TypeCache cache = ClassCache.getCache(clazz, name);
-                    if (cache != null) {
+                    if (null != cache) {
                         ValueHandleCache.invokeValueCache(e, cache.getMethodSet(), value, cache.getType(), config);
                     } else {
                         Invoke.injectionParameters(e, name, value, config);
@@ -110,22 +110,22 @@ public class FillToolImpl {
     public <E> E mapFillEntity(Map map, E e, FillConfig config) throws Exception {
 
         Iterator iterator = map.entrySet().iterator();
-        Class<E> clazz = (Class<E>) e.getClass();
+        Class clazz = e.getClass();
         while (iterator.hasNext()) {
             Map.Entry entry = (Map.Entry) iterator.next();
             String name = String.valueOf(entry.getKey());
             String value = String.valueOf(entry.getValue());
             if (StrUtils.isNNoE(value)) {
                 TypeCache cache = ClassCache.getCache(clazz, name);
-                if (cache != null) {
+                if (null != cache) {
                     ValueHandleCache.invokeValueCache(e, cache.getMethodSet(), value, cache.getType(), config);
                 } else {
                     Invoke.injectionParameters(e, name, value, config);
                 }
             } else {
-                if (config != null && config.getSaveStyleEnum().getHaving()) {
+                if (null != config && config.getSaveStyleEnum().getHaving()) {
                     TypeCache cache = ClassCache.getCache(clazz, name);
-                    if (cache != null) {
+                    if (null != cache) {
                         ValueHandleCache.invokeValueCache(e, cache.getMethodSet(), value, cache.getType(), config);
                     } else {
                         Invoke.injectionParameters(e, name, value, config);
@@ -149,12 +149,12 @@ public class FillToolImpl {
         List<E> result = new ArrayList<>();
         List<String> fieldsMap = new ArrayList<>();
         List<Map> entityMaps = new ArrayList<>();
-        Class<E> clazz = (Class<E>) t.getClass();
+        Class clazz = t.getClass();
         Map<String, TypeCache> cache = ClassCache.getCache(clazz);
-        if (cache != null) {
+        if (null != cache) {
             fieldsMap = new ArrayList<>(cache.keySet());
         } else {
-            for (; clazz != Object.class; clazz = (Class<E>) clazz.getSuperclass()) {
+            for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
                 Field[] fields = clazz.getDeclaredFields();
                 for (int i = 0; i < fields.length; i++) {
                     fieldsMap.add(fields[i].getName());
@@ -195,7 +195,7 @@ public class FillToolImpl {
     public <E> Map fillMapDefault(E e, Map map, FillConfig config) throws Exception {
 
         Map<String, TypeCache> caches = ClassCache.getCache(e.getClass());
-        if (caches != null) {
+        if (null != caches) {
             Iterator<Map.Entry<String, TypeCache>> iterator = caches.entrySet().iterator();
             while (iterator.hasNext()) {
                 Map.Entry typeCache = iterator.next();
@@ -203,7 +203,7 @@ public class FillToolImpl {
                 Method methodGet = cache.getMethodGet();
                 methodGet.setAccessible(true);
                 Object invoke = methodGet.invoke(e);
-                if (config.getSaveStyleEnum().getHaving() && invoke != null) {
+                if (config.getSaveStyleEnum().getHaving() && null != invoke) {
                     invoke = ValueHandleCache.processingTimeType(cache.getParamtertype(), config, invoke);
                     map.put(typeCache.getKey(), invoke);
                 }
@@ -217,7 +217,7 @@ public class FillToolImpl {
                 Method method = clazz.getMethod(StrUtils.achieveGetFunction(declaredField.getName()));
                 Object invoke = method.invoke(e);
                 ClassCache.get().add(e.getClass(), declaredField.getName(), type);
-                if (config.getSaveStyleEnum().getHaving() && invoke != null) {
+                if (config.getSaveStyleEnum().getHaving() && null != invoke) {
                     invoke = ValueHandleCache.processingTimeType(type, config, invoke);
                     map.put(declaredField.getName(), invoke);
                 }
@@ -255,7 +255,7 @@ public class FillToolImpl {
 //        }
         int i = 0;
         Integer[] sort = config.getSortStyleEnum().getSort();
-        if (StrUtils.isNNoEE(config) && StrUtils.isNNoEE(sort) && sort.length != 0) {
+        if (StrUtils.isNNoEE(config) && StrUtils.isNNoEE(sort) && 0 != sort.length) {
             for (Integer integer : sort) {
                 if (integer < field.size() && i <= field.size()) {
                     fieldsMap.add(field.get(integer));
