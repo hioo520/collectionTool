@@ -40,7 +40,7 @@ public class PickToolImpl {
     }
 
     /**
-     * tips 添加缓存 无极提取属性参数
+     * tips 添加缓存 无极递归提取父类属性参数
      *
      * @parameter:
      * @return:
@@ -114,14 +114,13 @@ public class PickToolImpl {
                     try {
                         achieveInvoke(name, t, clazz, method, invoke, property, config);
                     } catch (Exception e) {
-                        try {
-                            clazz = clazz.getSuperclass();
-                            for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
+                        for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
+                            try {
                                 achieveInvoke(name, t, clazz, method, invoke, property, config);
                                 break;
+                            } catch (Exception e0) {
+                                continue;
                             }
-                        } catch (Exception e0) {
-                            continue;
                         }
                     }
                 }
