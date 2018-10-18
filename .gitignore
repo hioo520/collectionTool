@@ -7,5 +7,4 @@ target/
 /hihuzi_highSpeedCache.iml
 /.iml
 src/main/resources/
-src/test/
 collectionTool.iml
