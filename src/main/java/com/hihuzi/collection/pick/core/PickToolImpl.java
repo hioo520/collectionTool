@@ -102,12 +102,14 @@ public class PickToolImpl {
                         ClassCache.get().add(t.getClass(), property);
                     } catch (Exception e) {
                         try {
-                            for (clazz = clazz.getSuperclass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
+                            clazz = clazz.getSuperclass();
+                            for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
                                 method = clazz.getMethod(name);
                                 method.setAccessible(true);
                                 invoke = method.invoke(t);
                                 invoke = processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
                                 ClassCache.get().add(t.getClass(), property);
+                                break;
                             }
                         } catch (Exception e0) {
                             System.out.println("对应的实体里面没有方法: " + name);

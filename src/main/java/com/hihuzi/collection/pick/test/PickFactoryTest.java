@@ -17,6 +17,32 @@ import java.util.*;
 public class PickFactoryTest {
 
 
+    /**
+     * tips  时间格式化 多级父类
+     *
+     * @parameter:
+     * @return:
+     * @author: hihuzi 2018/10/18 11:16
+     */
+    @Test
+    public void pick0() throws Exception {
+
+
+        List<TestBean> list = new ArrayList<>();
+        for (int i = 2; i < 3; i++) {
+            TestBean userPost = new TestBean();
+            userPost.setName("你好师姐");
+            userPost.setId(12345 * i + "");
+            userPost.setEmail(null);
+            userPost.setAddress("    ");
+            list.add(userPost);
+        }
+        /**tips 时间格式化 多级父类*/
+        List<Map> batch6 = PickFactory.batch().pick(list, new PickConfig(
+                PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date", "date0", "date1");
+        batch6.forEach(map -> System.out.println(map));
+    }
+
     @Test
     public void pick() throws Exception {
 
@@ -56,12 +82,6 @@ public class PickFactoryTest {
         List<Map> batch5 = PickFactory.batch().pick(list, new PickConfig(
                 PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date", "date0");
         batch5.forEach(map -> System.out.println(map));
-
-        /**tips 时间格式化 多级父类*/
-        List<Map> batch6 = PickFactory.batch().pick(list, new PickConfig(
-                PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date", "date0", "date1");
-        batch6.forEach(map -> System.out.println(map));
-
     }
 
     /**
