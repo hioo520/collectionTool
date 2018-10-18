@@ -7,6 +7,7 @@ import com.hihuzi.collection.pick.constant.PickConfig;
 import com.hihuzi.collection.utils.Constants;
 import com.hihuzi.collection.utils.StrUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -36,6 +37,22 @@ public class PickToolImpl {
             }
         }
         return obj;
+    }
+
+    /**
+     * tips 添加缓存 无极提取属性参数
+     *
+     * @parameter:
+     * @return:
+     * @author: hihuzi  2018/10/18 11:43
+     */
+    private <T> void achieveInvoke(String name, T t, Class clazz, Method method, Object invoke, String property, PickConfig config) throws Exception {
+
+        method = clazz.getMethod(name);
+        method.setAccessible(true);
+        invoke = method.invoke(t);
+        invoke = processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
+        ClassCache.get().add(t.getClass(), property);
     }
 
     /**
@@ -95,20 +112,12 @@ public class PickToolImpl {
                     invoke = processingTimeType(cache.getParamtertype(), config, invoke);
                 } else {
                     try {
-                        method = clazz.getMethod(name);
-                        method.setAccessible(true);
-                        invoke = method.invoke(t);
-                        invoke = processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
-                        ClassCache.get().add(t.getClass(), property);
+                        achieveInvoke(name, t, clazz, method, invoke, property, config);
                     } catch (Exception e) {
                         try {
                             clazz = clazz.getSuperclass();
                             for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
-                                method = clazz.getMethod(name);
-                                method.setAccessible(true);
-                                invoke = method.invoke(t);
-                                invoke = processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
-                                ClassCache.get().add(t.getClass(), property);
+                                achieveInvoke(name, t, clazz, method, invoke, property, config);
                                 break;
                             }
                         } catch (Exception e0) {
@@ -153,6 +162,7 @@ public class PickToolImpl {
         }
         return null;
     }
+
 
     /**
      * tips 从新命名key
