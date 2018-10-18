@@ -24,10 +24,7 @@ public interface FillFactory {
      */
     static FillTool batch() {
 
-        if (FILL_TOOL == null) {
-            return new FillTool();
-        }
-        return FILL_TOOL;
+        return new FillTool();
     }
 
     /**

@@ -60,7 +60,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
     @Override
     public <E> Set pickValue(List<E> list, String... parameter) throws Exception {
 
-        Set<String> set = (Set) batch(list, new PickConfig(
+        Set set = (Set) batch(list, new PickConfig(
                 PickBase.ReturnStyleEnum.SET,
                 PickBase.ReturnNameEnum.DEFAULT,
                 PickBase.SaveStyleEnum.DEFAULT), parameter);
@@ -80,7 +80,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
     @Override
     public <E> Set pickValue(List<E> list, PickConfig config, String... parameter) throws Exception {
 
-        Set<String> set = (Set) batch(list,
+        Set set = (Set) batch(list,
                 config.setReturnStyleEnum(PickBase.ReturnStyleEnum.SET), parameter);
         PickConfig.reset();
         return set;

@@ -37,7 +37,7 @@ public class Invoke {
         if (StrUtils.isNNoEE(paramtertype)) {
             putValue(obj, names, value, paramtertype, config);
         } else {
-            for (; clazz != Object.class; clazz = (Class<E>) clazz.getSuperclass()) {
+            for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
                 try {
                     paramtertype = clazz.getDeclaredField(names).getType();
                 } catch (NoSuchFieldException e) {

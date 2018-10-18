@@ -36,9 +36,9 @@ public class ClassCache {
     public static Boolean isHaving(Class<?> clazz, String... paramterName) {
 
         if (paramterName.length == 0) {
-            return cache.get(clazz.getName()) != null ? true : false;
+            return cache.get(clazz.getName()) != null;
         } else {
-            return cache.get(clazz.getName()).get(paramterName) != null ? true : false;
+            return cache.get(clazz.getName()).get(paramterName) != null;
         }
     }
 

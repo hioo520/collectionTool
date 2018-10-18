@@ -92,7 +92,7 @@ public class PickToolImpl {
                         ClassCache.get().add(t.getClass(), property);
                     } catch (Exception e) {
                         try {
-                            for (clazz = clazz.getSuperclass(); clazz != Object.class; clazz = (Class<T>) clazz.getSuperclass()) {
+                            for (clazz = clazz.getSuperclass(); clazz != Object.class; clazz = clazz.getSuperclass()) {
                                 Method method = clazz.getMethod(name);
                                 method.setAccessible(true);
                                 invoke = method.invoke(t);
@@ -172,11 +172,11 @@ public class PickToolImpl {
             case DEFAULT:
                 return property;
             case LOWER_CASE:
-                return new StringBuffer().append(property.toLowerCase()).toString();
+                return property.toLowerCase();
             case UPPER_CASE:
-                return new StringBuffer().append(property.toUpperCase()).toString();
+                return property.toUpperCase();
             case INITIAL_CAPITAL:
-                return new StringBuffer().append(property.substring(0, 1).toUpperCase()).append(property.substring(1)).toString();
+                return property.substring(0, 1).toUpperCase() + property.substring(1);
             case CUSTOM_SUFFIX:
                 return config.getReturnNameEnum().getKey() + property;
             default:

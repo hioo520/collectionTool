@@ -215,7 +215,7 @@ public class FillToolImpl {
                 declaredField.setAccessible(true);
                 Class<?> type = declaredField.getType();
                 Method method = clazz.getMethod(StrUtils.achieveGetFunction(declaredField.getName()));
-                Object invoke = method.invoke(e, new Object[]{});
+                Object invoke = method.invoke(e);
                 ClassCache.get().add(e.getClass(), declaredField.getName(), type);
                 if (config.getSaveStyleEnum().getHaving() && invoke != null) {
                     invoke = ValueHandleCache.processingTimeType(type, config, invoke);
@@ -239,13 +239,13 @@ public class FillToolImpl {
         List<E> result = new ArrayList<>();
         List<String> field = new ArrayList<>();
         List<String> fieldsMap = new ArrayList<>();
-        Class<E> clazz = (Class<E>) e.getClass();
+        Class clazz = e.getClass();
 
 //        Map<String, TypeCache> cache = ClassCache.getCache(clazz);
 //        if (cache != null) {
 //            field = new ArrayList<>(cache.keySet());
 //        } else {
-        for (; clazz != Object.class; clazz = (Class<E>) clazz.getSuperclass()) {
+        for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             Field[] fields = clazz.getDeclaredFields();
             for (int i = 0; i < fields.length; i++) {
                 field.add(fields[i].getName());
