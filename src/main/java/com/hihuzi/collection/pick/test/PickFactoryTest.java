@@ -38,8 +38,8 @@ public class PickFactoryTest {
             list.add(userPost);
         }
         /**tips 时间格式化 多级父类*/
-        List<Map> batch6 = PickFactory.batch().pick(list, new PickConfig(
-                PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date", "date0", "date1");
+        List<Map> batch6 = PickFactory.batch().pick(list, new PickConfig(PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY,
+                PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date", "date0", "date1", "date341231");
         batch6.forEach(map -> System.out.println(map));
     }
 

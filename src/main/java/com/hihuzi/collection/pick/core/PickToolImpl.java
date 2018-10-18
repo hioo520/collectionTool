@@ -112,7 +112,7 @@ public class PickToolImpl {
                                 break;
                             }
                         } catch (Exception e0) {
-                            System.out.println("对应的实体里面没有方法: " + name);
+                            continue;
                         }
                     }
                 }
