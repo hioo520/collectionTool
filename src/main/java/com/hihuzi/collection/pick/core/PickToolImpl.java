@@ -46,13 +46,14 @@ public class PickToolImpl {
      * @return:
      * @author: hihuzi  2018/10/18 11:43
      */
-    private <T> void achieveInvoke(String name, T t, Class clazz, Method method, Object invoke, String property, PickConfig config) throws Exception {
+    private <T>  Object achieveInvoke(String name, T t, Class clazz, Method method, Object invoke, String property, PickConfig config) throws Exception {
 
         method = clazz.getMethod(name);
         method.setAccessible(true);
         invoke = method.invoke(t);
         invoke = processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
         ClassCache.get().add(t.getClass(), property);
+        return invoke;
     }
 
     /**
@@ -112,11 +113,11 @@ public class PickToolImpl {
                     invoke = processingTimeType(cache.getParamtertype(), config, invoke);
                 } else {
                     try {
-                        achieveInvoke(name, t, clazz, method, invoke, property, config);
+                        invoke = achieveInvoke(name, t, clazz, method, invoke, property, config);
                     } catch (Exception e) {
                         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
                             try {
-                                achieveInvoke(name, t, clazz, method, invoke, property, config);
+                                invoke = achieveInvoke(name, t, clazz, method, invoke, property, config);
                                 break;
                             } catch (Exception e0) {
                                 continue;
