@@ -18,11 +18,13 @@ import java.util.*;
  *
  * @author:hihuzi 2018/7/23 9:21
  */
-public class FillFactoryTest {
+public class FillFactoryTest implements Runnable {
 
     private MockHttpServletRequest request;
 
     private FillFactory fillTool;
+    private Map map;
+    private String tip;
 
     @Before
     public void setUp() {
@@ -30,6 +32,11 @@ public class FillFactoryTest {
         request = new MockHttpServletRequest();
         request.setCharacterEncoding("utf-8");
         fillTool = new FillTool();
+    }
+
+    public FillFactoryTest(Map map, String tip) {
+        this.map = map;
+        this.tip = tip;
     }
 
     /**
@@ -65,6 +72,7 @@ public class FillFactoryTest {
         /**tips 舍弃空值 并且去掉特定字段*/
         Map map3 = FillFactory.batch().fill(request, new FillConfig(FillConfig.SaveStyleEnum.REMOVE_NULL_EMPTY), "stringMax");
         map3.forEach((o, o2) -> System.out.print(o + "=" + o2 + " "));
+
     }
 
     /**
@@ -96,11 +104,11 @@ public class FillFactoryTest {
         request.setParameter("doubleMin", "");
         long start = System.currentTimeMillis();
         TestBean map1 = null;
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 10000000; i++) {
             map1 = FillFactory.batch().fillEntity(request, new TestBean());
         }
         long end = System.currentTimeMillis();
-        System.err.println("------>一百万 耗时" + (end - start) / 1000 + "秒<------");
+        System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
         System.out.println(Arrays.asList(map1));
     }
 
@@ -195,6 +203,12 @@ public class FillFactoryTest {
         Map map2 = FillFactory.batch().fillMap(bean, map1);
         System.out.println(bean.toString());
         map2.forEach((o, o2) -> System.out.print(o + " " + o2));
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 10000000; i++) {
+            TestBean bean0 = FillFactory.batch().fillEntity(map, new TestBean());
+        }
+        long end = System.currentTimeMillis();
+        System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
     }
 
     /**
@@ -224,6 +238,7 @@ public class FillFactoryTest {
                 new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")));
         map2.forEach((o, o2) -> System.out.print(o + "-->" + o2));
     }
+
 
     /**
      * tips List<Map> --> E --> List<E>
@@ -262,6 +277,14 @@ public class FillFactoryTest {
                 new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss")));
         System.out.println(bean.get(0).toString());
         System.out.println(bean0.get(0).toString());
+        long start = System.currentTimeMillis();
+        List<TestBean> bean3;
+        for (int i = 0; i < 1000000; i++) {
+            bean3 = FillFactory.batch().fillEntity(list, new TestBean(),
+                    new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss")));
+        }
+        long end = System.currentTimeMillis();
+        System.err.println("------>一百万 耗时" + (end - start) / 1000 + "秒<------");
     }
 
     /**
@@ -323,8 +346,52 @@ public class FillFactoryTest {
         list.add("1.94");
         List<TestBean> bean = FillFactory.batch().listToEntity(list, new TestBean());
         System.out.println(bean.get(0).toString());
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 10000000; i++) {
+            List<TestBean> bean0 = FillFactory.batch().listToEntity(list, new TestBean());
+        }
+        long end = System.currentTimeMillis();
+        System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
         Map<String, Map<String, TypeCache>> classCache = ClassCache.cache;
         classCache.forEach((s, typeCache) -> System.err.println(typeCache.size()));
     }
 
+    @Override
+    public void run() {
+
+        TestBean bean = null;
+        try {
+            bean = FillFactory.batch().fillEntity(map, new TestBean(),
+                    new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle(this.tip)));
+            System.out.println(bean.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void main(String[] args) {
+        Map map = new HashMap(1);
+        map.put("dateMax", "333-33-33");
+        FillFactoryTest test0 = new FillFactoryTest(map, "yyyy-MM-dd");
+        Map maps = new HashMap(1);
+        maps.put("dateMax", "222!22@22#22-22:22");
+        FillFactoryTest test = new FillFactoryTest(maps, "yyyy!MM@dd#HH-mm:ss");
+        List<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < 666;i++) {
+            Thread thread;
+            if (i % 2 == 0) {
+                thread = new Thread(test0, ""+i);
+            } else {
+                thread = new Thread(test,  ""+i);
+            }
+            threads.add(thread);
+        }
+        for (Thread thread : threads) {
+
+            thread.start();
+        }
+
+
+    }
 }

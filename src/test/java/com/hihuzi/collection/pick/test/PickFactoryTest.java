@@ -14,8 +14,15 @@ import java.util.*;
  *
  * @author: hihuzi 2018/7/20 8:42
  */
-public class PickFactoryTest {
+public class PickFactoryTest implements Runnable {
 
+    public PickFactoryTest(Map map, String tip) {
+        this.map = map;
+        this.tip = tip;
+    }
+
+    private Map map;
+    private String tip;
 
     /**
      * tips  时间格式化 多级父类
@@ -169,5 +176,42 @@ public class PickFactoryTest {
         Map<String, Map<String, TypeCache>> classCache = ClassCache.cache;
         classCache.forEach((s, typeCacheMap) -> System.err.println(typeCacheMap.size()));
     }
+    @Override
+    public void run() {
 
+        TestBean bean = new TestBean();
+        bean.setDate(new Date());
+        try {
+            Map  map =  PickFactory.batch().pickValue(bean,
+                    new PickConfig(PickBase.DateStyleEnum.DEFAULT.setFormartStyle(this.tip)),"date");
+            System.out.println(map.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    public static void main(String[] args) {
+        Map map = new HashMap(1);
+        map.put("dateMax", "2012-12-33");
+        PickFactoryTest test0 = new PickFactoryTest(map, "yyyy-MM-----dd");
+        Map maps = new HashMap(1);
+        maps.put("dateMax", "2018!22@22#22-22:22");
+        PickFactoryTest test = new PickFactoryTest(maps, "yyyy!MM@dd#HH-mm:ss");
+        List<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < 666; i++) {
+            Thread thread;
+            if (i % 2 == 0) {
+                thread = new Thread(test0, "" + i);
+            } else {
+                thread = new Thread(test, "" + i);
+            }
+            threads.add(thread);
+        }
+        for (Thread thread : threads) {
+
+            thread.start();
+        }
+
+
+    }
 }

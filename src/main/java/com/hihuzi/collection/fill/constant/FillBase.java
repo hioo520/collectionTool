@@ -1,7 +1,6 @@
 package com.hihuzi.collection.fill.constant;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * tips 控制常量
@@ -22,21 +21,27 @@ public interface FillBase {
          */
         DEFAULT("");
 
-        private String formartStyle;
+        private String value;
+        /**
+         * tips 多线程并发时启用
+         */
+        private static ThreadLocal<SimpleDateFormat> dateFormat = new ThreadLocal<SimpleDateFormat>() {
+        };
 
-        DateStyleEnum(String formartStyle) {
+        DateStyleEnum(String value) {
 
-            this.formartStyle = formartStyle;
+            this.value = value;
         }
 
         public SimpleDateFormat getFormartStyle() {
-
-            return new SimpleDateFormat(DateStyleEnum.DEFAULT.formartStyle);
+            return dateFormat.get();
         }
 
         public DateStyleEnum setFormartStyle(String formartStyle) {
-
-            this.formartStyle = formartStyle;
+            SimpleDateFormat threadSimpleDateFormat = dateFormat.get();
+            if (null == threadSimpleDateFormat) {
+                dateFormat.set(new SimpleDateFormat(formartStyle));
+            }
             return this;
         }
     }

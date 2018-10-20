@@ -100,8 +100,8 @@ public class FillToolImpl {
     }
 
     /**
-     * tips tips 对MAP数据装填--> 对象
-     *
+     * tips  对MAP数据装填--> 对象
+     * @notice: 忽略掉不在对象中的属性
      * @parameter: map
      * @parameter: E
      * @return: E
@@ -154,7 +154,7 @@ public class FillToolImpl {
         if (null != cache) {
             fieldsMap = new ArrayList<>(cache.keySet());
         } else {
-            for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
+            for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
                 Field[] fields = clazz.getDeclaredFields();
                 for (int i = 0; i < fields.length; i++) {
                     fieldsMap.add(fields[i].getName());
@@ -171,7 +171,7 @@ public class FillToolImpl {
                 String value = String.valueOf(entry.getValue());
                 if (StrUtils.isNNoE(value)) {
                     for (String fields : fieldsMap) {
-                        if (fields.toLowerCase().equalsIgnoreCase(names.replaceAll("_", "").toLowerCase())) {
+                        if (fields.toLowerCase().equals(names.replaceAll("[_|-|]", "").toLowerCase())) {
                             transition.put(fields, value);
                         }
                     }
@@ -240,11 +240,6 @@ public class FillToolImpl {
         List<String> field = new ArrayList<>();
         List<String> fieldsMap = new ArrayList<>();
         Class clazz = e.getClass();
-
-//        Map<String, TypeCache> cache = ClassCache.getCache(clazz);
-//        if (cache != null) {
-//            field = new ArrayList<>(cache.keySet());
-//        } else {
         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             Field[] fields = clazz.getDeclaredFields();
             for (int i = 0; i < fields.length; i++) {
@@ -252,7 +247,6 @@ public class FillToolImpl {
                 ClassCache.get().add(e.getClass(), fields[i].getName());
             }
         }
-//        }
         int i = 0;
         Integer[] sort = config.getSortStyleEnum().getSort();
         if (StrUtils.isNNoEE(config) && StrUtils.isNNoEE(sort) && 0 != sort.length) {

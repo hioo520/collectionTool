@@ -155,18 +155,27 @@ public interface PickBase {
          * 默认时间风格规则
          */
         DEFAULT("");
-        private String formartStyle;
 
-        DateStyleEnum(String formartStyle) {
-            this.formartStyle = formartStyle;
+        private String value;
+        /**
+         * tips 多线程并发时启用
+         */
+        private static ThreadLocal<SimpleDateFormat> dateFormat = new ThreadLocal<SimpleDateFormat>() {};
+
+        DateStyleEnum(String value) {
+
+            this.value = value;
         }
 
         public SimpleDateFormat getFormartStyle() {
-            return new SimpleDateFormat(DateStyleEnum.DEFAULT.formartStyle);
+            return dateFormat.get();
         }
 
         public DateStyleEnum setFormartStyle(String formartStyle) {
-            this.formartStyle = formartStyle;
+            SimpleDateFormat threadSimpleDateFormat = dateFormat.get();
+            if (null == threadSimpleDateFormat) {
+                dateFormat.set(new SimpleDateFormat(formartStyle));
+            }
             return this;
         }
     }
