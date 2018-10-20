@@ -165,6 +165,9 @@ public class FillFactoryTest implements Runnable {
         request.setParameter("dateMax", "2012-12-12");
         TestBean map = null;
         map = FillFactory.batch().fillEntity(request, new TestBean(),
+                new FillConfig());
+        System.out.println(Arrays.asList(map).toString());
+        map = FillFactory.batch().fillEntity(request, new TestBean(),
                 new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")));
         System.out.println(Arrays.asList(map).toString());
         request.setParameter("dateMax", "2012-12-12 22:21:20");

@@ -1,5 +1,7 @@
 package com.hihuzi.collection.pick.constant;
 
+import com.hihuzi.collection.utils.Constants;
+
 /**
  * tips:构造器
  *
@@ -7,10 +9,6 @@ package com.hihuzi.collection.pick.constant;
  * @author: hihuzi 2018/9/29 16:43
  **/
 public class PickConfig implements PickBase {
-    /**
-     * tips 默认可以处理的时间类型
-     */
-    private static final String DATE_FORMART = "yyyy-MM-dd";
     /**
      * 返回名自定义
      */
@@ -33,7 +31,7 @@ public class PickConfig implements PickBase {
      * 对枚举静态变量一定要初始化
      */
     public static void reset() {
-        DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
+        DateStyleEnum.DEFAULT.setFormartStyle(Constants.DATE_FORMART);
         ReturnNameEnum.CUSTOM_SUFFIX.setKey("");
     }
 
@@ -118,7 +116,7 @@ public class PickConfig implements PickBase {
     }
 
     public DateStyleEnum getDateStyleEnum() {
-        return null != dateStyleEnum ? dateStyleEnum : DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
+        return null != dateStyleEnum ? dateStyleEnum : DateStyleEnum.DEFAULT.setFormartStyle(Constants.DATE_FORMART);
     }
 
     public void setDateStyleEnum(DateStyleEnum dateStyleEnum) {

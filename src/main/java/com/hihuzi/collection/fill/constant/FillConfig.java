@@ -1,5 +1,7 @@
 package com.hihuzi.collection.fill.constant;
 
+import com.hihuzi.collection.utils.Constants;
+
 /**
  * tips: 填充工具控制器
  *
@@ -7,11 +9,6 @@ package com.hihuzi.collection.fill.constant;
  * @author: hihuzi 2018/9/30 10:08
  **/
 public class FillConfig implements FillBase {
-
-    /**
-     * tips 默认可以处理的时间类型
-     */
-    private static final String DATE_FORMART = "yyyy-MM-dd";
 
     /**
      * 对于空值得管理
@@ -35,7 +32,7 @@ public class FillConfig implements FillBase {
     public static void reset() {
 
         SortStyleEnum.DEFAULT.setSort(new Integer[]{});
-        DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
+        DateStyleEnum.DEFAULT.setFormartStyle(Constants.DATE_FORMART);
     }
 
     /**
@@ -94,7 +91,7 @@ public class FillConfig implements FillBase {
 
     public DateStyleEnum getDateStyleEnum() {
 
-        return null != dateStyleEnum ? dateStyleEnum : DateStyleEnum.DEFAULT.setFormartStyle(DATE_FORMART);
+        return null != dateStyleEnum ? dateStyleEnum : DateStyleEnum.DEFAULT.setFormartStyle(Constants.DATE_FORMART);
     }
 
     public void setDateStyleEnum(DateStyleEnum dateStyleEnum) {
