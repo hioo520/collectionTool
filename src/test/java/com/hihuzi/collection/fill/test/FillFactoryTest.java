@@ -23,8 +23,16 @@ public class FillFactoryTest implements Runnable {
     private MockHttpServletRequest request;
 
     private FillFactory fillTool;
-    private Map map;
-    private String tip;
+    private static Map map;
+    private static String tip;
+
+    public void setMap(Map map) {
+        this.map = map;
+    }
+
+    public void setTip(String tip) {
+        this.tip = tip;
+    }
 
     @Before
     public void setUp() {
@@ -32,11 +40,6 @@ public class FillFactoryTest implements Runnable {
         request = new MockHttpServletRequest();
         request.setCharacterEncoding("utf-8");
         fillTool = new FillTool();
-    }
-
-    public FillFactoryTest(Map map, String tip) {
-        this.map = map;
-        this.tip = tip;
     }
 
     /**
@@ -203,12 +206,6 @@ public class FillFactoryTest implements Runnable {
         Map map2 = FillFactory.batch().fillMap(bean, map1);
         System.out.println(bean.toString());
         map2.forEach((o, o2) -> System.out.print(o + " " + o2));
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < 10000000; i++) {
-            TestBean bean0 = FillFactory.batch().fillEntity(map, new TestBean());
-        }
-        long end = System.currentTimeMillis();
-        System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
     }
 
     /**
@@ -250,6 +247,7 @@ public class FillFactoryTest implements Runnable {
     public void fill_entity_list() throws Exception {
 
         List list = new ArrayList();
+        List list0 = new ArrayList();
         Map map = new HashMap(20);
         map.put("booleanMax", "true");
         map.put("byteMax", "1");
@@ -272,19 +270,21 @@ public class FillFactoryTest implements Runnable {
         list.add(map);
         List<TestBean> bean = FillFactory.batch().fillEntity(list, new TestBean());
         /**tips 特殊的时间格式处理*/
+
         map.put("dateMax", "2012!12@12#12-12:12");
-        List<TestBean> bean0 = FillFactory.batch().fillEntity(list, new TestBean(),
+        list0.add(map);
+        List<TestBean> bean0 = FillFactory.batch().fillEntity(list0, new TestBean(),
                 new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss")));
         System.out.println(bean.get(0).toString());
         System.out.println(bean0.get(0).toString());
-        long start = System.currentTimeMillis();
-        List<TestBean> bean3;
-        for (int i = 0; i < 1000000; i++) {
-            bean3 = FillFactory.batch().fillEntity(list, new TestBean(),
-                    new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss")));
-        }
-        long end = System.currentTimeMillis();
-        System.err.println("------>一百万 耗时" + (end - start) / 1000 + "秒<------");
+//        long start = System.currentTimeMillis();
+//        List<TestBean> bean3;
+//        for (int i = 0; i < 1000000; i++) {
+//            bean3 = FillFactory.batch().fillEntity(list, new TestBean(),
+//                    new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss")));
+//        }
+//        long end = System.currentTimeMillis();
+//        System.err.println("------>一百万 耗时" + (end - start) / 1000 + "秒<------");
     }
 
     /**
@@ -346,12 +346,12 @@ public class FillFactoryTest implements Runnable {
         list.add("1.94");
         List<TestBean> bean = FillFactory.batch().listToEntity(list, new TestBean());
         System.out.println(bean.get(0).toString());
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < 10000000; i++) {
-            List<TestBean> bean0 = FillFactory.batch().listToEntity(list, new TestBean());
-        }
-        long end = System.currentTimeMillis();
-        System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
+//        long start = System.currentTimeMillis();
+//        for (int i = 0; i < 10000000; i++) {
+//            List<TestBean> bean0 = FillFactory.batch().listToEntity(list, new TestBean());
+//        }
+//        long end = System.currentTimeMillis();
+//        System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
         Map<String, Map<String, TypeCache>> classCache = ClassCache.cache;
         classCache.forEach((s, typeCache) -> System.err.println(typeCache.size()));
     }
@@ -370,20 +370,32 @@ public class FillFactoryTest implements Runnable {
 
     }
 
-    public static void main(String[] args) {
+    /**
+     * tips 多线程测试
+     *
+     * @parameter:
+     * @return:
+     * @author: hihuzi 2018/10/21 3:51
+     */
+    @Test
+    public void mains() {
         Map map = new HashMap(1);
         map.put("dateMax", "333-33-33");
-        FillFactoryTest test0 = new FillFactoryTest(map, "yyyy-MM-dd");
+        FillFactoryTest test0 = new FillFactoryTest();
+        test0.setMap(map);
+        test0.setTip("yyyy-MM-dd");
         Map maps = new HashMap(1);
         maps.put("dateMax", "222!22@22#22-22:22");
-        FillFactoryTest test = new FillFactoryTest(maps, "yyyy!MM@dd#HH-mm:ss");
+        FillFactoryTest test = new FillFactoryTest();
+        test0.setMap(maps);
+        test0.setTip("yyyy!MM@dd#HH-mm:ss");
         List<Thread> threads = new ArrayList<>();
-        for (int i = 0; i < 666;i++) {
+        for (int i = 0; i < 666; i++) {
             Thread thread;
             if (i % 2 == 0) {
-                thread = new Thread(test0, ""+i);
+                thread = new Thread(test0, "" + i);
             } else {
-                thread = new Thread(test,  ""+i);
+                thread = new Thread(test, "" + i);
             }
             threads.add(thread);
         }
@@ -392,6 +404,34 @@ public class FillFactoryTest implements Runnable {
             thread.start();
         }
 
+
+    }
+
+    public static void main(String[] args) {
+        Map map = new HashMap(1);
+        map.put("dateMax", "333-33-33");
+        FillFactoryTest test0 = new FillFactoryTest();
+        test0.setMap(map);
+        test0.setTip("yyyy-MM-dd");
+        Map maps = new HashMap(1);
+        maps.put("dateMax", "222!22@22#22-22:22");
+        FillFactoryTest test = new FillFactoryTest();
+        test0.setMap(maps);
+        test0.setTip("yyyy!MM@dd#HH-mm:ss");
+        List<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < 666; i++) {
+            Thread thread;
+            if (i % 2 == 0) {
+                thread = new Thread(test0, "" + i);
+            } else {
+                thread = new Thread(test, "" + i);
+            }
+            threads.add(thread);
+        }
+        for (Thread thread : threads) {
+
+            thread.start();
+        }
 
     }
 }

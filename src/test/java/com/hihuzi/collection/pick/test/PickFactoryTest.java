@@ -16,12 +16,8 @@ import java.util.*;
  */
 public class PickFactoryTest implements Runnable {
 
-    public PickFactoryTest(Map map, String tip) {
-        this.map = map;
-        this.tip = tip;
-    }
 
-    private Map map;
+
     private String tip;
 
     /**
@@ -190,13 +186,20 @@ public class PickFactoryTest implements Runnable {
         }
 
     }
-    public static void main(String[] args) {
-        Map map = new HashMap(1);
-        map.put("dateMax", "2012-12-33");
-        PickFactoryTest test0 = new PickFactoryTest(map, "yyyy-MM-----dd");
+
+    public void setTip(String tip) {
+        this.tip = tip;
+    }
+
+    @Test
+    public  void mutlThreadTest() {
+
+        PickFactoryTest test0 = new PickFactoryTest();
+        test0.setTip("yyyy-MM-----dd");
         Map maps = new HashMap(1);
         maps.put("dateMax", "2018!22@22#22-22:22");
-        PickFactoryTest test = new PickFactoryTest(maps, "yyyy!MM@dd#HH-mm:ss");
+        PickFactoryTest test = new PickFactoryTest( );
+        test.setTip("yyyy!MM@dd#HH-mm:ss");
         List<Thread> threads = new ArrayList<>();
         for (int i = 0; i < 666; i++) {
             Thread thread;

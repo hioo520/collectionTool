@@ -144,6 +144,7 @@ public interface PickBase {
             return isHaving;
         }
     }
+
     /**
      * tips: 时间规则
      *
@@ -160,7 +161,7 @@ public interface PickBase {
         /**
          * tips 多线程并发时启用
          */
-        private static ThreadLocal<SimpleDateFormat> dateFormat = new ThreadLocal<SimpleDateFormat>() {};
+        private static ThreadLocal<SimpleDateFormat> dateFormat = new ThreadLocal<SimpleDateFormat>();
 
         DateStyleEnum(String value) {
 
@@ -173,7 +174,7 @@ public interface PickBase {
 
         public DateStyleEnum setFormartStyle(String formartStyle) {
             SimpleDateFormat threadSimpleDateFormat = dateFormat.get();
-            if (null == threadSimpleDateFormat) {
+            if (null == threadSimpleDateFormat || !formartStyle.equals(threadSimpleDateFormat.toPattern())) {
                 dateFormat.set(new SimpleDateFormat(formartStyle));
             }
             return this;

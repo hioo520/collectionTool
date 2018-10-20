@@ -1,5 +1,6 @@
 package com.hihuzi.collection.fill.core;
 
+import com.hihuzi.collection.fill.constant.FillBase;
 import com.hihuzi.collection.fill.constant.FillConfig;
 import com.hihuzi.collection.fill.FillFactory;
 
@@ -218,7 +219,9 @@ public class FillTool extends FillToolImpl implements FillFactory {
     @Override
     public <E> List<E> listToEntity(List<String> list, E e) throws Exception {
 
-        return listToEntityDefault(list, e, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
+        List<E> es = listToEntityDefault(list, e, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
+        FillConfig.reset();
+        return es;
     }
 
     /**
@@ -232,7 +235,9 @@ public class FillTool extends FillToolImpl implements FillFactory {
     @Override
     public <E> List<E> listToEntity(List<String> list, E e, FillConfig config) throws Exception {
 
-        return listToEntityDefault(list, e, config);
+        List<E> es = listToEntityDefault(list, e, config);
+        FillConfig.reset();
+        return es;
     }
 
 }

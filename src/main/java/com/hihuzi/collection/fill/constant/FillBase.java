@@ -25,8 +25,7 @@ public interface FillBase {
         /**
          * tips 多线程并发时启用
          */
-        private static ThreadLocal<SimpleDateFormat> dateFormat = new ThreadLocal<SimpleDateFormat>() {
-        };
+        private static ThreadLocal<SimpleDateFormat> dateFormat = new ThreadLocal<SimpleDateFormat>();
 
         DateStyleEnum(String value) {
 
@@ -39,7 +38,7 @@ public interface FillBase {
 
         public DateStyleEnum setFormartStyle(String formartStyle) {
             SimpleDateFormat threadSimpleDateFormat = dateFormat.get();
-            if (null == threadSimpleDateFormat) {
+            if (null == threadSimpleDateFormat || !formartStyle.equals(threadSimpleDateFormat.toPattern())) {
                 dateFormat.set(new SimpleDateFormat(formartStyle));
             }
             return this;
