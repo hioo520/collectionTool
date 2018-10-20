@@ -214,7 +214,28 @@ public class PickFactoryTest implements Runnable {
 
             thread.start();
         }
+    }
 
+    public static void main(String[] args) {
+        PickFactoryTest test0 = new PickFactoryTest();
+        test0.setTip("yyyy-MM-----dd");
+        Map maps = new HashMap(1);
+        maps.put("dateMax", "2018!22@22#22-22:22");
+        PickFactoryTest test = new PickFactoryTest();
+        test.setTip("yyyy!MM@dd#HH-mm:ss");
+        List<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < 666; i++) {
+            Thread thread;
+            if (i % 2 == 0) {
+                thread = new Thread(test0, "" + i);
+            } else {
+                thread = new Thread(test, "" + i);
+            }
+            threads.add(thread);
+        }
+        for (Thread thread : threads) {
 
+            thread.start();
+        }
     }
 }
