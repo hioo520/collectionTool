@@ -46,7 +46,7 @@ public class PickToolImpl {
      * @return:
      * @author: hihuzi  2018/10/18 11:43
      */
-    private <T>  Object achieveInvoke(String name, T t, Class clazz, Method method, Object invoke, String property, PickConfig config) throws Exception {
+    private <T> Object achieveInvoke(String name, T t, Class clazz, Method method, Object invoke, String property, PickConfig config) throws Exception {
 
         method = clazz.getMethod(name);
         method.setAccessible(true);
@@ -95,17 +95,18 @@ public class PickToolImpl {
         if (list == null) {
             throw new IndexOutOfBoundsException("调用batch: 输入的是null!");
         }
+        Class clacc = list.get(0).getClass();
         Class clazz = list.get(0).getClass();
         List<Map> lists = new ArrayList<>(list.size());
-        Set sets = new HashSet<>(list.size());
-        Map maps = new HashMap(list.size());
+        Set sets = new HashSet<>(list.size() * key.length);
+        Map maps = new HashMap(list.size() * key.length);
         for (T t : list) {
             Map map = new HashMap<>(key.length);
             for (String property : key) {
                 String name = StrUtils.achieveGetFunction(property);
                 Object invoke = null;
                 Method method = null;
-                TypeCache cache = ClassCache.getCache(clazz, property);
+                TypeCache cache = ClassCache.getCache(t.getClass(), property);
                 if (null != cache) {
                     method = cache.getMethodGet();
                     method.setAccessible(true);
@@ -113,11 +114,12 @@ public class PickToolImpl {
                     invoke = processingTimeType(cache.getParamtertype(), config, invoke);
                 } else {
                     try {
-                        invoke = achieveInvoke(name, t, clazz, method, invoke, property, config);
+                        invoke = achieveInvoke(name, t, t.getClass(), method, invoke, property, config);
                     } catch (Exception e) {
                         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
                             try {
                                 invoke = achieveInvoke(name, t, clazz, method, invoke, property, config);
+                                clazz = clacc;
                                 break;
                             } catch (Exception e0) {
                                 continue;
