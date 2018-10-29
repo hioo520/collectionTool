@@ -32,7 +32,7 @@ public class FillConfig implements FillBase {
     public static void reset() {
 
         SortStyleEnum.DEFAULT.setSort(new Integer[]{});
-        DateStyleEnum.DEFAULT.setFormartStyle(Constants.DATE_FORMART);
+        DateStyleEnum.DEFAULT.dateFormat.remove();
     }
 
     /**

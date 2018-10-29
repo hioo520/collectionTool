@@ -25,7 +25,7 @@ public interface FillBase {
         /**
          * tips 多线程并发时启用
          */
-        private static ThreadLocal<SimpleDateFormat> dateFormat = new ThreadLocal<SimpleDateFormat>();
+        public static ThreadLocal<SimpleDateFormat> dateFormat = new ThreadLocal<SimpleDateFormat>();
 
         DateStyleEnum(String value) {
 

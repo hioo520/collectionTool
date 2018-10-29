@@ -31,7 +31,8 @@ public class PickConfig implements PickBase {
      * 对枚举静态变量一定要初始化
      */
     public static void reset() {
-        DateStyleEnum.DEFAULT.setFormartStyle(Constants.DATE_FORMART);
+
+        DateStyleEnum.DEFAULT.dateFormat.remove();
         ReturnNameEnum.CUSTOM_SUFFIX.setKey("");
     }
 
