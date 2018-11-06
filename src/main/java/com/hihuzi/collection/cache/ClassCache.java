@@ -19,7 +19,7 @@ public class ClassCache {
 
     public static Map<String, Map<String, TypeCache>> cache = null;
 
-    public final static ClassCache get() {
+    public static ClassCache get() {
 
         return CacheClazz.CLASS_CACHE;
     }

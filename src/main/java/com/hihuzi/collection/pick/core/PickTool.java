@@ -26,7 +26,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
      */
     @Override
     public <E> List<Map> pick(List<E> list, String... parameter) throws Exception {
-
+        if (null == list) return null;
         List<Map> lists = (List<Map>) batch(list, new PickConfig(), parameter);
         PickConfig.reset();
         return lists;
@@ -43,7 +43,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
      */
     @Override
     public <E> List<Map> pick(List<E> list, PickConfig config, String... parameter) throws Exception {
-
+        if (null == list) return null;
         List<Map> lists = (List<Map>) batch(list, config, parameter);
         PickConfig.reset();
         return lists;
@@ -59,7 +59,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
      */
     @Override
     public <E> Set pickValue(List<E> list, String... parameter) throws Exception {
-
+        if (null == list) return null;
         Set set = (Set) batch(list, new PickConfig(
                 PickBase.ReturnStyleEnum.SET,
                 PickBase.ReturnNameEnum.DEFAULT,
@@ -79,7 +79,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
      */
     @Override
     public <E> Set pickValue(List<E> list, PickConfig config, String... parameter) throws Exception {
-
+        if (null == list) return null;
         Set set = (Set) batch(list,
                 config.setReturnStyleEnum(PickBase.ReturnStyleEnum.SET), parameter);
         PickConfig.reset();
@@ -96,7 +96,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
      */
     @Override
     public <E> Map pickValue(E obj, String... key) throws Exception {
-
+        if (null == obj) return null;
         List<E> list = new ArrayList<>();
         list.add(obj);
         Map map = ((List<Map>) batch(list, new PickConfig(
@@ -118,7 +118,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
      */
     @Override
     public <E> Map pickValue(E e, PickConfig config, String... key) throws Exception {
-
+        if (null == e) return null;
         List<E> list = new ArrayList<>();
         list.add(e);
         Map map = ((List<Map>) (batch(list, config.setReturnStyleEnum(PickBase.ReturnStyleEnum.MAP), key))).get(0);
@@ -136,7 +136,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
      */
     @Override
     public Map pickMap(Map map, String... key) {
-
+        if (null == map) return null;
         Map maps = batchMap(map, new PickConfig(
                 PickBase.ReturnStyleEnum.MAP,
                 PickBase.ReturnNameEnum.DEFAULT,
@@ -156,7 +156,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
      */
     @Override
     public Map pickMap(Map map, PickConfig config, String... parameter) {
-
+        if (null == map) return null;
         Map maps = batchMap(map, config.setReturnStyleEnum(PickBase.ReturnStyleEnum.MAP), parameter);
         PickConfig.reset();
         return maps;

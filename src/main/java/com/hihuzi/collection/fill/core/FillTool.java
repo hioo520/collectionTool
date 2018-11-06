@@ -122,7 +122,7 @@ public class FillTool extends FillToolImpl implements FillFactory {
      */
     @Override
     public <E> E fillEntity(Map map, E e) throws Exception {
-
+        if (null == map) return null;
         E entity = mapFillEntity(map, e, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
         FillConfig.reset();
         return entity;
@@ -138,7 +138,7 @@ public class FillTool extends FillToolImpl implements FillFactory {
      */
     @Override
     public <E> E fillEntity(Map map, E e, FillConfig config) throws Exception {
-
+        if (null == map) return null;
         E entity = mapFillEntity(map, e, config);
         FillConfig.reset();
         return entity;
@@ -154,7 +154,7 @@ public class FillTool extends FillToolImpl implements FillFactory {
      */
     @Override
     public <E> List<E> fillEntity(List<Map> list, E e) throws Exception {
-
+        if (null == list) return null;
         List<E> entitys = listFillEntity(list, e, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
         FillConfig.reset();
         return entitys;
@@ -170,7 +170,7 @@ public class FillTool extends FillToolImpl implements FillFactory {
      */
     @Override
     public <E> List<E> fillEntity(List<Map> list, E e, FillConfig config) throws Exception {
-
+        if (null == list) return null;
         List<E> entitys = listFillEntity(list, e, config);
         FillConfig.reset();
         return entitys;
@@ -186,7 +186,7 @@ public class FillTool extends FillToolImpl implements FillFactory {
      */
     @Override
     public <E> Map fillMap(E e, Map map) throws Exception {
-
+        if (null == e) return null;
         Map map1 = fillMapDefault(e, map, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
         FillConfig.reset();
         return map1;
@@ -202,7 +202,7 @@ public class FillTool extends FillToolImpl implements FillFactory {
      */
     @Override
     public <E> Map fillMap(E e, Map map, FillConfig config) throws Exception {
-
+        if (null == e) return null;
         Map map1 = fillMapDefault(e, map, config);
         FillConfig.reset();
         return map1;
@@ -218,7 +218,7 @@ public class FillTool extends FillToolImpl implements FillFactory {
      */
     @Override
     public <E> List<E> listToEntity(List<String> list, E e) throws Exception {
-
+        if (null == list) return null;
         List<E> es = listToEntityDefault(list, e, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
         FillConfig.reset();
         return es;
@@ -234,7 +234,7 @@ public class FillTool extends FillToolImpl implements FillFactory {
      */
     @Override
     public <E> List<E> listToEntity(List<String> list, E e, FillConfig config) throws Exception {
-
+        if (null == list) return null;
         List<E> es = listToEntityDefault(list, e, config);
         FillConfig.reset();
         return es;
