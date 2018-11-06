@@ -17,7 +17,6 @@ import java.util.*;
 public class PickFactoryTest implements Runnable {
 
 
-
     private String tip;
 
     /**
@@ -47,6 +46,11 @@ public class PickFactoryTest implements Runnable {
         List<Map> batch6 = PickFactory.batch().pick(list, new PickConfig(PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY,
                 PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date", "date0", "date1");
         batch6.forEach(map -> System.out.println(map));
+        List<Map> batch5 = PickFactory.batch().pick(list, new PickConfig(PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY,
+                PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")), "date", "date0", "date1");
+        batch5.forEach(map -> System.out.println(map));
+        List<Map> batch4 = PickFactory.batch().pick(list, new PickConfig(PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "date", "date0", "date1");
+        batch4.forEach(map -> System.out.println(map));
     }
 
     @Test
@@ -172,14 +176,15 @@ public class PickFactoryTest implements Runnable {
         Map<String, Map<String, TypeCache>> classCache = ClassCache.cache;
         classCache.forEach((s, typeCacheMap) -> System.err.println(typeCacheMap.size()));
     }
+
     @Override
     public void run() {
 
         TestBean bean = new TestBean();
         bean.setDate(new Date());
         try {
-            Map  map =  PickFactory.batch().pickValue(bean,
-                    new PickConfig(PickBase.DateStyleEnum.DEFAULT.setFormartStyle(this.tip)),"date");
+            Map map = PickFactory.batch().pickValue(bean,
+                    new PickConfig(PickBase.DateStyleEnum.DEFAULT.setFormartStyle(this.tip)), "date");
             System.out.println(map.toString());
         } catch (Exception e) {
             e.printStackTrace();
@@ -188,35 +193,13 @@ public class PickFactoryTest implements Runnable {
     }
 
     public void setTip(String tip) {
+
         this.tip = tip;
     }
 
     @Test
-    public  void mutlThreadTest() {
+    public void mutlThreadTest() {
 
-        PickFactoryTest test0 = new PickFactoryTest();
-        test0.setTip("yyyy-MM-----dd");
-        Map maps = new HashMap(1);
-        maps.put("dateMax", "2018!22@22#22-22:22");
-        PickFactoryTest test = new PickFactoryTest( );
-        test.setTip("yyyy!MM@dd#HH-mm:ss");
-        List<Thread> threads = new ArrayList<>();
-        for (int i = 0; i < 666; i++) {
-            Thread thread;
-            if (i % 2 == 0) {
-                thread = new Thread(test0, "" + i);
-            } else {
-                thread = new Thread(test, "" + i);
-            }
-            threads.add(thread);
-        }
-        for (Thread thread : threads) {
-
-            thread.start();
-        }
-    }
-
-    public static void main(String[] args) {
         PickFactoryTest test0 = new PickFactoryTest();
         test0.setTip("yyyy-MM-----dd");
         Map maps = new HashMap(1);
@@ -238,4 +221,29 @@ public class PickFactoryTest implements Runnable {
             thread.start();
         }
     }
+
+    public static void main(String[] args) {
+
+        PickFactoryTest test0 = new PickFactoryTest();
+        test0.setTip("yyyy-MM-----dd");
+        Map maps = new HashMap(1);
+        maps.put("dateMax", "2018!22@22#22-22:22");
+        PickFactoryTest test = new PickFactoryTest();
+        test.setTip("yyyy!MM@dd#HH-mm:ss");
+        List<Thread> threads = new ArrayList<>();
+        for (int i = 0; i < 666; i++) {
+            Thread thread;
+            if (i % 2 == 0) {
+                thread = new Thread(test0, "" + i);
+            } else {
+                thread = new Thread(test, "" + i);
+            }
+            threads.add(thread);
+        }
+        for (Thread thread : threads) {
+
+            thread.start();
+        }
+    }
+
 }
