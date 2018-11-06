@@ -1,6 +1,6 @@
-package com.hihuzi.collection.pick.constant;
+package top.hihuzi.collection.pick.constant;
 
-import com.hihuzi.collection.utils.Constants;
+import top.hihuzi.collection.utils.Constants;
 
 /**
  * tips:构造器

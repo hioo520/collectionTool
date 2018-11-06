@@ -1,4 +1,4 @@
-package com.hihuzi.collection.utils;
+package top.hihuzi.collection.utils;
 
 
 import java.util.Collection;

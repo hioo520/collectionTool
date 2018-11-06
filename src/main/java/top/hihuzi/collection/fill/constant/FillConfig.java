@@ -1,6 +1,6 @@
-package com.hihuzi.collection.fill.constant;
+package top.hihuzi.collection.fill.constant;
 
-import com.hihuzi.collection.utils.Constants;
+import top.hihuzi.collection.utils.Constants;
 
 /**
  * tips: 填充工具控制器

@@ -1,4 +1,4 @@
-package com.hihuzi.collection.fill.constant;
+package top.hihuzi.collection.fill.constant;
 
 import java.text.SimpleDateFormat;
 

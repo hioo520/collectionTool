@@ -1,11 +1,11 @@
-package com.hihuzi.collection.fill.core;
+package top.hihuzi.collection.fill.core;
 
-import com.hihuzi.collection.cache.ClassCache;
-import com.hihuzi.collection.cache.TypeCache;
-import com.hihuzi.collection.fill.common.Invoke;
-import com.hihuzi.collection.fill.common.ValueHandleCache;
-import com.hihuzi.collection.fill.constant.FillConfig;
-import com.hihuzi.collection.utils.StrUtils;
+import top.hihuzi.collection.cache.ClassCache;
+import top.hihuzi.collection.cache.TypeCache;
+import top.hihuzi.collection.fill.common.Invoke;
+import top.hihuzi.collection.fill.common.ValueHandleCache;
+import top.hihuzi.collection.fill.constant.FillConfig;
+import top.hihuzi.collection.utils.StrUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;

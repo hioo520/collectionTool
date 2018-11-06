@@ -1,8 +1,8 @@
-package com.hihuzi.collection.pick;
+package top.hihuzi.collection.pick;
 
 
-import com.hihuzi.collection.pick.constant.PickConfig;
-import com.hihuzi.collection.pick.core.PickTool;
+import top.hihuzi.collection.pick.constant.PickConfig;
+import top.hihuzi.collection.pick.core.PickTool;
 
 import java.util.List;
 import java.util.Map;

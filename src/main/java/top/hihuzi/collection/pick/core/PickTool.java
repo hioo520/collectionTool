@@ -1,8 +1,8 @@
-package com.hihuzi.collection.pick.core;
+package top.hihuzi.collection.pick.core;
 
-import com.hihuzi.collection.pick.PickFactory;
-import com.hihuzi.collection.pick.constant.PickBase;
-import com.hihuzi.collection.pick.constant.PickConfig;
+import top.hihuzi.collection.pick.PickFactory;
+import top.hihuzi.collection.pick.constant.PickBase;
+import top.hihuzi.collection.pick.constant.PickConfig;
 
 import java.util.ArrayList;
 import java.util.List;

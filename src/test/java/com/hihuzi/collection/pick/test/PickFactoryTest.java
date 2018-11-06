@@ -1,10 +1,10 @@
 package com.hihuzi.collection.pick.test;
 
-import com.hihuzi.collection.pick.constant.PickBase;
-import com.hihuzi.collection.cache.ClassCache;
-import com.hihuzi.collection.cache.TypeCache;
-import com.hihuzi.collection.pick.PickFactory;
-import com.hihuzi.collection.pick.constant.PickConfig;
+import top.hihuzi.collection.pick.constant.PickBase;
+import top.hihuzi.collection.cache.ClassCache;
+import top.hihuzi.collection.cache.TypeCache;
+import top.hihuzi.collection.pick.PickFactory;
+import top.hihuzi.collection.pick.constant.PickConfig;
 import org.junit.Test;
 
 import java.util.*;

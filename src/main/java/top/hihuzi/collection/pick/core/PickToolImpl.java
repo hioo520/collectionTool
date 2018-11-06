@@ -1,13 +1,12 @@
-package com.hihuzi.collection.pick.core;
+package top.hihuzi.collection.pick.core;
 
 
-import com.hihuzi.collection.cache.ClassCache;
-import com.hihuzi.collection.cache.TypeCache;
-import com.hihuzi.collection.pick.constant.PickConfig;
-import com.hihuzi.collection.utils.Constants;
-import com.hihuzi.collection.utils.StrUtils;
+import top.hihuzi.collection.cache.ClassCache;
+import top.hihuzi.collection.cache.TypeCache;
+import top.hihuzi.collection.pick.constant.PickConfig;
+import top.hihuzi.collection.utils.Constants;
+import top.hihuzi.collection.utils.StrUtils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 

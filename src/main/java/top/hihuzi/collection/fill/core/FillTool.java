@@ -1,8 +1,7 @@
-package com.hihuzi.collection.fill.core;
+package top.hihuzi.collection.fill.core;
 
-import com.hihuzi.collection.fill.constant.FillBase;
-import com.hihuzi.collection.fill.constant.FillConfig;
-import com.hihuzi.collection.fill.FillFactory;
+import top.hihuzi.collection.fill.constant.FillConfig;
+import top.hihuzi.collection.fill.FillFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;

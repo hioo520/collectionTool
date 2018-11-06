@@ -1,7 +1,7 @@
-package com.hihuzi.collection.fill.common;
+package top.hihuzi.collection.fill.common;
 
-import com.hihuzi.collection.fill.constant.FillConfig;
-import com.hihuzi.collection.utils.StrUtils;
+import top.hihuzi.collection.fill.constant.FillConfig;
+import top.hihuzi.collection.utils.StrUtils;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;

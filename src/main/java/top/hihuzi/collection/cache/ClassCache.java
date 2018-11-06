@@ -1,4 +1,4 @@
-package com.hihuzi.collection.cache;
+package top.hihuzi.collection.cache;
 
 import java.util.HashMap;
 import java.util.Map;

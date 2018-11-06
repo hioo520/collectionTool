@@ -1,4 +1,4 @@
-package com.hihuzi.collection.pick.constant;
+package top.hihuzi.collection.pick.constant;
 
 import java.text.SimpleDateFormat;
 

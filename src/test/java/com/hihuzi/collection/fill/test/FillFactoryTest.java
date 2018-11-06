@@ -1,12 +1,12 @@
 package com.hihuzi.collection.fill.test;
 
 
-import com.hihuzi.collection.cache.ClassCache;
-import com.hihuzi.collection.cache.TypeCache;
-import com.hihuzi.collection.fill.FillFactory;
-import com.hihuzi.collection.fill.constant.FillBase;
-import com.hihuzi.collection.fill.constant.FillConfig;
-import com.hihuzi.collection.fill.core.FillTool;
+import top.hihuzi.collection.cache.ClassCache;
+import top.hihuzi.collection.cache.TypeCache;
+import top.hihuzi.collection.fill.FillFactory;
+import top.hihuzi.collection.fill.constant.FillBase;
+import top.hihuzi.collection.fill.constant.FillConfig;
+import top.hihuzi.collection.fill.core.FillTool;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
