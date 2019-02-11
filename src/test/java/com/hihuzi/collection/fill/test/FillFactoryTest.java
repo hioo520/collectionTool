@@ -111,7 +111,7 @@ public class FillFactoryTest implements Runnable {
         request.setParameter("doubleMin", "");
         long start = System.currentTimeMillis();
         TestBean map1 = null;
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 10000000; i++) {
             map1 = FillFactory.batch().fillEntity(request, new TestBean());
         }
         long end = System.currentTimeMillis();
@@ -396,7 +396,8 @@ public class FillFactoryTest implements Runnable {
         long start = System.currentTimeMillis();
         List testBeans = new ArrayList<>();
         testBeans.add(new TestBean());
-        for (int i = 0; i < 10000; i++) {
+        testBeans.add(new TestBean());
+        for (int i = 0; i < 100000; i++) {
             list.add(map);
         }
         map1 = FillFactory.batch().listToClass(list, testBeans);

@@ -68,7 +68,7 @@ public class ClassCache {
     }
 
     /**
-     * tips 从缓存中取出数据(ParameterCache)
+     * tips 从缓存中取出数据(表)(ParameterCache)
      *
      * @parameter: clazz
      * @parameter: paramterName
@@ -100,7 +100,7 @@ public class ClassCache {
     }
 
     /**
-     * tips 从缓存中取出数据(TypeCache)
+     * tips 从缓存中取出数据(表)(ParameterCache)
      *
      * @parameter: clazz
      * @parameter: paramterName
@@ -209,7 +209,7 @@ public class ClassCache {
     private void joinTheCache(Class<?> clazz, String paramterName, Map<String, ParameterCache> paramterMap,
                               Class<?> paramtertype, String tableName) {
 
-        paramterMap.put(tableName, ParameterCache.add(clazz, paramterName, paramtertype));
+        paramterMap.put(tableName, ParameterCache.add(clazz, paramterName, paramtertype,tableName));
         paramCache.put(clazz.getName(), paramterMap);
     }
 

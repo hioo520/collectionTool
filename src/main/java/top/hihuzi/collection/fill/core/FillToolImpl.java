@@ -288,32 +288,39 @@ class FillToolImpl {
         Map<String, List<E>> ma = new HashMap<>(e.size());
         Object newClazz = null;
         int i = list.size();
-        while (i > 0) {
-            for (E es : e) {
-                Class<?> clazz = es.getClass();
+//        while (i > 0) {
+        for (E es : e) {
+            Class<?> clazz = es.getClass();
+            for (Map map : list) {
                 newClazz = clazz.getDeclaredConstructor().newInstance();
-                for (Map map : list) {
-                    for (Object o : map.entrySet()) {
-                        Map.Entry entry = (Map.Entry) o;
-                        String names = String.valueOf(entry.getKey());
-                        String values = String.valueOf(entry.getValue());
-                        ParameterCache pCache = ClassCache.getPCache(clazz, names);
-                        if (null != pCache) {
-                            Map<String, TypeCache> ptCache = pCache.getCache();
-                            Set<String> keSet = ptCache.keySet();
-                            for (String next : keSet) {
-                                TypeCache cache = ptCache.get(next);
-                                ValueHandleCache.invokeValueCache(newClazz, cache.getMethodSet(), values, cache.getType(), config);
-                            }
-                        } else {
+                for (Object obj : map.entrySet()) {
+                    Map.Entry entry = (Map.Entry) obj;
+                    String names = String.valueOf(entry.getKey());
+                    String values = String.valueOf(entry.getValue());
+                    ParameterCache pCache = ClassCache.getPCache(clazz, names);
+                    if (null != pCache) {
+                        Map<String, TypeCache> ptCache = pCache.getCache();
+                        TypeCache cache = ptCache.get(names);
+                        ValueHandleCache.invokeValueCache(newClazz, cache.getMethodSet(), values, cache.getType(), config);
+                    } else {
+//                        for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
                             Field[] declaredFields = clazz.getDeclaredFields();
                             for (Field field : declaredFields) {
                                 if (isEquals(names, field.getName())) {
                                     Invoke.injectionParameters(newClazz, field.getName(), values, config);
                                     ClassCache.get().add(clazz, field.getName(), null, names);
+                                    break;
                                 }
                             }
-                        }
+//                        }
+//                                Field[] fields = clazz.getDeclaredFields();
+//                                for (Field field : fields) {
+//                                    if (isEquals(names, field.getName())) {
+//                                        Invoke.injectionParameters(newClazz, field.getName(), values, config);
+//                                        ClassCache.get().add(clazz, field.getName(), null, names);
+//                                    }
+//                                }
+//                            }
                     }
                 }
                 List<E> lis = ma.get(newClazz.getClass().getSimpleName());
@@ -325,7 +332,8 @@ class FillToolImpl {
                     ma.put(newClazz.getClass().getSimpleName(), li);
                 }
             }
-            i--;
+//            }
+//            i--;
         }
 
         return ma;

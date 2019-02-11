@@ -13,7 +13,7 @@ public class ParameterCache {
      *
      * @author: hihuzi 2019/2/11 11:14
      */
-    public  Map<String, TypeCache> paramCache = null;
+    public Map<String, TypeCache> paramCache = null;
 
     /**
      * tips 构造器实例化对象
@@ -23,15 +23,15 @@ public class ParameterCache {
      * @parameter: Class<?> paramtertype
      * @author: hihuzi 2019/2/11 11:14
      */
-    public ParameterCache(Class<?> clazz, String paramterName, Class<?> paramtertype) {
+    public ParameterCache(Class<?> clazz, String paramterName, Class<?> paramtertype, String tableName) {
 
 
-        TypeCache caches = ClassCache.getCache(clazz,paramterName);
+        TypeCache caches = ClassCache.getCache(clazz, paramterName);
         if (null != caches) {
             if (null == this.paramCache) {
                 this.paramCache = new HashMap<>(clazz.getDeclaredFields().length);
             }
-            this.paramCache.put(paramterName,caches);
+            this.paramCache.put(tableName, caches);
         } else {
             ClassCache.get().add(clazz, paramterName, paramtertype);
         }
@@ -47,9 +47,9 @@ public class ParameterCache {
      * @return: TypeCache
      * @author: hihuzi 2018/9/24 23:45
      */
-    public static ParameterCache add(Class<?> clazz, String paramterName, Class<?> paramtertype) {
+    public static ParameterCache add(Class<?> clazz, String paramterName, Class<?> paramtertype, String tableName) {
 
-        return new ParameterCache(clazz, paramterName, paramtertype);
+        return new ParameterCache(clazz, paramterName, paramtertype, tableName);
     }
 
     public Map<String, TypeCache> getCache() {
