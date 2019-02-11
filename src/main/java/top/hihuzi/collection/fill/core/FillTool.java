@@ -1,7 +1,7 @@
 package top.hihuzi.collection.fill.core;
 
-import top.hihuzi.collection.fill.constant.FillConfig;
 import top.hihuzi.collection.fill.FillFactory;
+import top.hihuzi.collection.fill.constant.FillConfig;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -146,40 +146,6 @@ public class FillTool extends FillToolImpl implements FillFactory {
     }
 
     /**
-     * tips tips 对LIST数据装填--> 对象 针对数据库与实体类名有区别 key-value -->e
-     *
-     * @parameter: List<Map>
-     * @parameter: E
-     * @return: List<E>
-     * @author: hihuzi 2018/6/26 14:51
-     */
-    @Override
-    public <E> List<E> fillEntity(List<Map> list, E e) throws Exception {
-
-        if (null == list || 0 == list.size()) return null;
-        List<E> entitys = listFillEntity(list, e, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
-        FillConfig.reset();
-        return entitys;
-    }
-
-    /**
-     * tips tips 对LIST数据装填--> 对象 针对数据库与实体类名有区别 key-value -->e
-     *
-     * @parameter: List<Map>
-     * @parameter: E
-     * @return: List<E>
-     * @author: hihuzi 2018/6/26 14:51
-     */
-    @Override
-    public <E> List<E> fillEntity(List<Map> list, E e, FillConfig config) throws Exception {
-
-        if (null == list || 0 == list.size()) return null;
-        List<E> entitys = listFillEntity(list, e, config);
-        FillConfig.reset();
-        return entitys;
-    }
-
-    /**
      * tips E --> Map  针对E的属性属性值填充到map
      *
      * @parameter: E e
@@ -189,6 +155,7 @@ public class FillTool extends FillToolImpl implements FillFactory {
      */
     @Override
     public <E> Map fillMap(E e, Map map) throws Exception {
+
         if (null == e) return null;
         Map map1 = fillMapDefault(e, map, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
         FillConfig.reset();
@@ -205,6 +172,7 @@ public class FillTool extends FillToolImpl implements FillFactory {
      */
     @Override
     public <E> Map fillMap(E e, Map map, FillConfig config) throws Exception {
+
         if (null == e) return null;
         Map map1 = fillMapDefault(e, map, config);
         FillConfig.reset();
@@ -243,6 +211,74 @@ public class FillTool extends FillToolImpl implements FillFactory {
         List<E> es = listToEntityDefault(list, e, config);
         FillConfig.reset();
         return es;
+    }
+
+    /**
+     * tips tips 对LIST数据装填--> 对象 针对数据库与实体类名有区别 key-value -->e
+     *
+     * @parameter: List<Map>
+     * @parameter: E
+     * @return: List<E>
+     * @author: hihuzi 2018/6/26 14:51
+     */
+    @Override
+    public <E> List<E> fillEntity(List<Map> list, E e) throws Exception {
+
+        if (null == list || 0 == list.size()) return null;
+        List<E> entitys = listFillEntity(list, e, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
+        FillConfig.reset();
+        return entitys;
+    }
+
+    /**
+     * tips tips 对LIST数据装填--> 对象 针对数据库与实体类名有区别 key-value -->e
+     *
+     * @parameter: List<Map>
+     * @parameter: E
+     * @return: List<E>
+     * @author: hihuzi 2018/6/26 14:51
+     */
+    @Override
+    public <E> List<E> fillEntity(List<Map> list, E e, FillConfig config) throws Exception {
+
+        if (null == list || 0 == list.size()) return null;
+        List<E> entitys = listFillEntity(list, e, config);
+        FillConfig.reset();
+        return entitys;
+    }
+
+    /**
+     * tips 数据库的元组转对象
+     *
+     * @notice: 对象属性和表 遵循驼峰或者下划线命名
+     * @author: hihuzi 2019/2/11 9:53
+     */
+    @Override
+
+    public <E> Boolean listToClass(List<Map> list, E... e) throws Exception {
+
+        if (null == list || 0 == list.size() || null == e || 0 == e.length) return false;
+        Boolean b = listToClassDefault(list, new FillConfig(), e);
+        FillConfig.reset();
+        return b;
+    }
+
+
+    /**
+     * tips 数据库的元组转对象
+     *
+     * @notice: 对象属性和表 遵循驼峰或者下划线命名
+     * @author: hihuzi 2019/2/11 9:57
+     */
+    @Override
+
+    public <E> Boolean listToClass(List<Map> list, FillConfig config, E... e) throws Exception {
+
+        if (null == list || 0 == list.size() || null == e || 0 == e.length) return false;
+        Boolean b = listToClassDefault(list, config, e);
+        FillConfig.reset();
+        return b;
+
     }
 
 }

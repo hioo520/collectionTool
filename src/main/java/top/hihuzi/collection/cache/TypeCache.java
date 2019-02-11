@@ -6,7 +6,7 @@ import top.hihuzi.collection.utils.StrUtils;
 import java.lang.reflect.Method;
 
 /**
- * tips 待处理的某一状态(多实例)
+ * tips
  *
  * @author: hihuzi 2018/9/24 9:23
  */
@@ -155,7 +155,7 @@ public class TypeCache {
                 }
             }
         }
-        System.out.println(this.clazz + "中无此" + paramter + "属性,从而无法确定方法类型");
+        System.out.println(this.clazz + " 中无此" + paramter + "属性,从而无法确定方法类型");
         return null;
     }
 

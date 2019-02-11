@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 public class ValueHandleCache {
 
     /**
-     * tips 注入对对象注入值
+     * tips 缓存注入数据
      *
      * @parameter: E e
      * @parameter: Method method
@@ -122,7 +122,7 @@ public class ValueHandleCache {
     }
 
     /**
-     * tips 注入对对象注入值
+     * tips 通用方法注入值
      *
      * @parameter: E e
      * @parameter: Method method

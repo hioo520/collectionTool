@@ -1,6 +1,7 @@
 package top.hihuzi.collection.fill.core;
 
 import top.hihuzi.collection.cache.ClassCache;
+import top.hihuzi.collection.cache.ParameterCache;
 import top.hihuzi.collection.cache.TypeCache;
 import top.hihuzi.collection.fill.common.Invoke;
 import top.hihuzi.collection.fill.common.ValueHandleCache;
@@ -74,7 +75,7 @@ public class FillToolImpl {
     public <E> E requestFillEntityDefault(HttpServletRequest request, E e, FillConfig config) throws Exception {
 
         Enumeration pars = request.getParameterNames();
-        Class clazz =  e.getClass();
+        Class clazz = e.getClass();
         while (pars.hasMoreElements()) {
             String name = pars.nextElement().toString().trim();
             String value = request.getParameter(name);
@@ -101,6 +102,7 @@ public class FillToolImpl {
 
     /**
      * tips  对MAP数据装填--> 对象
+     *
      * @notice: 忽略掉不在对象中的属性
      * @parameter: map
      * @parameter: E
@@ -136,56 +138,6 @@ public class FillToolImpl {
         return e;
     }
 
-    /**
-     * tips tips 对LIST数据装填--> 对象 针对数据库与实体类名有区别 key-value -->e
-     *
-     * @parameter: List<Map>
-     * @parameter: E
-     * @return: List<E>
-     * @author: hihuzi 2018/6/26 14:51
-     */
-    public <E> List<E> listFillEntity(List<Map> list, E t, FillConfig config) throws Exception {
-
-        List<E> result = new ArrayList<>();
-        List<String> fieldsMap = new ArrayList<>();
-        List<Map> entityMaps = new ArrayList<>();
-        Class clazz = t.getClass();
-        Map<String, TypeCache> cache = ClassCache.getCache(clazz);
-        if (null != cache) {
-            fieldsMap = new ArrayList<>(cache.keySet());
-        } else {
-            for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
-                Field[] fields = clazz.getDeclaredFields();
-                for (int i = 0; i < fields.length; i++) {
-                    fieldsMap.add(fields[i].getName());
-                    ClassCache.get().add(clazz, fields[i].getName());
-                }
-            }
-        }
-        for (Map map : list) {
-            Iterator iterator = map.entrySet().iterator();
-            Map transition = new HashMap(list.size());
-            while (iterator.hasNext()) {
-                Map.Entry entry = (Map.Entry) iterator.next();
-                String names = String.valueOf(entry.getKey());
-                String value = String.valueOf(entry.getValue());
-                if (StrUtils.isNNoE(value)) {
-                    for (String fields : fieldsMap) {
-                        if (fields.toLowerCase().equals(names.replaceAll("[_|-|]", "").toLowerCase())) {
-                            transition.put(fields, value);
-                        }
-                    }
-                }
-            }
-            entityMaps.add(transition);
-        }
-        for (Map map : entityMaps) {
-            Object obj = t.getClass().getDeclaredConstructor().newInstance();
-            obj = mapFillEntity(map, obj, config);
-            result.add((E) obj);
-        }
-        return result;
-    }
 
     /**
      * tips E --> Map  针对E与map进行填充
@@ -274,6 +226,113 @@ public class FillToolImpl {
         obj = mapFillEntity(map, obj, config);
         result.add((E) obj);
         return result;
+    }
+
+    /**
+     * tips tips 对LIST数据装填--> 对象 针对数据库与实体类名有区别 key-value -->e
+     *
+     * @parameter: List<Map>
+     * @parameter: E
+     * @return: List<E>
+     * @author: hihuzi 2018/6/26 14:51
+     */
+    public <E> List<E> listFillEntity(List<Map> list, E t, FillConfig config) throws Exception {
+
+        List<E> result = new ArrayList<>();
+        List<String> fieldsMap = new ArrayList<>();
+        List<Map> entityMaps = new ArrayList<>();
+        Class clazz = t.getClass();
+        Map<String, TypeCache> cache = ClassCache.getCache(clazz);
+        if (null != cache) {
+            fieldsMap = new ArrayList<>(cache.keySet());
+        } else {
+            for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
+                Field[] fields = clazz.getDeclaredFields();
+                for (int i = 0; i < fields.length; i++) {
+                    fieldsMap.add(fields[i].getName());
+                    ClassCache.get().add(clazz, fields[i].getName());
+                }
+            }
+        }
+        for (Map map : list) {
+            Iterator iterator = map.entrySet().iterator();
+            Map transition = new HashMap(list.size());
+            while (iterator.hasNext()) {
+                Map.Entry entry = (Map.Entry) iterator.next();
+                String names = String.valueOf(entry.getKey());
+                String value = String.valueOf(entry.getValue());
+                if (StrUtils.isNNoE(value)) {
+                    for (String fields : fieldsMap) {
+                        if (isEquals(names, fields)) {
+                            transition.put(fields, value);
+                        }
+                    }
+                }
+            }
+            entityMaps.add(transition);
+        }
+        for (Map map : entityMaps) {
+            Object obj = t.getClass().getDeclaredConstructor().newInstance();
+            obj = mapFillEntity(map, obj, config);
+            result.add((E) obj);
+        }
+        return result;
+    }
+
+    /**
+     * tips 数据库的元组转对象
+     *
+     * @notice: 对象属性和表 遵循驼峰或者下划线命名
+     * @author: hihuzi 2019/2/11 9:53
+     */
+    public <E> Boolean listToClassDefault(List<Map> list, FillConfig config, E... e) throws Exception {
+
+        for (Map map : list) {
+            Iterator iterator = map.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry entry = (Map.Entry) iterator.next();
+                String names = String.valueOf(entry.getKey());
+                String values = String.valueOf(entry.getValue());
+                for (E es : e) {
+                    if (null == es) {
+                        es = (E) es.getClass().getDeclaredConstructor().newInstance();
+                    }
+                    ParameterCache pCache = ClassCache.getPCache((Class<?>) es, names);
+
+                    if (null != pCache) {
+                        Map<String, TypeCache> ptCache = pCache.getCache();
+                        Iterator it = ptCache.entrySet().iterator();
+                        while (it.hasNext()) {
+                            Map.Entry entrys = (Map.Entry) iterator.next();
+                            String name = String.valueOf(entrys.getKey());
+                            TypeCache cache = (TypeCache) entrys.getValue();
+                            if (null != ptCache) {
+                                ValueHandleCache.invokeValueCache(es, cache.getMethodSet(), values, cache.getType(), config);
+                            } else {
+                                System.out.println("表的名称存在 属性名称不存在!!!");
+                            }
+                        }
+                    } else {
+
+                        Class<?> aClass = es.getClass();
+                        Field[] declaredFields = aClass.getDeclaredFields();
+                        for (Field field : declaredFields) {
+                            if (isEquals(names, field.getName())) {
+                                Invoke.injectionParameters(es, field.getName(), values, config);
+                                ClassCache.get().add((Class<?>) es, field.getName(), null, names);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean isEquals(String names, String name) {
+
+        return name.toLowerCase().equals(names.replaceAll("[_|-|]", "").toLowerCase());
     }
 
 }

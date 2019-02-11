@@ -25,25 +25,25 @@ public class Invoke {
      * @return:
      * @author: hihuzi 2018/6/22 9:22
      */
-    public static <E> void injectionParameters(E obj, String names, String value, FillConfig config) throws
+    public static <E> void injectionParameters(E obj, String name, String value, FillConfig config) throws
             Exception {
 
         Class clazz = obj.getClass();
         Class<?> paramtertype = null;
         try {
-            paramtertype = clazz.getDeclaredField(names).getType();
+            paramtertype = clazz.getDeclaredField(name).getType();
         } catch (NoSuchFieldException e) {
         }
         if (StrUtils.isNNoEE(paramtertype)) {
-            putValue(obj, names, value, paramtertype, config);
+            putValue(obj, name, value, paramtertype, config);
         } else {
             for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
                 try {
-                    paramtertype = clazz.getDeclaredField(names).getType();
+                    paramtertype = clazz.getDeclaredField(name).getType();
                 } catch (NoSuchFieldException e) {
                 }
                 if (StrUtils.isNNoEE(paramtertype)) {
-                    putValue(obj, names, value, paramtertype, config);
+                    putValue(obj, name, value, paramtertype, config);
                 }
             }
 

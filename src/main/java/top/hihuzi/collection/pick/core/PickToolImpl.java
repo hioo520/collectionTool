@@ -26,6 +26,7 @@ public class PickToolImpl {
     public static Object processingTimeType(Class<?> type, PickConfig config, Object obj) {
 
         if (Constants.TypeEnum.DATE.getValue().equals(type.getSimpleName())) {
+            if (null == obj) return null;
             return config.getDateStyleEnum().getFormartStyle().format(obj);
         }
         if (Constants.TypeEnum.STRING.getValue().equals(type.getSimpleName())) {

@@ -7,10 +7,17 @@ package top.hihuzi.collection.utils;
  * @author: hihuzi 2018/9/29 10:45
  **/
 public class Constants {
+
     /**
      * tips 默认可以处理的时间类型
      */
     public static final String DATE_FORMART = "yyyy-MM-dd";
+
+    /**
+     * tips 表标识
+     */
+    public static final String TABLE = "-TABLE";
+
     /**
      * tips 数据类型转化
      *

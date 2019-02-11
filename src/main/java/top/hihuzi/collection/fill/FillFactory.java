@@ -175,4 +175,30 @@ public interface FillFactory {
      * @author: hihuzi 2018/6/26 14:51
      */
     <E> List<E> listToEntity(List<String> list, E e, FillConfig config) throws Exception;
+    /**
+     * tips E --> Map  针对数据库查询*数据  数据是驼峰的自动填充工具
+     *
+     * @notice: 属性值为空的舍弃
+     * @parameter: E e
+     * @parameter: map map
+     * @return: map
+     * @author: hihuzi 2018/6/26 14:51
+     */
+
+    /**
+     * tips 数据库的元组转对象
+     *
+     * @notice: 对象属性和表 遵循驼峰或者下划线命名
+     * @author: hihuzi 2019/2/11 9:53
+     */
+    <E> Boolean listToClass(List<Map> list, E... e) throws Exception;
+
+    /**
+     * tips 数据库的元组转对象
+     *
+     * @notice: 对象属性和表 遵循驼峰或者下划线命名
+     * @author: hihuzi 2019/2/11 9:53
+     */
+    <E> Boolean listToClass(List<Map> list, FillConfig config, E... e) throws Exception;
+
 }
