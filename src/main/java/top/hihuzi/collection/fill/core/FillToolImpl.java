@@ -18,7 +18,7 @@ import java.util.*;
  *
  * @author: hihuzi 2018/9/23 16:03
  */
-public class FillToolImpl {
+class FillToolImpl {
 
     /**
      * tips 缓存
@@ -29,7 +29,7 @@ public class FillToolImpl {
      * @return: Map
      * @author: hihuzi 2018/9/24 9:36
      */
-    public Map fillDefault(HttpServletRequest request, FillConfig config, String... key) {
+    Map fillDefault(HttpServletRequest request, FillConfig config, String... key) {
 
         Map map = new HashMap(key.length);
         List<String> exclude = null;
@@ -72,7 +72,7 @@ public class FillToolImpl {
      * @return: E
      * @author: hihuzi 2018/6/14 14:50
      */
-    public <E> E requestFillEntityDefault(HttpServletRequest request, E e, FillConfig config) throws Exception {
+    <E> E requestFillEntityDefault(HttpServletRequest request, E e, FillConfig config) throws Exception {
 
         Enumeration pars = request.getParameterNames();
         Class clazz = e.getClass();
@@ -109,7 +109,7 @@ public class FillToolImpl {
      * @return: E
      * @author: hihuzi 2018/6/14 14:50
      */
-    public <E> E mapFillEntity(Map map, E e, FillConfig config) throws Exception {
+    <E> E mapFillEntity(Map map, E e, FillConfig config) throws Exception {
 
         Iterator iterator = map.entrySet().iterator();
         Class clazz = e.getClass();
@@ -148,9 +148,7 @@ public class FillToolImpl {
 
         Map<String, TypeCache> caches = ClassCache.getCache(e.getClass());
         if (null != caches) {
-            Iterator<Map.Entry<String, TypeCache>> iterator = caches.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry typeCache = iterator.next();
+            for (Map.Entry typeCache : caches.entrySet()) {
                 TypeCache cache = (TypeCache) typeCache.getValue();
                 Method methodGet = cache.getMethodGet();
                 methodGet.setAccessible(true);
@@ -194,9 +192,9 @@ public class FillToolImpl {
         Class clazz = e.getClass();
         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             Field[] fields = clazz.getDeclaredFields();
-            for (int i = 0; i < fields.length; i++) {
-                field.add(fields[i].getName());
-                ClassCache.get().add(e.getClass(), fields[i].getName());
+            for (Field value : fields) {
+                field.add(value.getName());
+                ClassCache.get().add(e.getClass(), value.getName());
             }
         }
         int i = 0;
@@ -236,7 +234,7 @@ public class FillToolImpl {
      * @return: List<E>
      * @author: hihuzi 2018/6/26 14:51
      */
-    public <E> List<E> listFillEntity(List<Map> list, E t, FillConfig config) throws Exception {
+    <E> List<E> listFillEntity(List<Map> list, E t, FillConfig config) throws Exception {
 
         List<E> result = new ArrayList<>();
         List<String> fieldsMap = new ArrayList<>();
@@ -248,9 +246,9 @@ public class FillToolImpl {
         } else {
             for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
                 Field[] fields = clazz.getDeclaredFields();
-                for (int i = 0; i < fields.length; i++) {
-                    fieldsMap.add(fields[i].getName());
-                    ClassCache.get().add(clazz, fields[i].getName());
+                for (Field field : fields) {
+                    fieldsMap.add(field.getName());
+                    ClassCache.get().add(clazz, field.getName());
                 }
             }
         }
@@ -285,49 +283,52 @@ public class FillToolImpl {
      * @notice: 对象属性和表 遵循驼峰或者下划线命名
      * @author: hihuzi 2019/2/11 9:53
      */
-    public <E> Boolean listToClassDefault(List<Map> list, FillConfig config, E... e) throws Exception {
+    <E> Map<String, List<E>> listToClassDefault(List<Map> list, FillConfig config, List<E> e) throws Exception {
 
-        for (Map map : list) {
-            Iterator iterator = map.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry entry = (Map.Entry) iterator.next();
-                String names = String.valueOf(entry.getKey());
-                String values = String.valueOf(entry.getValue());
-                for (E es : e) {
-                    if (null == es) {
-                        es = (E) es.getClass().getDeclaredConstructor().newInstance();
-                    }
-                    ParameterCache pCache = ClassCache.getPCache((Class<?>) es, names);
-
-                    if (null != pCache) {
-                        Map<String, TypeCache> ptCache = pCache.getCache();
-                        Iterator it = ptCache.entrySet().iterator();
-                        while (it.hasNext()) {
-                            Map.Entry entrys = (Map.Entry) iterator.next();
-                            String name = String.valueOf(entrys.getKey());
-                            TypeCache cache = (TypeCache) entrys.getValue();
-                            if (null != ptCache) {
-                                ValueHandleCache.invokeValueCache(es, cache.getMethodSet(), values, cache.getType(), config);
-                            } else {
-                                System.out.println("表的名称存在 属性名称不存在!!!");
+        Map<String, List<E>> ma = new HashMap<>(e.size());
+        Object newClazz = null;
+        int i = list.size();
+        while (i > 0) {
+            for (E es : e) {
+                Class<?> clazz = es.getClass();
+                newClazz = clazz.getDeclaredConstructor().newInstance();
+                for (Map map : list) {
+                    for (Object o : map.entrySet()) {
+                        Map.Entry entry = (Map.Entry) o;
+                        String names = String.valueOf(entry.getKey());
+                        String values = String.valueOf(entry.getValue());
+                        ParameterCache pCache = ClassCache.getPCache(clazz, names);
+                        if (null != pCache) {
+                            Map<String, TypeCache> ptCache = pCache.getCache();
+                            Set<String> keSet = ptCache.keySet();
+                            for (String next : keSet) {
+                                TypeCache cache = ptCache.get(next);
+                                ValueHandleCache.invokeValueCache(newClazz, cache.getMethodSet(), values, cache.getType(), config);
                             }
-                        }
-                    } else {
-
-                        Class<?> aClass = es.getClass();
-                        Field[] declaredFields = aClass.getDeclaredFields();
-                        for (Field field : declaredFields) {
-                            if (isEquals(names, field.getName())) {
-                                Invoke.injectionParameters(es, field.getName(), values, config);
-                                ClassCache.get().add((Class<?>) es, field.getName(), null, names);
+                        } else {
+                            Field[] declaredFields = clazz.getDeclaredFields();
+                            for (Field field : declaredFields) {
+                                if (isEquals(names, field.getName())) {
+                                    Invoke.injectionParameters(newClazz, field.getName(), values, config);
+                                    ClassCache.get().add(clazz, field.getName(), null, names);
+                                }
                             }
                         }
                     }
                 }
+                List<E> lis = ma.get(newClazz.getClass().getSimpleName());
+                if (null != lis) {
+                    lis.add((E) newClazz);
+                } else {
+                    List<E> li = new ArrayList<>(list.size());
+                    li.add((E) newClazz);
+                    ma.put(newClazz.getClass().getSimpleName(), li);
+                }
             }
+            i--;
         }
 
-        return false;
+        return ma;
     }
 
     private boolean isEquals(String names, String name) {

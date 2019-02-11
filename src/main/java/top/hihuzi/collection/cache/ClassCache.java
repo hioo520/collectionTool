@@ -1,7 +1,5 @@
 package top.hihuzi.collection.cache;
 
-import top.hihuzi.collection.utils.Constants;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,7 +77,7 @@ public class ClassCache {
      */
     public static ParameterCache getPCache(Class<?> clazz, String paramterName) {
 
-        if (paramCache == null || paramCache.get(clazz.getName()) == null) {
+        if (null == paramCache || paramCache.get(clazz.getName()) == null) {
             return null;
         }
         return paramCache.get(clazz.getName()).get(paramterName);
@@ -142,8 +140,8 @@ public class ClassCache {
 
         Map<String, ParameterCache> parameterCacheMap = null;
         if (null != paramCache) {
-            if (paramCache.containsKey(clazz.getName() + Constants.TABLE)) {
-                parameterCacheMap = paramCache.get(clazz.getName() + Constants.TABLE);
+            if (paramCache.containsKey(clazz.getName())) {
+                parameterCacheMap = paramCache.get(clazz.getName());
             } else {
                 parameterCacheMap = new HashMap(1);
             }
@@ -212,7 +210,7 @@ public class ClassCache {
                               Class<?> paramtertype, String tableName) {
 
         paramterMap.put(tableName, ParameterCache.add(clazz, paramterName, paramtertype));
-        paramCache.put(clazz.getName() + Constants.TABLE, paramterMap);
+        paramCache.put(clazz.getName(), paramterMap);
     }
 
     /**

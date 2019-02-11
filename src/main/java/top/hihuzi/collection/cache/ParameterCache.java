@@ -13,7 +13,7 @@ public class ParameterCache {
      *
      * @author: hihuzi 2019/2/11 11:14
      */
-    public static Map<String, TypeCache> paramCache = null;
+    public  Map<String, TypeCache> paramCache = null;
 
     /**
      * tips 构造器实例化对象
@@ -26,15 +26,14 @@ public class ParameterCache {
     public ParameterCache(Class<?> clazz, String paramterName, Class<?> paramtertype) {
 
 
-        Map<String, TypeCache> caches = ClassCache.getCache(clazz.getClass());
+        TypeCache caches = ClassCache.getCache(clazz,paramterName);
         if (null != caches) {
-            Map<String, TypeCache> cache = ClassCache.getCache(clazz);
-            if (null == paramCache) {
-                paramCache = new HashMap<>(clazz.getDeclaredFields().length);
+            if (null == this.paramCache) {
+                this.paramCache = new HashMap<>(clazz.getDeclaredFields().length);
             }
-            paramCache.putAll(cache);
+            this.paramCache.put(paramterName,caches);
         } else {
-            ClassCache.get().add(clazz.getClass(), paramterName, paramtertype);
+            ClassCache.get().add(clazz, paramterName, paramtertype);
         }
 
     }

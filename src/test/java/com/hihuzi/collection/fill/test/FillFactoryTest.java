@@ -23,14 +23,18 @@ public class FillFactoryTest implements Runnable {
     private MockHttpServletRequest request;
 
     private FillFactory fillTool;
+
     private static Map map;
+
     private static String tip;
 
     public void setMap(Map map) {
+
         this.map = map;
     }
 
     public void setTip(String tip) {
+
         this.tip = tip;
     }
 
@@ -107,7 +111,7 @@ public class FillFactoryTest implements Runnable {
         request.setParameter("doubleMin", "");
         long start = System.currentTimeMillis();
         TestBean map1 = null;
-        for (int i = 0; i < 10000000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             map1 = FillFactory.batch().fillEntity(request, new TestBean());
         }
         long end = System.currentTimeMillis();
@@ -143,7 +147,7 @@ public class FillFactoryTest implements Runnable {
         request.setParameter("doubleMin", "1.94");
         TestBean map1 = null;
         long start = System.currentTimeMillis();
-        for (int i = 0; i < 10000000; i++) {
+        for (int i = 0; i < 1000000; i++) {
             map1 = FillFactory.batch().fillEntity(request, new TestBean());
         }
         long end = System.currentTimeMillis();
@@ -359,6 +363,48 @@ public class FillFactoryTest implements Runnable {
         classCache.forEach((s, typeCache) -> System.err.println(typeCache.size()));
     }
 
+    /**
+     * tips HttpServletRequest--> obj
+     *
+     * @author:hihuzi 2018/6/14 14:50
+     */
+    @Test
+    public void list_to_entitys() throws Exception {
+
+        List list = new ArrayList();
+        Map map = new HashMap();
+        map.put("boo_leanMax", "true");
+        map.put("byteMax", "1");
+        map.put("shortMax", "129");
+        map.put("integerMax", "123456");
+        map.put("longMax", "1");
+        map.put("floatMax", "12.9");
+        map.put("doubleMax", "3.55");
+        map.put("string_Max", "你好师姐!!!");
+        map.put("bigdecimalMax", "9825485.61551");
+        map.put("dateMax", "2012-12-12");
+        map.put("booleanMin", "true");
+        map.put("charMin", "a");
+        map.put("byteMin", "2");
+        map.put("shortMin", "5");
+        map.put("intMin", "55");
+        map.put("longMin", "555");
+        map.put("floatMin", "0.9");
+        map.put("doubleMin", "1.94");
+        list.add(map);
+        Map<String, List<TestBean>> map1 = null;
+        long start = System.currentTimeMillis();
+        List testBeans = new ArrayList<>();
+        testBeans.add(new TestBean());
+        for (int i = 0; i < 10000; i++) {
+            list.add(map);
+        }
+        map1 = FillFactory.batch().listToClass(list, testBeans);
+        long end = System.currentTimeMillis();
+        System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
+        System.out.println(Arrays.asList(map1).toString());
+    }
+
     @Override
     public void run() {
 
@@ -382,6 +428,7 @@ public class FillFactoryTest implements Runnable {
      */
     @Test
     public void mains() {
+
         Map map = new HashMap(1);
         map.put("dateMax", "333-33-33");
         FillFactoryTest test0 = new FillFactoryTest();
@@ -411,6 +458,7 @@ public class FillFactoryTest implements Runnable {
     }
 
     public static void main(String[] args) {
+
         Map map = new HashMap(1);
         map.put("dateMax", "333-33-33");
         FillFactoryTest test0 = new FillFactoryTest();
@@ -437,4 +485,5 @@ public class FillFactoryTest implements Runnable {
         }
 
     }
+
 }
