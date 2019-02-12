@@ -394,21 +394,35 @@ public class FillFactoryTest implements Runnable {
         map.put("i_d", "ID_ID-ID-ID");
         list.add(map);
         long start = System.currentTimeMillis();
-
         for (int i = 1; i < 100000; i++) {
             list.add(map);
         }
-        List<TestBean> List1 = null;
-        List<TestBeanBean> List2 = null;
-        Map<String, List> map1 = (Map<String, List>)
-                FillFactory.batch().listToClass(list,
 
-                        new TestBean(), new TestBeanBean());
-        List<TestBean> testBean = (List<TestBean>) map1.get("TestBean");
-        List<TestBeanBean> testBeanBean = (List<TestBeanBean>) map1.get("TestBeanBean");
+        System.out.println("测试 ---> 第一种返回结果是List<Map>");
+        List<Map> map1 = (List<Map>) FillFactory.batch().listToClass(list,
+                new TestBean(), new TestBeanBean());
+        List<Map> map2 = (List<Map>) FillFactory.batch().listToClass(list,
+                new FillConfig(FillBase.ReturnStyleEnum.LISR),
+                new TestBean(), new TestBeanBean());
+        List<Map> map3 = (List<Map>) FillFactory.batch().listToClass(list,
+                new FillConfig(FillBase.ReturnStyleEnum.DEFAULT),
+                new TestBean(), new TestBeanBean());
+        System.out.println("测试 ---< 第一种返回结果是List<Map>");
+
+        System.out.println("测试 ---< 第二种返回结果是Map<String, List>");
+        Map<String, List> map4 = (Map<String, List>) FillFactory.batch().listToClass(list,
+                new FillConfig(FillBase.ReturnStyleEnum.MAP),
+                new TestBean(), new TestBeanBean());
+        System.out.println("测试 ---< 第二种返回结果是Map<String, List>");
+        System.out.println("测试 ---< 第三种返回结果是Map<String, List>");
+        List<TestBean> testBeans = new ArrayList<>();
+        List<TestBeanBean> testBeanBean = new ArrayList<>();
+        FillFactory.batch().listToClass(list,
+                new FillConfig(FillBase.ReturnStyleEnum.FILL_LIST.setList(testBeans, testBeanBean)),
+                new TestBean(), new TestBeanBean());
+        System.out.println("测试 ---< 第三种返回结果是Map<String, List>");
         long end = System.currentTimeMillis();
         System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
-//        System.out.println(Arrays.asList(map1).toString());
     }
 
     @Override

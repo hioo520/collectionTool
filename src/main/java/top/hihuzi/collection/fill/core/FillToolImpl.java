@@ -285,10 +285,29 @@ class FillToolImpl {
      */
     <E> Object listToClassDefault(List<Map> list, FillConfig config, E... e) throws Exception {
 
-        Map<String, List<E>> m = new HashMap<>(e.length);
         List<Map> lm = new ArrayList<>(list.size());
         Object newClazz = null;
-        tableNameMatchParameter(list, e);
+        Map<String, List<E>> m = null;
+        Map<String, ParameterCache> tableNameMatchParameter = tableNameMatchParameter(list, e);
+        switch (config.getReturnStyleEnum()) {
+            case DEFAULT:
+            case LISR:
+                for (Map map : list) {
+                    Map map1 = new HashMap(map.size());
+                    for (Object obj : map.entrySet()) {
+                        Map.Entry entry = (Map.Entry) obj;
+                        String names = String.valueOf(entry.getKey());
+                        String values = String.valueOf(entry.getValue());
+                        TypeCache typeCache = tableNameMatchParameter.get(names).getCache().get(names);
+                        map1.put(typeCache.getParamterName(), values);
+                    }
+                    lm.add(map1);
+                }
+                return lm;
+            default:
+                m = new HashMap<>(e.length);
+                break;
+        }
         for (E es : e) {
             Class<?> clazz = es.getClass();
             for (Map map : list) {
@@ -317,16 +336,17 @@ class FillToolImpl {
             }
         }
         switch (config.getReturnStyleEnum()) {
-            case DEFAULT:
+            case MAP:
                 return m;
-            case LISR:
-                for (List list1 : config.getReturnStyleEnum().getList()) {
+            case FILL_LIST:
+                int i = 0;
+                for (E es : e) {
+                    config.getReturnStyleEnum().getList()[i].addAll(m.get(es.getClass().getSimpleName()));
+                    i++;
                 }
-                break;
             default:
                 return null;
         }
-        return null;
     }
 
     /**
@@ -334,7 +354,7 @@ class FillToolImpl {
      *
      * @author: hihuzi 2019/2/12 14:06
      */
-    <E> Boolean tableNameMatchParameter(List<Map> list, E... e) {
+    <E> Map<String, ParameterCache> tableNameMatchParameter(List<Map> list, E... e) {
 
         for (E es : e) {
             Class<?> clazz = es.getClass();
@@ -350,7 +370,12 @@ class FillToolImpl {
                 clazz = es.getClass();
             }
         }
-        return true;
+        Map<String, ParameterCache> map = new HashMap();
+        for (E es : e) {
+            Map<String, ParameterCache> pCache = ClassCache.getPCache(es.getClass());
+            map.putAll(pCache);
+        }
+        return map;
     }
 
 }

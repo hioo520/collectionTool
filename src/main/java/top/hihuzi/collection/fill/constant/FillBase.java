@@ -131,13 +131,22 @@ public interface FillBase {
      **/
     enum ReturnStyleEnum {
         /**
-         * 所有都保存
+         * 默认和LIST返回一致
          */
         DEFAULT(null),
         /**
-         * 所有都保存(不处理)
+         * 返回"list<map>"
          */
-        LISR(null);
+        LISR(null),
+        /**
+         * 返回"map<e.getClass().getSimpleName(),list<E>>"
+         */
+        MAP(null),
+        /**
+         * 返回 根据传入的list进行填充
+         */
+        FILL_LIST(new List[]{});
+
 
         private List[] list;
 
@@ -154,7 +163,7 @@ public interface FillBase {
             return list;
         }
 
-        public ReturnStyleEnum setList(List ...list) {
+        public ReturnStyleEnum setList(List... list) {
 
             this.list = list;
             return this;
