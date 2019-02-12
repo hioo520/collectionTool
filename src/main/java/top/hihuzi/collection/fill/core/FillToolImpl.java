@@ -186,9 +186,9 @@ class FillToolImpl {
      */
     public <E> List<E> listToEntityDefault(List<String> list, E e, FillConfig config) throws Exception {
 
-        List<E> result = new ArrayList<>();
-        List<String> field = new ArrayList<>();
-        List<String> fieldsMap = new ArrayList<>();
+        List<E> result = new ArrayList<>(list.size());
+        List<String> field = new ArrayList<>(e.getClass().getDeclaredFields().length);
+        List<String> fieldsMap = new ArrayList<>(e.getClass().getDeclaredFields().length);
         Class clazz = e.getClass();
         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             Field[] fields = clazz.getDeclaredFields();
@@ -223,57 +223,6 @@ class FillToolImpl {
         Object obj = e.getClass().getDeclaredConstructor().newInstance();
         obj = mapFillEntity(map, obj, config);
         result.add((E) obj);
-        return result;
-    }
-
-    /**
-     * tips tips 对LIST数据装填--> 对象 针对数据库与实体类名有区别 key-value -->e
-     *
-     * @parameter: List<Map>
-     * @parameter: E
-     * @return: List<E>
-     * @author: hihuzi 2018/6/26 14:51
-     */
-    <E> List<E> listFillEntity(List<Map> list, E t, FillConfig config) throws Exception {
-
-        List<E> result = new ArrayList<>();
-        List<String> fieldsMap = new ArrayList<>();
-        List<Map> entityMaps = new ArrayList<>();
-        Class clazz = t.getClass();
-        Map<String, TypeCache> cache = ClassCache.getCache(clazz);
-        if (null != cache) {
-            fieldsMap = new ArrayList<>(cache.keySet());
-        } else {
-            for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
-                Field[] fields = clazz.getDeclaredFields();
-                for (Field field : fields) {
-                    fieldsMap.add(field.getName());
-                    ClassCache.get().add(clazz, field.getName());
-                }
-            }
-        }
-        for (Map map : list) {
-            Iterator iterator = map.entrySet().iterator();
-            Map transition = new HashMap(list.size());
-            while (iterator.hasNext()) {
-                Map.Entry entry = (Map.Entry) iterator.next();
-                String names = String.valueOf(entry.getKey());
-                String value = String.valueOf(entry.getValue());
-                if (StrUtils.isNNoE(value)) {
-                    for (String fields : fieldsMap) {
-                        if (StrUtils.isEquals(names, fields)) {
-                            transition.put(fields, value);
-                        }
-                    }
-                }
-            }
-            entityMaps.add(transition);
-        }
-        for (Map map : entityMaps) {
-            Object obj = t.getClass().getDeclaredConstructor().newInstance();
-            obj = mapFillEntity(map, obj, config);
-            result.add((E) obj);
-        }
         return result;
     }
 
@@ -340,10 +289,18 @@ class FillToolImpl {
                 return m;
             case FILL_LIST:
                 int i = 0;
-                for (E es : e) {
-                    config.getReturnStyleEnum().getList()[i].addAll(m.get(es.getClass().getSimpleName()));
-                    i++;
+                try {
+                    for (E es : e) {
+                        config.getReturnStyleEnum().getList()[i].addAll(m.get(es.getClass().getSimpleName()));
+                        i++;
+                    }
+                } catch (Exception ex) {
+                    System.out.println("从新配置list顺序有误");
+                    return false;
                 }
+                return true;
+            case FILL_CLASS:
+                return m.get(e[0].getClass().getSimpleName());
             default:
                 return null;
         }
@@ -370,7 +327,7 @@ class FillToolImpl {
                 clazz = es.getClass();
             }
         }
-        Map<String, ParameterCache> map = new HashMap();
+        Map<String, ParameterCache> map = new HashMap(e.length);
         for (E es : e) {
             Map<String, ParameterCache> pCache = ClassCache.getPCache(es.getClass());
             map.putAll(pCache);

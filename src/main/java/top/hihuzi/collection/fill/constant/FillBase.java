@@ -145,7 +145,12 @@ public interface FillBase {
         /**
          * 返回 根据传入的list进行填充
          */
-        FILL_LIST(new List[]{});
+        FILL_LIST(null),
+
+        /**
+         * 返回 根据传入的list进行填充成单个对象
+         */
+        FILL_CLASS(null);
 
 
         private List[] list;

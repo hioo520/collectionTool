@@ -113,27 +113,6 @@ public interface FillFactory {
     <E> E fillEntity(Map map, E e, FillConfig config) throws Exception;
 
     /**
-     * tips List<Map> --> E --> List<E>
-     *
-     * @parameter: List<Map> list
-     * @parameter: E e
-     * @return: List<E>
-     * @author: hihuzi 2018/6/26 14:51
-     */
-
-    <E> List<E> fillEntity(List<Map> list, E e) throws Exception;
-
-    /**
-     * tips list<String> --> E --> list<E> 针对数据库与实体类名有区别
-     *
-     * @parameter: List<String> list
-     * @parameter: E e
-     * @return: List<E>
-     * @author: hihuzi 2018/6/26 14:51
-     */
-    <E> List<E> fillEntity(List<Map> list, E e, FillConfig config) throws Exception;
-
-    /**
      * tips E --> Map  针对E的属性属性值填充到map
      *
      * @parameter: E e

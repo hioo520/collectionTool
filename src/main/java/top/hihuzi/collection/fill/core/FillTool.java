@@ -214,40 +214,6 @@ public class FillTool extends FillToolImpl implements FillFactory {
     }
 
     /**
-     * tips tips 对LIST数据装填--> 对象 针对数据库与实体类名有区别 key-value -->e
-     *
-     * @parameter: List<Map>
-     * @parameter: E
-     * @return: List<E>
-     * @author: hihuzi 2018/6/26 14:51
-     */
-    @Override
-    public <E> List<E> fillEntity(List<Map> list, E e) throws Exception {
-
-        if (null == list || 0 == list.size()) return null;
-        List<E> entitys = listFillEntity(list, e, new FillConfig(FillConfig.SaveStyleEnum.DEFAULT));
-        FillConfig.reset();
-        return entitys;
-    }
-
-    /**
-     * tips tips 对LIST数据装填--> 对象 针对数据库与实体类名有区别 key-value -->e
-     *
-     * @parameter: List<Map>
-     * @parameter: E
-     * @return: List<E>
-     * @author: hihuzi 2018/6/26 14:51
-     */
-    @Override
-    public <E> List<E> fillEntity(List<Map> list, E e, FillConfig config) throws Exception {
-
-        if (null == list || 0 == list.size()) return null;
-        List<E> entitys = listFillEntity(list, e, config);
-        FillConfig.reset();
-        return entitys;
-    }
-
-    /**
      * tips 数据库的元组转对象
      *
      * @notice: 对象属性和表 遵循驼峰或者下划线命名

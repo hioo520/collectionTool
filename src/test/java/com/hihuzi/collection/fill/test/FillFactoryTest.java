@@ -251,7 +251,7 @@ public class FillFactoryTest implements Runnable {
      * @author: hihuzi 2018/6/26 14:51
      */
     @Test
-    public void fill_entity_list() throws Exception {
+    public void fill_entity_class() throws Exception {
 
         List list = new ArrayList();
         List list0 = new ArrayList();
@@ -275,13 +275,17 @@ public class FillFactoryTest implements Runnable {
         map.put("floatMin", "0.9");
         map.put("doubleMin", "1.94");
         list.add(map);
-        List<TestBean> bean = FillFactory.batch().fillEntity(list, new TestBean());
+        List<TestBean> bean = (List<TestBean>) FillFactory.batch().listToClass(list,
+                new FillConfig(FillBase.ReturnStyleEnum.FILL_CLASS), new TestBean());
+        for (TestBean testBean : bean) {
+            System.out.println(testBean.toString());
+        }
         /**tips 特殊的时间格式处理*/
 
         map.put("dateMax", "2012!12@12#12-12:12");
         list0.add(map);
-        List<TestBean> bean0 = FillFactory.batch().fillEntity(list0, new TestBean(),
-                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss")));
+        List<TestBean> bean0 = (List<TestBean>) FillFactory.batch().listToClass(list0,
+                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss"), FillBase.ReturnStyleEnum.FILL_CLASS), new TestBean());
         System.out.println(bean.get(0).toString());
         System.out.println(bean0.get(0).toString());
 //        long start = System.currentTimeMillis();
@@ -369,7 +373,7 @@ public class FillFactoryTest implements Runnable {
      * @author:hihuzi 2018/6/14 14:50
      */
     @Test
-    public void list_to_entitys() throws Exception {
+    public void list_to_class() throws Exception {
 
         List list = new ArrayList();
         Map map = new HashMap();
@@ -421,6 +425,10 @@ public class FillFactoryTest implements Runnable {
                 new FillConfig(FillBase.ReturnStyleEnum.FILL_LIST.setList(testBeans, testBeanBean)),
                 new TestBean(), new TestBeanBean());
         System.out.println("测试 ---< 第三种返回结果是Map<String, List>");
+        System.out.println("测试 ---< 第四种返回结果是Map<String, List>");
+        List<TestBean> bean = (List<TestBean>) FillFactory.batch().listToClass(list,
+                new FillConfig(FillBase.ReturnStyleEnum.FILL_CLASS), new TestBean());
+        System.out.println("测试 ---< 第四种返回结果是Map<String, List>");
         long end = System.currentTimeMillis();
         System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
     }
