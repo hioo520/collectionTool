@@ -52,6 +52,25 @@ public class ClassCache {
     }
 
     /**
+     * tips 判断是否已经缓存了
+     *
+     * @notice: 这样设计是为了可以值传一值(对来自表 - 0 -)
+     * @parameter: Class<?> clazz
+     * @parameter: String[] paramterName
+     * @return: Boolean
+     * @author: hihuzi 2018/9/24 17:32
+     */
+    public static Boolean isBeing(Class<?> clazz, String... paramterName) {
+
+        if (paramterName.length == 0) {
+            return paramCache.get(clazz.getName()) != null;
+        } else {
+            if (null == paramCache || paramCache.get(clazz.getName()) == null) return false;
+            return paramCache.get(clazz.getName()).get(paramterName) != null;
+        }
+    }
+
+    /**
      * tips 从缓存中取出数据(TypeCache)
      *
      * @parameter: clazz
@@ -61,9 +80,7 @@ public class ClassCache {
      */
     public static TypeCache getCache(Class<?> clazz, String paramterName) {
 
-        if (cache == null || cache.get(clazz.getName()) == null) {
-            return null;
-        }
+        if (cache == null || cache.get(clazz.getName()) == null) return null;
         return cache.get(clazz.getName()).get(paramterName);
     }
 
@@ -77,9 +94,7 @@ public class ClassCache {
      */
     public static ParameterCache getPCache(Class<?> clazz, String paramterName) {
 
-        if (null == paramCache || paramCache.get(clazz.getName()) == null) {
-            return null;
-        }
+        if (null == paramCache || paramCache.get(clazz.getName()) == null) return null;
         return paramCache.get(clazz.getName()).get(paramterName);
     }
 
@@ -93,9 +108,7 @@ public class ClassCache {
      */
     public static Map<String, TypeCache> getCache(Class<?> clazz) {
 
-        if (cache == null || cache.get(clazz.getName()) == null) {
-            return null;
-        }
+        if (cache == null || cache.get(clazz.getName()) == null)  return null;
         return cache.get(clazz.getName());
     }
 
@@ -109,9 +122,7 @@ public class ClassCache {
      */
     public static Map<String, ParameterCache> getPCache(Class<?> clazz) {
 
-        if (paramCache == null || paramCache.get(clazz.getName()) == null) {
-            return null;
-        }
+        if (paramCache == null || paramCache.get(clazz.getName()) == null) return null;
         return paramCache.get(clazz.getName());
     }
 
@@ -189,7 +200,8 @@ public class ClassCache {
      * @return:
      * @author: hihuzi 2018/9/24 18:09
      */
-    private void joinTheCache(Class<?> clazz, String paramterName, Map<String, TypeCache> cacheTypeMap, Class<?> paramtertype) {
+    private void joinTheCache(Class<?> clazz, String
+            paramterName, Map<String, TypeCache> cacheTypeMap, Class<?> paramtertype) {
 
         cacheTypeMap.put(paramterName, TypeCache.add(clazz, paramterName, paramtertype));
         cache.put(clazz.getName(), cacheTypeMap);
@@ -209,7 +221,7 @@ public class ClassCache {
     private void joinTheCache(Class<?> clazz, String paramterName, Map<String, ParameterCache> paramterMap,
                               Class<?> paramtertype, String tableName) {
 
-        paramterMap.put(tableName, ParameterCache.add(clazz, paramterName, paramtertype,tableName));
+        paramterMap.put(tableName, ParameterCache.add(clazz, paramterName, paramtertype, tableName));
         paramCache.put(clazz.getName(), paramterMap);
     }
 

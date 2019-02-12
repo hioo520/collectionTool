@@ -2,6 +2,8 @@ package top.hihuzi.collection.fill.constant;
 
 import top.hihuzi.collection.utils.Constants;
 
+import java.util.List;
+
 /**
  * tips: 填充工具控制器
  *
@@ -26,6 +28,12 @@ public class FillConfig implements FillBase {
     private DateStyleEnum dateStyleEnum;
 
     /**
+     * 对于返回风格管理器
+     */
+    private ReturnStyleEnum returnStyleEnum;
+
+
+    /**
      * 重置枚举对象
      * 对枚举静态变量一定要初始化
      */
@@ -33,6 +41,7 @@ public class FillConfig implements FillBase {
 
         SortStyleEnum.DEFAULT.setSort(new Integer[]{});
         DateStyleEnum.DEFAULT.dateFormat.remove();
+        ReturnStyleEnum.DEFAULT.setList(new List[]{});
     }
 
     /**
@@ -68,6 +77,11 @@ public class FillConfig implements FillBase {
         this.dateStyleEnum = dateStyleEnum;
     }
 
+    public FillConfig(ReturnStyleEnum returnStyleEnum) {
+
+        this.returnStyleEnum = returnStyleEnum;
+    }
+
     public SaveStyleEnum getSaveStyleEnum() {
 
         return null != saveStyleEnum ? saveStyleEnum : SaveStyleEnum.DEFAULT;
@@ -97,6 +111,16 @@ public class FillConfig implements FillBase {
     public void setDateStyleEnum(DateStyleEnum dateStyleEnum) {
 
         this.dateStyleEnum = dateStyleEnum;
+    }
+
+    public ReturnStyleEnum getReturnStyleEnum() {
+
+        return null != returnStyleEnum ? returnStyleEnum : ReturnStyleEnum.DEFAULT;
+    }
+
+    public void setReturnStyleEnum(ReturnStyleEnum returnStyleEnum) {
+
+        this.returnStyleEnum = returnStyleEnum;
     }
 
 }

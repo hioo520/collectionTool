@@ -261,7 +261,7 @@ class FillToolImpl {
                 String value = String.valueOf(entry.getValue());
                 if (StrUtils.isNNoE(value)) {
                     for (String fields : fieldsMap) {
-                        if (isEquals(names, fields)) {
+                        if (StrUtils.isEquals(names, fields)) {
                             transition.put(fields, value);
                         }
                     }
@@ -283,12 +283,12 @@ class FillToolImpl {
      * @notice: 对象属性和表 遵循驼峰或者下划线命名
      * @author: hihuzi 2019/2/11 9:53
      */
-    <E> Map<String, List<E>> listToClassDefault(List<Map> list, FillConfig config, List<E> e) throws Exception {
+    <E> Object listToClassDefault(List<Map> list, FillConfig config, E... e) throws Exception {
 
-        Map<String, List<E>> ma = new HashMap<>(e.size());
+        Map<String, List<E>> m = new HashMap<>(e.length);
+        List<Map> lm = new ArrayList<>(list.size());
         Object newClazz = null;
-        int i = list.size();
-//        while (i > 0) {
+        tableNameMatchParameter(list, e);
         for (E es : e) {
             Class<?> clazz = es.getClass();
             for (Map map : list) {
@@ -303,45 +303,54 @@ class FillToolImpl {
                         TypeCache cache = ptCache.get(names);
                         ValueHandleCache.invokeValueCache(newClazz, cache.getMethodSet(), values, cache.getType(), config);
                     } else {
-//                        for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
-                            Field[] declaredFields = clazz.getDeclaredFields();
-                            for (Field field : declaredFields) {
-                                if (isEquals(names, field.getName())) {
-                                    Invoke.injectionParameters(newClazz, field.getName(), values, config);
-                                    ClassCache.get().add(clazz, field.getName(), null, names);
-                                    break;
-                                }
-                            }
-//                        }
-//                                Field[] fields = clazz.getDeclaredFields();
-//                                for (Field field : fields) {
-//                                    if (isEquals(names, field.getName())) {
-//                                        Invoke.injectionParameters(newClazz, field.getName(), values, config);
-//                                        ClassCache.get().add(clazz, field.getName(), null, names);
-//                                    }
-//                                }
-//                            }
+                        continue;
                     }
                 }
-                List<E> lis = ma.get(newClazz.getClass().getSimpleName());
+                List<E> lis = m.get(newClazz.getClass().getSimpleName());
                 if (null != lis) {
                     lis.add((E) newClazz);
                 } else {
                     List<E> li = new ArrayList<>(list.size());
                     li.add((E) newClazz);
-                    ma.put(newClazz.getClass().getSimpleName(), li);
+                    m.put(newClazz.getClass().getSimpleName(), li);
                 }
             }
-//            }
-//            i--;
         }
-
-        return ma;
+        switch (config.getReturnStyleEnum()) {
+            case DEFAULT:
+                return m;
+            case LISR:
+                for (List list1 : config.getReturnStyleEnum().getList()) {
+                }
+                break;
+            default:
+                return null;
+        }
+        return null;
     }
 
-    private boolean isEquals(String names, String name) {
+    /**
+     * tips 无线递归上级找属性(表和对象属性匹配)
+     *
+     * @author: hihuzi 2019/2/12 14:06
+     */
+    <E> Boolean tableNameMatchParameter(List<Map> list, E... e) {
 
-        return name.toLowerCase().equals(names.replaceAll("[_|-|]", "").toLowerCase());
+        for (E es : e) {
+            Class<?> clazz = es.getClass();
+            for (Object obj : list.get(0).keySet()) {
+                for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
+                    for (Field field : clazz.getDeclaredFields()) {
+                        if (StrUtils.isEquals(String.valueOf(obj), field.getName())) {
+                            ClassCache.get().add(es.getClass(), field.getName(), null, String.valueOf(obj));
+                            break;
+                        }
+                    }
+                }
+                clazz = es.getClass();
+            }
+        }
+        return true;
     }
 
 }

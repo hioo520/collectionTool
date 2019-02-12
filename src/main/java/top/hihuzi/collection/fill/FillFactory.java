@@ -188,17 +188,19 @@ public interface FillFactory {
     /**
      * tips 数据库的元组转对象
      *
+     * @notice:返回风格"Map<String, List<E>>"
      * @notice: 对象属性和表 遵循驼峰或者下划线命名
      * @author: hihuzi 2019/2/11 9:53
      */
-    <E> Map<String, List<E>> listToClass(List<Map> list, List<E> e) throws Exception;
+    <E> Object listToClass(List<Map> list, E ...e) throws Exception;
 
     /**
      * tips 数据库的元组转对象
      *
+     * @notice:返回风格"Map<String, List<E>>"
      * @notice: 对象属性和表 遵循驼峰或者下划线命名
      * @author: hihuzi 2019/2/11 9:53
      */
-    <E> Map<String, List<E>> listToClass(List<Map> list, FillConfig config, List<E> e) throws Exception;
+    <E> Object listToClass(List<Map> list, FillConfig config, E ...e) throws Exception;
 
 }

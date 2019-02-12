@@ -1,6 +1,7 @@
 package top.hihuzi.collection.fill.constant;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * tips 控制常量
@@ -22,6 +23,7 @@ public interface FillBase {
         DEFAULT("");
 
         private String value;
+
         /**
          * tips 多线程并发时启用
          */
@@ -33,10 +35,12 @@ public interface FillBase {
         }
 
         public SimpleDateFormat getFormartStyle() {
+
             return dateFormat.get();
         }
 
         public DateStyleEnum setFormartStyle(String formartStyle) {
+
             SimpleDateFormat threadSimpleDateFormat = dateFormat.get();
             if (null == threadSimpleDateFormat || !formartStyle.equals(threadSimpleDateFormat.toPattern())) {
                 dateFormat.set(new SimpleDateFormat(formartStyle));
@@ -117,5 +121,43 @@ public interface FillBase {
             return isHaving;
         }
     }
+
+
+    /**
+     * tips: 返回值为空或者""
+     *
+     * @notice: 通用枚举
+     * @author: hihuzi 2018/9/29 14:54
+     **/
+    enum ReturnStyleEnum {
+        /**
+         * 所有都保存
+         */
+        DEFAULT(null),
+        /**
+         * 所有都保存(不处理)
+         */
+        LISR(null);
+
+        private List[] list;
+
+        ReturnStyleEnum(List[] list) {
+
+            this.list = list;
+        }
+
+        /**
+         * @author: hihuzi 2018/9/30 8:52
+         **/
+        public List[] getList() {
+
+            return list;
+        }
+
+        public ReturnStyleEnum setList(List ...list) {
+
+            this.list = list;
+            return this;
+        }}
 
 }

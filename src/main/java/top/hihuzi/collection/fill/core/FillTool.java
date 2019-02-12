@@ -254,14 +254,13 @@ public class FillTool extends FillToolImpl implements FillFactory {
      * @author: hihuzi 2019/2/11 9:53
      */
     @Override
-    public <E> Map<String, List<E>> listToClass(List<Map> list, List<E>  e) throws Exception {
+    public <E> Object listToClass(List<Map> list, E... e) throws Exception {
 
-        if (null == list || 0 == list.size() || null == e || 0 == e.size()) return null;
-        Map<String, List<E>> b = listToClassDefault(list, new FillConfig(), e);
+        if (null == list || 0 == list.size() || null == e || 0 == e.length) return null;
+        Object b = listToClassDefault(list, new FillConfig(), e);
         FillConfig.reset();
         return b;
     }
-
 
 
     /**
@@ -271,10 +270,10 @@ public class FillTool extends FillToolImpl implements FillFactory {
      * @author: hihuzi 2019/2/11 9:57
      */
     @Override
-    public <E> Map<String, List<E>> listToClass(List<Map> list, FillConfig config, List<E>  e) throws Exception {
+    public <E> Object listToClass(List<Map> list, FillConfig config, E... e) throws Exception {
 
-        if (null == list || 0 == list.size() || null == e || 0 == e.size()) return null;
-        Map<String, List<E>> b = listToClassDefault(list, config, e);
+        if (null == list || 0 == list.size() || null == e || 0 == e.length) return null;
+        Object b = listToClassDefault(list, config, e);
         FillConfig.reset();
         return b;
 

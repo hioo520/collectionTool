@@ -9,7 +9,7 @@ public class ParameterCache {
      * 缓存class 全限定名 参数类型 参数
      * 第一个 String: class 全限定名
      * 第二个String: class 属性名
-     * cache--->"Map<class 全限定名称,Map<属性名称,[各个属性的方法,属性类型]>>"
+     * cache--->"Map<属性名称,[各个属性的方法,属性类型]>"
      *
      * @author: hihuzi 2019/2/11 11:14
      */
@@ -27,14 +27,14 @@ public class ParameterCache {
 
 
         TypeCache caches = ClassCache.getCache(clazz, paramterName);
-        if (null != caches) {
-            if (null == this.paramCache) {
-                this.paramCache = new HashMap<>(clazz.getDeclaredFields().length);
-            }
-            this.paramCache.put(tableName, caches);
-        } else {
+        if (null == caches) {
             ClassCache.get().add(clazz, paramterName, paramtertype);
+            caches = ClassCache.getCache(clazz, paramterName);
         }
+        if (null == this.paramCache) {
+            this.paramCache = new HashMap<>(clazz.getDeclaredFields().length);
+        }
+        this.paramCache.put(tableName, caches);
 
     }
 
@@ -52,6 +52,11 @@ public class ParameterCache {
         return new ParameterCache(clazz, paramterName, paramtertype, tableName);
     }
 
+    /**
+     * tips 获取缓存
+     *
+     * @author: hihuzi 2019/2/12 10:23
+     */
     public Map<String, TypeCache> getCache() {
 
         return paramCache;

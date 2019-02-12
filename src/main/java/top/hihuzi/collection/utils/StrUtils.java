@@ -22,6 +22,11 @@ public class StrUtils {
     private static StringBuffer SET = new StringBuffer().append("set");
 
     /**
+     * 处理驼峰 set
+     */
+    private static String HUMP = "[_|-|]";
+
+    /**
      * tips 存在一个是  "" 或"  "或 null 返回 true  原名:isNullOrEmpty
      *
      * @parameter: string[] strs
@@ -176,6 +181,11 @@ public class StrUtils {
 
         return GET + name.substring(0, 1).toUpperCase() + name.substring(1);
 
+    }
+
+    public static boolean isEquals(String names, String name) {
+
+        return name.toLowerCase().equals(names.replaceAll(HUMP, "").toLowerCase());
     }
 
 }

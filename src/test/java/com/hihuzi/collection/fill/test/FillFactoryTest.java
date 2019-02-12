@@ -147,7 +147,7 @@ public class FillFactoryTest implements Runnable {
         request.setParameter("doubleMin", "1.94");
         TestBean map1 = null;
         long start = System.currentTimeMillis();
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 100000; i++) {
             map1 = FillFactory.batch().fillEntity(request, new TestBean());
         }
         long end = System.currentTimeMillis();
@@ -389,21 +389,26 @@ public class FillFactoryTest implements Runnable {
         map.put("shortMin", "5");
         map.put("intMin", "55");
         map.put("longMin", "555");
-        map.put("floatMin", "0.9");
+        map.put("flo_atMin", "0.9");
         map.put("doubleMin", "1.94");
+        map.put("i_d", "ID_ID-ID-ID");
         list.add(map);
-        Map<String, List<TestBean>> map1 = null;
         long start = System.currentTimeMillis();
-        List testBeans = new ArrayList<>();
-        testBeans.add(new TestBean());
-        testBeans.add(new TestBean());
-        for (int i = 0; i < 100000; i++) {
+
+        for (int i = 1; i < 100000; i++) {
             list.add(map);
         }
-        map1 = FillFactory.batch().listToClass(list, testBeans);
+        List<TestBean> List1 = null;
+        List<TestBeanBean> List2 = null;
+        Map<String, List> map1 = (Map<String, List>)
+                FillFactory.batch().listToClass(list,
+
+                        new TestBean(), new TestBeanBean());
+        List<TestBean> testBean = (List<TestBean>) map1.get("TestBean");
+        List<TestBeanBean> testBeanBean = (List<TestBeanBean>) map1.get("TestBeanBean");
         long end = System.currentTimeMillis();
         System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
-        System.out.println(Arrays.asList(map1).toString());
+//        System.out.println(Arrays.asList(map1).toString());
     }
 
     @Override
