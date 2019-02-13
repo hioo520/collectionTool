@@ -2,6 +2,7 @@ package top.hihuzi.collection.fill.core;
 
 import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.ParameterCache;
+import top.hihuzi.collection.cache.SecondCache;
 import top.hihuzi.collection.cache.TypeCache;
 import top.hihuzi.collection.fill.common.Invoke;
 import top.hihuzi.collection.fill.common.ValueHandleCache;
@@ -317,26 +318,41 @@ class FillToolImpl {
      */
     <E> Map<String, ParameterCache> tableNameMatchParameter(List<Map> list, E... e) {
 
-        for (E es : e) {
-            Class<?> clazz = es.getClass();
-            for (Object obj : list.get(0).keySet()) {
-                for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
-                    for (Field field : clazz.getDeclaredFields()) {
-                        if (StrUtils.isEquals(String.valueOf(obj), field.getName())) {
-                            ClassCache.get().add(es.getClass(), field.getName(), null, String.valueOf(obj));
-                            break;
+        if (!isBeingCache(e)) {
+            for (E es : e) {
+                Class<?> clazz = es.getClass();
+                for (Object obj : list.get(0).keySet()) {
+                    for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
+                        for (Field field : clazz.getDeclaredFields()) {
+                            if (StrUtils.isEquals(String.valueOf(obj), field.getName())) {
+                                ClassCache.get().add(es.getClass(), field.getName(), null, String.valueOf(obj));
+                                break;
+                            }
                         }
                     }
+                    clazz = es.getClass();
                 }
-                clazz = es.getClass();
             }
         }
-        Map<String, ParameterCache> map = new HashMap(e.length);
-        for (E es : e) {
-            Map<String, ParameterCache> pCache = ClassCache.getPCache(es.getClass());
-            map.putAll(pCache);
+        Map<String, ParameterCache> map = SecondCache.getCache(StrUtils.splicingObjectName(e));
+        if (null == map) {
+            map = new HashMap(e.length);
+            for (E es : e) {
+                Map<String, ParameterCache> pCache = ClassCache.getPCache(es.getClass());
+                map.putAll(pCache);
+            }
+            SecondCache.addCache(StrUtils.splicingObjectName(e), map);
         }
         return map;
+    }
+
+    private <E> boolean isBeingCache(E... e) {
+
+        for (E es : e) {
+            Map<String, ParameterCache> pCache = ClassCache.getPCache(es.getClass());
+            if (null == pCache) return false;
+        }
+        return true;
     }
 
 }
