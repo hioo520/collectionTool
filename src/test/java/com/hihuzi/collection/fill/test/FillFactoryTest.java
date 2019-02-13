@@ -413,11 +413,14 @@ public class FillFactoryTest implements Runnable {
                 new TestBean(), new TestBeanBean());
         System.out.println("测试 ---< 第一种返回结果是List<Map>");
 
+
         System.out.println("测试 ---< 第二种返回结果是Map<String, List>");
         Map<String, List> map4 = (Map<String, List>) FillFactory.batch().listToClass(list,
                 new FillConfig(FillBase.ReturnStyleEnum.MAP),
                 new TestBean(), new TestBeanBean());
         System.out.println("测试 ---< 第二种返回结果是Map<String, List>");
+
+
         System.out.println("测试 ---< 第三种返回结果是Map<String, List>");
         List<TestBean> testBeans = new ArrayList<>();
         List<TestBeanBean> testBeanBean = new ArrayList<>();
@@ -425,6 +428,8 @@ public class FillFactoryTest implements Runnable {
                 new FillConfig(FillBase.ReturnStyleEnum.FILL_LIST.setList(testBeans, testBeanBean)),
                 new TestBean(), new TestBeanBean());
         System.out.println("测试 ---< 第三种返回结果是Map<String, List>");
+
+
         System.out.println("测试 ---< 第四种返回结果是Map<String, List>");
         List<TestBean> bean = (List<TestBean>) FillFactory.batch().listToClass(list,
                 new FillConfig(FillBase.ReturnStyleEnum.FILL_CLASS), new TestBean());

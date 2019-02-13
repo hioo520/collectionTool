@@ -113,4 +113,25 @@ public interface PickFactory {
      */
     Map pickMap(Map map, PickConfig config, String... key);
 
+    /**
+     * tips 从集合中取出特定key
+     *
+     * @parameter: Map map
+     * @parameter: String[] key
+     * @return: Map
+     * @author: hihuzi 2018/8/3 17:09
+     */
+    List<Map> pickList(List<Map> list, String... key) throws Exception;
+
+    /**
+     * tips 从集合中取出特定Key(带返回控制)
+     *
+     * @parameter: Map map
+     * @parameter: PickConfig config
+     * @parameter: String[] key
+     * @return: Map
+     * @author: hihuzi 2018/8/3 17:09
+     */
+    List<Map> pickList(List<Map> list, PickConfig config, String... key) throws Exception;
+
 }

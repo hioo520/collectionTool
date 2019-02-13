@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * tips class 字典 饿汉式(内部类懒加载)线程安全行
+ * tips class缓存器 字典 饿汉式(内部类懒加载)线程安全行
  *
  * @author: hihuzi 2018/9/23 23:37
  */
@@ -31,43 +31,6 @@ public class ClassCache {
     public static ClassCache get() {
 
         return CacheClazz.CLASS_CACHE;
-    }
-
-    /**
-     * tips 判断是否已经缓存了
-     *
-     * @notice: 这样设计是为了可以值传一值(对来自表 - 0 - Constants.TABLE的数据判断无效)
-     * @parameter: Class<?> clazz
-     * @parameter: String[] paramterName
-     * @return: Boolean
-     * @author: hihuzi 2018/9/24 17:32
-     */
-    public static Boolean isHaving(Class<?> clazz, String... paramterName) {
-
-        if (paramterName.length == 0) {
-            return cache.get(clazz.getName()) != null;
-        } else {
-            return cache.get(clazz.getName()).get(paramterName) != null;
-        }
-    }
-
-    /**
-     * tips 判断是否已经缓存了
-     *
-     * @notice: 这样设计是为了可以值传一值(对来自表 - 0 -)
-     * @parameter: Class<?> clazz
-     * @parameter: String[] paramterName
-     * @return: Boolean
-     * @author: hihuzi 2018/9/24 17:32
-     */
-    public static Boolean isBeing(Class<?> clazz, String... paramterName) {
-
-        if (paramterName.length == 0) {
-            return paramCache.get(clazz.getName()) != null;
-        } else {
-            if (null == paramCache || paramCache.get(clazz.getName()) == null) return false;
-            return paramCache.get(clazz.getName()).get(paramterName) != null;
-        }
     }
 
     /**
