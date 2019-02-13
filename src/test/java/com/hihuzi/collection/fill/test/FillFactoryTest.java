@@ -378,7 +378,7 @@ public class FillFactoryTest implements Runnable {
         List list = new ArrayList();
         Map map = new HashMap();
         map.put("boo_leanMax", "true");
-        map.put("byteMax", "1");
+        map.put("by_teMax", "1");
         map.put("shortMax", "129");
         map.put("integerMax", "123456");
         map.put("longMax", "1");

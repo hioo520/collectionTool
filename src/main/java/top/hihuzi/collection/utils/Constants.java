@@ -14,11 +14,6 @@ public class Constants {
     public static final String DATE_FORMART = "yyyy-MM-dd";
 
     /**
-     * tips 表标识
-     */
-    public static final String TABLE = "-TABLE";
-
-    /**
      * tips 数据类型转化
      *
      * @notice : 0 是预留数据类型 表示没有匹配
