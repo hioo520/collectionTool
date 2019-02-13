@@ -247,8 +247,12 @@ class FillToolImpl {
                         Map.Entry entry = (Map.Entry) obj;
                         String names = String.valueOf(entry.getKey());
                         String values = String.valueOf(entry.getValue());
-                        TypeCache typeCache = tableNameMatchParameter.get(names).getCache().get(names);
-                        map1.put(typeCache.getParamterName(), values);
+                        try {
+                            TypeCache typeCache = tableNameMatchParameter.get(names).getCache().get(names);
+                            map1.put(typeCache.getParamterName(), values);
+                        } catch (Exception ex) {
+                            continue;
+                        }
                     }
                     lm.add(map1);
                 }
