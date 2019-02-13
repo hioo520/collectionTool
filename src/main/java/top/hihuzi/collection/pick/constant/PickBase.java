@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
  * @author: hihuzi 2018/9/29 16:44
  **/
 public interface PickBase {
+
     /**
      * tips: 自定义返回Key
      *
@@ -48,17 +49,21 @@ public interface PickBase {
          * @author: hihuzi
          */
         CUSTOM_SUFFIX("");
+
         private String key;
 
         ReturnNameEnum(String key) {
+
             this.key = key;
         }
 
         public String getKey() {
+
             return key;
         }
 
         public ReturnNameEnum setKey(String key) {
+
             this.key = key;
             return this;
         }
@@ -95,13 +100,16 @@ public interface PickBase {
          * @author: hihuzi
          */
         SET(3);
+
         private Integer key;
 
         ReturnStyleEnum(Integer key) {
+
             this.key = key;
         }
 
         public Integer getKey() {
+
             return key;
         }
     }
@@ -128,9 +136,11 @@ public interface PickBase {
          * @author: hihuzi 2018/9/29 17:21
          **/
         REMOVE_NULL_EMPTY(false);
+
         private Boolean isHaving;
 
         SaveStyleEnum(Boolean having) {
+
             this.isHaving = having;
         }
 
@@ -141,6 +151,7 @@ public interface PickBase {
          * @author: hihuzi 2018/9/30 8:52
          **/
         public Boolean getHaving() {
+
             return isHaving;
         }
     }
@@ -158,6 +169,7 @@ public interface PickBase {
         DEFAULT("");
 
         private String value;
+
         /**
          * tips 多线程并发时启用
          */
@@ -169,10 +181,12 @@ public interface PickBase {
         }
 
         public SimpleDateFormat getFormartStyle() {
+
             return dateFormat.get();
         }
 
         public DateStyleEnum setFormartStyle(String formartStyle) {
+
             SimpleDateFormat threadSimpleDateFormat = dateFormat.get();
             if (null == threadSimpleDateFormat || !formartStyle.equals(threadSimpleDateFormat.toPattern())) {
                 dateFormat.set(new SimpleDateFormat(formartStyle));
@@ -180,4 +194,5 @@ public interface PickBase {
             return this;
         }
     }
+
 }

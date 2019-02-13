@@ -3,7 +3,13 @@ package top.hihuzi.collection.cache;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * tips 表-对象属性缓存器
+ *
+ * @author: hihuzi 2019/2/13 8:39
+ */
 public class ParameterCache {
+
 
     /**
      * 缓存class 全限定名 参数类型 参数
@@ -60,6 +66,17 @@ public class ParameterCache {
     public Map<String, TypeCache> getCache() {
 
         return paramCache;
+    }
+
+
+    /**
+     * tips 获取属性缓存
+     *
+     * @author: hihuzi 2019/2/12 10:23
+     */
+    public TypeCache getCache(String tableName) {
+
+        return paramCache.get(tableName);
     }
 
 

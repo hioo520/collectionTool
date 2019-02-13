@@ -188,4 +188,24 @@ public class StrUtils {
         return name.toLowerCase().equals(names.replaceAll(HUMP, "").toLowerCase());
     }
 
+    /**
+     * tips 拼接对象名称
+     *
+     * @author: hihuzi 2019/2/13 17:03
+     */
+    public static <E> String splicingObjectName(E... e) {
+
+        int i = 0;
+        StringBuffer buffer = new StringBuffer();
+        for (E es : e) {
+            buffer.append(es.getClass().getSimpleName());
+            if (i >= e.length-1) {
+                return String.valueOf(buffer);
+            }
+            buffer.append("-");
+            i++;
+        }
+        return String.valueOf(buffer);
+    }
+
 }

@@ -100,6 +100,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
      */
     @Override
     public <E> Map pickValue(E obj, String... key) throws Exception {
+
         if (null == obj) return null;
         List<E> list = new ArrayList<>();
         list.add(obj);
@@ -122,6 +123,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
      */
     @Override
     public <E> Map pickValue(E e, PickConfig config, String... key) throws Exception {
+
         if (null == e) return null;
         List<E> list = new ArrayList<>();
         list.add(e);
@@ -167,5 +169,24 @@ public class PickTool extends PickToolImpl implements PickFactory {
         PickConfig.reset();
         return maps;
     }
+
+    @Override
+    public List<Map> pickList(List<Map> list, String... key) throws Exception {
+
+        if (null == list || 0 == list.size()) return null;
+        List<Map> maps = (List<Map>) batch(list, new PickConfig(), key);
+        PickConfig.reset();
+        return maps;
+    }
+
+    @Override
+    public List<Map> pickList(List<Map> list, PickConfig config, String... key) throws Exception {
+
+        if (null == list || 0 == list.size()) return null;
+        List<Map> maps = (List<Map>) batch(list, config, key);
+        PickConfig.reset();
+        return maps;
+    }
+
 
 }

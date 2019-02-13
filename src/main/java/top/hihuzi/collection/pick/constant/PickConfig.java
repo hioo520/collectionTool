@@ -26,6 +26,7 @@ public class PickConfig implements PickBase {
      */
     private DateStyleEnum dateStyleEnum;
 
+
     /**
      * 重置枚举对象
      * 对枚举静态变量一定要初始化
@@ -78,6 +79,10 @@ public class PickConfig implements PickBase {
         this.dateStyleEnum = dateStyleEnum;
     }
 
+    public PickConfig(ReturnStyleEnum returnStyleEnum) {
+
+        this.returnStyleEnum = returnStyleEnum;
+    }
     public PickConfig(DateStyleEnum dateStyleEnum) {
         this.dateStyleEnum = dateStyleEnum;
     }

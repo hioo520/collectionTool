@@ -6,7 +6,7 @@ import top.hihuzi.collection.utils.StrUtils;
 import java.lang.reflect.Method;
 
 /**
- * tips
+ * tips 对象属性 缓存器
  *
  * @author: hihuzi 2018/9/24 9:23
  */

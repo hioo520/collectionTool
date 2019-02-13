@@ -98,6 +98,20 @@ public class PickToolImpl {
         Class clacc = list.get(0).getClass();
         Class clazz = list.get(0).getClass();
         List<Map> lists = new ArrayList<>(list.size());
+        if (clacc.getSimpleName().contains(Map.class.getSimpleName())) {
+            List<String> strs = Arrays.asList(key);
+            for (T t : list) {
+                Map map = (Map) t;
+                Map map1 = new HashMap(map.size());
+                for (Object obj : map.keySet()) {
+                    if (strs.contains(obj)) {
+                        achieveMap(map1, String.valueOf(obj), map.get(obj), config);
+                    }
+                }
+                lists.add(map1);
+            }
+            return lists;
+        }
         Set sets = new HashSet<>(list.size() * key.length);
         Map maps = new HashMap(list.size() * key.length);
         for (T t : list) {
@@ -127,26 +141,7 @@ public class PickToolImpl {
                         }
                     }
                 }
-                switch (config.getReturnStyleEnum()) {
-                    case DEFAULT:
-                        achieveMap(map, property, invoke, config);
-                        break;
-                    case LIST_MAP:
-                        achieveMap(map, property, invoke, config);
-                        break;
-                    case MAP:
-                        achieveMap(maps, property, invoke, config);
-                        break;
-                    case SET:
-                        if (invoke != null) {
-                            sets.add(invoke);
-                        } else if (config.getSaveStyleEnum().getHaving()) {
-                            sets.add(invoke);
-                        }
-                        break;
-                    default:
-                        throw new Exception("数据输出超出范围 参考PickEnum定义" + list.toString());
-                }
+                definitionReturn(list, config, sets, maps, map, property, invoke);
             }
             if (0 == config.getReturnStyleEnum().getKey() || 1 == config.getReturnStyleEnum().getKey()) {
                 lists.add(map);
@@ -163,6 +158,30 @@ public class PickToolImpl {
             return lists;
         }
         return null;
+    }
+
+    private <T> void definitionReturn(List<T> list, PickConfig config, Set sets, Map maps, Map map, String property, Object invoke) throws Exception {
+
+        switch (config.getReturnStyleEnum()) {
+            case DEFAULT:
+                achieveMap(map, property, invoke, config);
+                break;
+            case LIST_MAP:
+                achieveMap(map, property, invoke, config);
+                break;
+            case MAP:
+                achieveMap(maps, property, invoke, config);
+                break;
+            case SET:
+                if (invoke != null) {
+                    sets.add(invoke);
+                } else if (config.getSaveStyleEnum().getHaving()) {
+                    sets.add(invoke);
+                }
+                break;
+            default:
+                throw new Exception("数据输出超出范围 参考PickEnum定义" + list.toString());
+        }
     }
 
 
