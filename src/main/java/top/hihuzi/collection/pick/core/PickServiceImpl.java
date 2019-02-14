@@ -3,7 +3,7 @@ package top.hihuzi.collection.pick.core;
 
 import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.TypeCache;
-import top.hihuzi.collection.common.ValueHandleCache;
+import top.hihuzi.collection.common.Invoke;
 import top.hihuzi.collection.pick.config.PickConfig;
 import top.hihuzi.collection.pick.factory.PickMethodFactory;
 import top.hihuzi.collection.utils.StrUtils;
@@ -16,7 +16,7 @@ import java.util.*;
  *
  * @Author:hihuzi 2018/7/19 17:54
  */
- abstract class PickServiceImpl implements PickMethodFactory {
+abstract class PickServiceImpl implements PickMethodFactory {
 
     /**
      * TIPS 集合Map 取出选定字段 默认 value为空时 保存
@@ -34,11 +34,12 @@ import java.util.*;
         Map result = new HashMap<>(str.length);
         for (String property : str) {
             Object value = map.get(property);
-            if (StrUtils.isNNoEE(value) && !"".equals(String.valueOf(value))) {
-                result.put(property, value);
-            } else if (config.getSaveStyleEnum().getHaving()) {
-                result.put(property, "");
-            }
+            achieveMap(result, property, value, config);
+//            if (StrUtils.isNNoEE(value) && !"".equals(String.valueOf(value))) {
+//                result.put(property, value);
+//            } else if (config.getSaveStyleEnum().getHaving()) {
+//                result.put(property, "");
+//            }
         }
         return result;
     }
@@ -87,7 +88,7 @@ import java.util.*;
                     method = cache.getMethodGet();
                     method.setAccessible(true);
                     invoke = method.invoke(t);
-                    invoke = processingTimeType(cache.getParamtertype(), config, invoke);
+                    invoke = Invoke.processingTimeType(cache.getParamtertype(), config, invoke);
                 } else {
                     try {
                         invoke = achieveInvoke(name, t, t.getClass(), method, invoke, property, config);
@@ -189,7 +190,7 @@ import java.util.*;
     }
 
     /**
-     * tips 添加缓存 无极递归提取父类属性参数
+     * tips 添加缓存
      *
      * @parameter:
      * @return:
@@ -200,30 +201,10 @@ import java.util.*;
         method = clazz.getMethod(name);
         method.setAccessible(true);
         invoke = method.invoke(t);
-        invoke = processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
+        invoke = Invoke.processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
         ClassCache.get().add(t.getClass(), property);
         return invoke;
     }
 
-    /**
-     * tips 只针对时间类型 和字符串类型 转化
-     *
-     * @author: hihuzi 2018/10/10 19:30
-     */
-    public static Object processingTimeType(Class<?> type, PickConfig config, Object obj) {
-
-        if (ValueHandleCache.TypeEnum.DATE.getValue().equals(type.getSimpleName())) {
-            if (null == obj) return null;
-            return config.getDateStyleEnum().getFormartStyle().format(obj);
-        }
-        if (ValueHandleCache.TypeEnum.STRING.getValue().equals(type.getSimpleName())) {
-            if (config.getSaveStyleEnum().getHaving()) {
-                return obj;
-            } else {
-                return "".equals(String.valueOf(obj).trim()) ? null : obj;
-            }
-        }
-        return obj;
-    }
 
 }

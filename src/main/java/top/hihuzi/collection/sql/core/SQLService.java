@@ -2,7 +2,7 @@ package top.hihuzi.collection.sql.core;
 
 import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.TableCache;
-import top.hihuzi.collection.sql.constant.SQLConfig;
+import top.hihuzi.collection.sql.config.SQLConfig;
 import top.hihuzi.collection.utils.StrUtils;
 
 import java.util.List;

@@ -5,7 +5,7 @@ import top.hihuzi.collection.cache.ParameterCache;
 import top.hihuzi.collection.cache.SecondCache;
 import top.hihuzi.collection.cache.TypeCache;
 import top.hihuzi.collection.common.ValueHandleCache;
-import top.hihuzi.collection.sql.constant.SQLConfig;
+import top.hihuzi.collection.sql.config.SQLConfig;
 import top.hihuzi.collection.sql.factory.SQLMethodFactory;
 import top.hihuzi.collection.utils.StrUtils;
 

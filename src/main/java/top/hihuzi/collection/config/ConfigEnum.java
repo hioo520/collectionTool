@@ -89,10 +89,7 @@ public interface ConfigEnum {
          * 所有都保存
          */
         DEFAULT(true),
-        /**
-         * 所有都保存(不处理)
-         */
-        NOT_PROCESSED(true),
+
         /**
          * tips: 对 (null or "")不处理 都保存
          *

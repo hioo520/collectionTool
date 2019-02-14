@@ -1,4 +1,4 @@
-package top.hihuzi.collection.sql.constant;
+package top.hihuzi.collection.sql.config;
 
 import top.hihuzi.collection.config.Config;
 import top.hihuzi.collection.utils.Constants;

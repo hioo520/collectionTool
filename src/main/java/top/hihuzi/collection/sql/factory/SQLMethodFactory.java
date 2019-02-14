@@ -1,6 +1,6 @@
 package top.hihuzi.collection.sql.factory;
 
-import top.hihuzi.collection.sql.constant.SQLConfig;
+import top.hihuzi.collection.sql.config.SQLConfig;
 
 import java.util.List;
 import java.util.Map;

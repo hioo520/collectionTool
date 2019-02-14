@@ -6,7 +6,7 @@ import com.hihuzi.collection.fill.test.TestBeanBean;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
-import top.hihuzi.collection.sql.constant.SQLConfig;
+import top.hihuzi.collection.sql.config.SQLConfig;
 import top.hihuzi.collection.sql.factory.SQLFactory;
 
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class SQlFactoryTest {
         map.put("flo_atMin", "0.9");
         map.put("doubleMin", "1.94");
         map.put("i_d", "ID_ID-ID-ID");
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 10000000; i++) {
             list.add(map);
         }
     }

@@ -32,6 +32,13 @@ public class FillConfig implements Config {
 
     }
 
+    public FillConfig(ReturnEnum returnEnum, DateStyleEnum dateStyleEnum) {
+
+        this.returnEnum = returnEnum;
+        this.dateStyleEnum = dateStyleEnum;
+
+    }
+
 
     /**
      * 重置枚举对象

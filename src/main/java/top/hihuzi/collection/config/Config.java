@@ -13,4 +13,6 @@ public interface Config extends ConfigEnum {
 
     ReturnStyleEnum getReturnStyleEnum();
 
+    SaveStyleEnum getSaveStyleEnum();
+
 }
