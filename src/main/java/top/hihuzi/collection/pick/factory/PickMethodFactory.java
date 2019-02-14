@@ -1,33 +1,19 @@
-package top.hihuzi.collection.pick;
+package top.hihuzi.collection.pick.factory;
 
 
-import top.hihuzi.collection.pick.constant.PickConfig;
-import top.hihuzi.collection.pick.core.PickTool;
+import top.hihuzi.collection.pick.config.PickConfig;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * tips 集合工具提取器
+ * tips 集合提取器 方法工厂
  *
  * @author: hihuzi  2018/6/27 6:50
  */
-public interface PickFactory {
+public interface PickMethodFactory extends PickFactory {
 
-    PickTool PICK_TOOL = null;
-
-    /**
-     * tips 工具
-     *
-     * @parameter:
-     * @return: PickFactory
-     * @author: hihuzi 2018/9/23 22:59
-     */
-    static PickFactory batch() {
-
-        return new PickTool();
-    }
 
     /**
      * tips 从对象集合中取特定字段

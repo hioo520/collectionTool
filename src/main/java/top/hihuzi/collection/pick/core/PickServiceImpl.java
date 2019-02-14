@@ -3,8 +3,9 @@ package top.hihuzi.collection.pick.core;
 
 import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.TypeCache;
-import top.hihuzi.collection.pick.constant.PickConfig;
-import top.hihuzi.collection.utils.Constants;
+import top.hihuzi.collection.common.ValueHandleCache;
+import top.hihuzi.collection.pick.config.PickConfig;
+import top.hihuzi.collection.pick.factory.PickMethodFactory;
 import top.hihuzi.collection.utils.StrUtils;
 
 import java.lang.reflect.Method;
@@ -15,46 +16,7 @@ import java.util.*;
  *
  * @Author:hihuzi 2018/7/19 17:54
  */
-public class PickToolImpl {
-
-    /**
-     * tips 只针对时间类型 和字符串类型 转化
-     *
-     * @notice : 0 是预留数据类型 表示没有匹配
-     * @author: hihuzi 2018/10/10 19:30
-     */
-    public static Object processingTimeType(Class<?> type, PickConfig config, Object obj) {
-
-        if (Constants.TypeEnum.DATE.getValue().equals(type.getSimpleName())) {
-            if (null == obj) return null;
-            return config.getDateStyleEnum().getFormartStyle().format(obj);
-        }
-        if (Constants.TypeEnum.STRING.getValue().equals(type.getSimpleName())) {
-            if (config.getSaveStyleEnum().getHaving()) {
-                return obj;
-            } else {
-                return "".equals(String.valueOf(obj).trim()) ? null : obj;
-            }
-        }
-        return obj;
-    }
-
-    /**
-     * tips 添加缓存 无极递归提取父类属性参数
-     *
-     * @parameter:
-     * @return:
-     * @author: hihuzi  2018/10/18 11:43
-     */
-    private <T> Object achieveInvoke(String name, T t, Class clazz, Method method, Object invoke, String property, PickConfig config) throws Exception {
-
-        method = clazz.getMethod(name);
-        method.setAccessible(true);
-        invoke = method.invoke(t);
-        invoke = processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
-        ClassCache.get().add(t.getClass(), property);
-        return invoke;
-    }
+ abstract class PickServiceImpl implements PickMethodFactory {
 
     /**
      * TIPS 集合Map 取出选定字段 默认 value为空时 保存
@@ -164,8 +126,6 @@ public class PickToolImpl {
 
         switch (config.getReturnStyleEnum()) {
             case DEFAULT:
-                achieveMap(map, property, invoke, config);
-                break;
             case LIST_MAP:
                 achieveMap(map, property, invoke, config);
                 break;
@@ -226,6 +186,44 @@ public class PickToolImpl {
                 break;
         }
         return null;
+    }
+
+    /**
+     * tips 添加缓存 无极递归提取父类属性参数
+     *
+     * @parameter:
+     * @return:
+     * @author: hihuzi  2018/10/18 11:43
+     */
+    private <T> Object achieveInvoke(String name, T t, Class clazz, Method method, Object invoke, String property, PickConfig config) throws Exception {
+
+        method = clazz.getMethod(name);
+        method.setAccessible(true);
+        invoke = method.invoke(t);
+        invoke = processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
+        ClassCache.get().add(t.getClass(), property);
+        return invoke;
+    }
+
+    /**
+     * tips 只针对时间类型 和字符串类型 转化
+     *
+     * @author: hihuzi 2018/10/10 19:30
+     */
+    public static Object processingTimeType(Class<?> type, PickConfig config, Object obj) {
+
+        if (ValueHandleCache.TypeEnum.DATE.getValue().equals(type.getSimpleName())) {
+            if (null == obj) return null;
+            return config.getDateStyleEnum().getFormartStyle().format(obj);
+        }
+        if (ValueHandleCache.TypeEnum.STRING.getValue().equals(type.getSimpleName())) {
+            if (config.getSaveStyleEnum().getHaving()) {
+                return obj;
+            } else {
+                return "".equals(String.valueOf(obj).trim()) ? null : obj;
+            }
+        }
+        return obj;
     }
 
 }

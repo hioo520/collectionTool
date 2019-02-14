@@ -157,7 +157,7 @@ public class StrUtils {
     }
 
     /**
-     * tips 获取set + name--> setName 首字母大写
+     * tips 获取set + name--> setName
      *
      * @parameter: String name
      * @return: String
@@ -171,7 +171,7 @@ public class StrUtils {
 
 
     /**
-     * tips 获取get + name --> getName 首字母大写
+     * tips 获取get + name --> getName
      *
      * @parameter: String name
      * @return: String
@@ -197,6 +197,27 @@ public class StrUtils {
 
         int i = 0;
         StringBuffer buffer = new StringBuffer();
+        for (E es : e) {
+            buffer.append(es.getClass().getSimpleName());
+            if (i >= e.length-1) {
+                return String.valueOf(buffer);
+            }
+            buffer.append("-");
+            i++;
+        }
+        return String.valueOf(buffer);
+    }
+
+ /**
+     * tips 拼接对象名称
+     *
+     * @author: hihuzi 2019/2/13 17:03
+     */
+    public static <E> String splicingObjectName(String mark,E... e) {
+
+        int i = 0;
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(mark);
         for (E es : e) {
             buffer.append(es.getClass().getSimpleName());
             if (i >= e.length-1) {

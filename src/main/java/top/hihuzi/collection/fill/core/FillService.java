@@ -1,7 +1,6 @@
 package top.hihuzi.collection.fill.core;
 
-import top.hihuzi.collection.fill.FillFactory;
-import top.hihuzi.collection.fill.constant.FillConfig;
+import top.hihuzi.collection.fill.config.FillConfig;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.Map;
  *
  * @author: hihuzi 2018/9/23 16:24
  */
-public class FillTool extends FillToolImpl implements FillFactory {
+public class FillService extends FillServiceImpl  {
 
 
     /**

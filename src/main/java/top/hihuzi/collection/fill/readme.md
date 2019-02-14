@@ -268,7 +268,73 @@
 ```
 #####TestBean(booleanMax=true, byteMax=1, shortMax=129, integerMax=123456, longMax=132542435, floatMax=12.99, doubleMax=3.55, stringMax=你好师姐!!!, bigdecimalMax=9825485.6, dateMax=Wed Dec 12 00:00:00 CST 2012, booleanMin=true, charMin=a, byteMin=2, shortMin=5, intMin=55, longMin=555, floatMin=0.9, doubleMin=1.94)
 #####TestBean(booleanMax=true, byteMax=1, shortMax=129, integerMax=123456, longMax=132542435, floatMax=12.99, doubleMax=3.55, stringMax=你好师姐!!!, bigdecimalMax=9825485.6, dateMax=Wed Dec 12 12:12:12 CST 2012, booleanMin=true, charMin=a, byteMin=2, shortMin=5, intMin=55, longMin=555, floatMin=0.9, doubleMin=1.94)
-#####加入缓存 一百万 耗时1秒 一千万 耗时30
+```
+    public void list_to_class() throws Exception {
+
+        List list = new ArrayList();
+        Map map = new HashMap();
+        map.put("boo_leanMax", "true");
+        map.put("by_teMax", "1");
+        map.put("shortMax", "129");
+        map.put("integerMax", "123456");
+        map.put("longMax", "1");
+        map.put("floatMax", "12.9");
+        map.put("doubleMax", "3.55");
+        map.put("string_Max", "你好师姐!!!");
+        map.put("bigdecimalMax", "9825485.61551");
+        map.put("dateMax", "2012-12-12");
+        map.put("booleanMin", "true");
+        map.put("charMin", "a");
+        map.put("byteMin", "2");
+        map.put("shortMin", "5");
+        map.put("intMin", "55");
+        map.put("longMin", "555");
+        map.put("flo_atMin", "0.9");
+        map.put("doubleMin", "1.94");
+        map.put("i_d", "ID_ID-ID-ID");
+        list.add(map);
+        long start = System.currentTimeMillis();
+        for (int i = 1; i < 100000; i++) {
+            list.add(map);
+        }
+
+        System.out.println("测试 ---> 第一种返回结果是List<Map>");
+        List<Map> map1 = (List<Map>) FillFactory.batch().listToClass(list,
+                new TestBean(), new TestBeanBean());
+        List<Map> map2 = (List<Map>) FillFactory.batch().listToClass(list,
+                new FillConfig(ConfigEnum.ReturnEnum.LISR),
+                new TestBean(), new TestBeanBean());
+        List<Map> map3 = (List<Map>) FillFactory.batch().listToClass(list,
+                new FillConfig(ConfigEnum.ReturnEnum.DEFAULT),
+                new TestBean(), new TestBeanBean());
+        System.out.println("测试 ---< 第一种返回结果是List<Map>");
+
+
+        System.out.println("测试 ---< 第二种返回结果是Map<String, List>");
+        Map<String, List> map4 = (Map<String, List>) FillFactory.batch().listToClass(list,
+                new FillConfig(ConfigEnum.ReturnEnum.MAP),
+                new TestBean(), new TestBeanBean());
+        System.out.println("测试 ---< 第二种返回结果是Map<String, List>");
+
+
+        System.out.println("测试 ---< 第三种返回结果是Map<String, List>");
+        List<TestBean> testBeans = new ArrayList<>();
+        List<TestBeanBean> testBeanBean = new ArrayList<>();
+        FillFactory.batch().listToClass(list,
+                new FillConfig(ConfigEnum.ReturnEnum.FILL_LIST.setList(testBeans, testBeanBean)),
+                new TestBean(), new TestBeanBean());
+        System.out.println("测试 ---< 第三种返回结果是Map<String, List>");
+
+
+        System.out.println("测试 ---< 第四种返回结果是Map<String, List>");
+        List<TestBean> bean = (List<TestBean>) FillFactory.batch().listToClass(list,
+                new FillConfig(ConfigEnum.ReturnEnum.FILL_CLASS), new TestBean());
+        System.out.println("测试 ---< 第四种返回结果是Map<String, List>");
+        long end = System.currentTimeMillis();
+        System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
+    }
+```
+#####加入缓存 一百万 耗时1秒 一千万 耗时20
 #引入缓存   ClassCache.get().add( clazz, fieldsName,paramtertype);
 #引入缓存   ClassCache.get().add(clazz, fieldsName);
 #调用缓存1.Map<String, TypeCache> cache = ClassCache.getCache(clazz);

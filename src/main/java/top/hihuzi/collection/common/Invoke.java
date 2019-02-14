@@ -1,7 +1,7 @@
-package top.hihuzi.collection.fill.common;
+package top.hihuzi.collection.common;
 
 import top.hihuzi.collection.cache.ClassCache;
-import top.hihuzi.collection.fill.constant.FillConfig;
+import top.hihuzi.collection.config.Config;
 import top.hihuzi.collection.utils.StrUtils;
 
 import java.lang.reflect.Method;
@@ -18,14 +18,14 @@ public class Invoke {
     /**
      * 遍历父类 所有 获取属性
      *
-     * @parameter: E obj
-     * @parameter: String names
+     * @parameter: E e
+     * @parameter: String name
      * @parameter: String value
-     * @parameter: FillConfig config
+     * @parameter: Config config
      * @return:
      * @author: hihuzi 2018/6/22 9:22
      */
-    public static <E> void injectionParameters(E e, String name, String value, FillConfig config) throws
+    public static <E> void injectionParameters(E e, String name, String value, Config config) throws
             Exception {
 
         Class clazz = e.getClass();
@@ -57,12 +57,12 @@ public class Invoke {
      * @parameter: String name
      * @parameter: String value
      * @parameter: Class<?> paramtertype
-     * @parameter: FillConfig config
+     * @parameter: Config config
      * @return:
      * @author: hihuzi 2018/7/19 10:26
      */
 
-    public static <E> void putValue(E e, String name, String value, Class<?> paramtertype, FillConfig config) throws Exception {
+    public static <E> void putValue(E e, String name, String value, Class<?> paramtertype, Config config) throws Exception {
 
         if (StrUtils.isNoEE(paramtertype)) {
             paramtertype = e.getClass().getDeclaredField(name).getType();
@@ -70,7 +70,7 @@ public class Invoke {
         Method method = e.getClass().getMethod(StrUtils.achieveSetFunction(name), paramtertype);
         method.setAccessible(true);
         ClassCache.get().add(e.getClass(), name, paramtertype);
-        ValueHandleCache.invokeValue(e, method, value, paramtertype.getSimpleName(), config);
+        ValueHandleCache.invokeValue(e, method, value, paramtertype.getSimpleName(), config,null);
     }
 
 }

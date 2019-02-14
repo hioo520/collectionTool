@@ -1,31 +1,17 @@
-package top.hihuzi.collection.fill;
+package top.hihuzi.collection.fill.factory;
 
-
-import top.hihuzi.collection.fill.constant.FillConfig;
-import top.hihuzi.collection.fill.core.FillTool;
+import top.hihuzi.collection.fill.config.FillConfig;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
 /**
- * tips 填充工具工厂
+ * tips 填充工具方法工厂
  *
- * @author: hihuzi 2018/9/23 16:03
+ * @author: hihuzi 2019/2/14 14:26
  */
-public interface FillFactory {
-
-    FillTool FILL_TOOL = null;
-
-    /**
-     * tips 获取工具
-     *
-     * @author: hihuzi 2018/9/23 22:59
-     */
-    static FillTool batch() {
-
-        return new FillTool();
-    }
+public interface FillMethodFactory extends FillFactory {
 
     /**
      * tips HttpServletRequest-->MAP
@@ -171,7 +157,7 @@ public interface FillFactory {
      * @notice: 对象属性和表 遵循驼峰或者下划线命名
      * @author: hihuzi 2019/2/11 9:53
      */
-    <E> Object listToClass(List<Map> list, E ...e) throws Exception;
+    <E> Object listToClass(List<Map> list, E... e) throws Exception;
 
     /**
      * tips 数据库的元组转对象
@@ -180,6 +166,6 @@ public interface FillFactory {
      * @notice: 对象属性和表 遵循驼峰或者下划线命名
      * @author: hihuzi 2019/2/11 9:53
      */
-    <E> Object listToClass(List<Map> list, FillConfig config, E ...e) throws Exception;
+    <E> Object listToClass(List<Map> list, FillConfig config, E... e) throws Exception;
 
 }

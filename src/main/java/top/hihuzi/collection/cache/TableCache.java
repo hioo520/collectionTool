@@ -1,5 +1,6 @@
 package top.hihuzi.collection.cache;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -9,6 +10,23 @@ import java.util.Map;
  */
 public class TableCache {
 
-    private static Map<String, Map<String, String>> cache;
+    private Map<String, String> cache;
+
+    TableCache(String paramterName, String tableName) {
+
+        cache = new HashMap<>(1);
+        cache.put(paramterName, tableName);
+
+    }
+
+    public Map<String, String> getCache() {
+
+        return cache;
+    }
+
+    public String getCache(String paramterName) {
+
+        return cache.get(paramterName);
+    }
 
 }

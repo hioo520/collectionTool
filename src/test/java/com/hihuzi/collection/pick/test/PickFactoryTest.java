@@ -1,11 +1,10 @@
 package com.hihuzi.collection.pick.test;
 
-import top.hihuzi.collection.pick.constant.PickBase;
+import org.junit.Test;
 import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.TypeCache;
-import top.hihuzi.collection.pick.PickFactory;
-import top.hihuzi.collection.pick.constant.PickConfig;
-import org.junit.Test;
+import top.hihuzi.collection.pick.factory.PickFactory;
+import top.hihuzi.collection.pick.config.PickConfig;
 
 import java.util.*;
 
@@ -40,16 +39,16 @@ public class PickFactoryTest implements Runnable {
             list.add(userPost);
         }
         /**tips 时间格式化 多级父类*/
-        List<Map> batch7 = PickFactory.batch().pick(list, new PickConfig(PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY,
-                PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date", "date0", "date1");
+        List<Map> batch7 = PickFactory.batch().pick(list, new PickConfig(PickConfig.SaveStyleEnum.REMOVE_NULL_EMPTY,
+                PickConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date", "date0", "date1");
         batch7.forEach(map -> System.out.println(map));
-        List<Map> batch6 = PickFactory.batch().pick(list, new PickConfig(PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY,
-                PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date", "date0", "date1");
+        List<Map> batch6 = PickFactory.batch().pick(list, new PickConfig(PickConfig.SaveStyleEnum.REMOVE_NULL_EMPTY,
+                PickConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date", "date0", "date1");
         batch6.forEach(map -> System.out.println(map));
-        List<Map> batch5 = PickFactory.batch().pick(list, new PickConfig(PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY,
-                PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")), "date", "date0", "date1");
+        List<Map> batch5 = PickFactory.batch().pick(list, new PickConfig(PickConfig.SaveStyleEnum.REMOVE_NULL_EMPTY,
+                PickConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")), "date", "date0", "date1");
         batch5.forEach(map -> System.out.println(map));
-        List<Map> batch4 = PickFactory.batch().pick(list, new PickConfig(PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "date", "date0", "date1");
+        List<Map> batch4 = PickFactory.batch().pick(list, new PickConfig(PickConfig.SaveStyleEnum.REMOVE_NULL_EMPTY), "date", "date0", "date1");
         batch4.forEach(map -> System.out.println(map));
     }
 
@@ -70,27 +69,27 @@ public class PickFactoryTest implements Runnable {
         batch0.forEach(map -> System.out.println(map));
         /**tips 和 默认一样 首字母大写*/
         List<Map> batch = PickFactory.batch().pick(list, new PickConfig(
-                PickBase.ReturnNameEnum.INITIAL_CAPITAL), "id", "name", "email", "date");
+                PickConfig.ReturnNameEnum.INITIAL_CAPITAL), "id", "name", "email", "date");
         batch.forEach(map -> System.out.println(map));
 /**         tips 空值丢掉(null 或者 "" "  ") 并且全部大写*/
 
         List<Map> batch3 = PickFactory.batch().pick(list, new PickConfig(
-                PickBase.ReturnNameEnum.UPPER_CASE,
-                PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "date");
+                PickConfig.ReturnNameEnum.UPPER_CASE,
+                PickConfig.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "date");
         batch3.forEach(map -> System.out.println(map));
         /**tips 空值不丢掉 并且全部小写*/
         List<Map> batch2 = PickFactory.batch().pick(list, new PickConfig(
-                PickBase.ReturnNameEnum.LOWER_CASE), "id", "name", "email", "date", "address");
+                PickConfig.ReturnNameEnum.LOWER_CASE), "id", "name", "email", "date", "address");
         batch2.forEach(map -> System.out.println(map));
 
         /**tips 空值不丢掉 重新命名Key*/
         List<Map> batch4 = PickFactory.batch().pick(list, new PickConfig(
-                PickBase.ReturnNameEnum.CUSTOM_SUFFIX.setKey("我就是我!!")), "id", "name", "email", "date", "address");
+                PickConfig.ReturnNameEnum.CUSTOM_SUFFIX.setKey("我就是我!!")), "id", "name", "email", "date", "address");
         batch4.forEach(map -> System.out.println(map));
 
         /**tips 时间格式化*/
         List<Map> batch5 = PickFactory.batch().pick(list, new PickConfig(
-                PickBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date", "date0");
+                PickConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")), "date", "date0");
         batch5.forEach(map -> System.out.println(map));
     }
 
@@ -116,7 +115,7 @@ public class PickFactoryTest implements Runnable {
         System.out.println(Arrays.asList(batch1).toString());
         /**tips (去掉 NUll 和 "" or "      ")*/
         Set batch = PickFactory.batch().pickValue(list, new PickConfig(
-                PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "address");
+                PickConfig.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "address");
         System.out.println(Arrays.asList(batch).toString());
 
     }
@@ -139,11 +138,11 @@ public class PickFactoryTest implements Runnable {
         System.out.println(batch0.toString());
         /**tips 保留 空值*/
         Map batch1 = PickFactory.batch().pickValue(bean, new PickConfig(
-                PickBase.ReturnNameEnum.DEFAULT), "id", "name", "email", "date", "address");
+                PickConfig.ReturnNameEnum.DEFAULT), "id", "name", "email", "date", "address");
         System.out.println(batch1.toString());
         /**tips 舍弃 空值*/
         Map batch = PickFactory.batch().pickValue(bean, new PickConfig(
-                PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "date", "address");
+                PickConfig.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "date", "address");
         System.out.println(batch.toString());
         Map<String, Map<String, TypeCache>> classCache = ClassCache.cache;
         classCache.forEach((s, typeCacheMap) -> System.err.println(typeCacheMap.size()));
@@ -167,11 +166,11 @@ public class PickFactoryTest implements Runnable {
         System.out.println(batch0.toString());
         /**tips 保留 空值*/
         Map batch1 = PickFactory.batch().pickMap(bean, new PickConfig(
-                PickBase.ReturnNameEnum.DEFAULT), "id", "name", "email", "age");
+                PickConfig.ReturnNameEnum.DEFAULT), "id", "name", "email", "age");
         System.out.println(batch1.toString());
         /**tips 舍弃 空值*/
         Map batch = PickFactory.batch().pickMap(bean, new PickConfig(
-                PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "age");
+                PickConfig.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "age");
         System.out.println(batch.toString());
         Map<String, Map<String, TypeCache>> classCache = ClassCache.cache;
         classCache.forEach((s, typeCacheMap) -> System.err.println(typeCacheMap.size()));
@@ -199,11 +198,11 @@ public class PickFactoryTest implements Runnable {
         System.out.println(batch0.toString());
         /**tips 保留 空值*/
         List batch1 = PickFactory.batch().pickList(list, new PickConfig(
-                PickBase.ReturnNameEnum.DEFAULT), "id", "name", "email", "age");
+                PickConfig.ReturnNameEnum.DEFAULT), "id", "name", "email", "age");
         System.out.println(batch1.toString());
         /**tips 舍弃 空值*/
         List batch = PickFactory.batch().pickList(list, new PickConfig(
-                PickBase.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "age");
+                PickConfig.SaveStyleEnum.REMOVE_NULL_EMPTY), "id", "name", "email", "age");
         System.out.println(batch.toString());
     }
 
@@ -214,7 +213,7 @@ public class PickFactoryTest implements Runnable {
         bean.setDate(new Date());
         try {
             Map map = PickFactory.batch().pickValue(bean,
-                    new PickConfig(PickBase.DateStyleEnum.DEFAULT.setFormartStyle(this.tip)), "date");
+                    new PickConfig(PickConfig.DateStyleEnum.DEFAULT.setFormartStyle(this.tip)), "date");
             System.out.println(map.toString());
         } catch (Exception e) {
             e.printStackTrace();

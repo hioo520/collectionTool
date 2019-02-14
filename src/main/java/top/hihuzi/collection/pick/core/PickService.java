@@ -1,8 +1,6 @@
 package top.hihuzi.collection.pick.core;
 
-import top.hihuzi.collection.pick.PickFactory;
-import top.hihuzi.collection.pick.constant.PickBase;
-import top.hihuzi.collection.pick.constant.PickConfig;
+import top.hihuzi.collection.pick.config.PickConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.Set;
  *
  * @author: hihuzi 2018/7/19 17:53
  */
-public class PickTool extends PickToolImpl implements PickFactory {
+public class PickService extends PickServiceImpl {
 
     /**
      * tips 从对象集合中取特定字段
@@ -64,9 +62,9 @@ public class PickTool extends PickToolImpl implements PickFactory {
 
         if (null == list || 0 == list.size()) return null;
         Set set = (Set) batch(list, new PickConfig(
-                PickBase.ReturnStyleEnum.SET,
-                PickBase.ReturnNameEnum.DEFAULT,
-                PickBase.SaveStyleEnum.DEFAULT), parameter);
+                PickConfig.ReturnStyleEnum.SET,
+                PickConfig.ReturnNameEnum.DEFAULT,
+                PickConfig.SaveStyleEnum.DEFAULT), parameter);
         PickConfig.reset();
         return set;
     }
@@ -85,7 +83,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
 
         if (null == list || 0 == list.size()) return null;
         Set set = (Set) batch(list,
-                config.setReturnStyleEnum(PickBase.ReturnStyleEnum.SET), parameter);
+                config.setReturnStyleEnum(PickConfig.ReturnStyleEnum.SET), parameter);
         PickConfig.reset();
         return set;
     }
@@ -105,9 +103,9 @@ public class PickTool extends PickToolImpl implements PickFactory {
         List<E> list = new ArrayList<>();
         list.add(obj);
         Map map = ((List<Map>) batch(list, new PickConfig(
-                PickBase.ReturnStyleEnum.MAP,
-                PickBase.ReturnNameEnum.DEFAULT,
-                PickBase.SaveStyleEnum.DEFAULT), key)).get(0);
+                PickConfig.ReturnStyleEnum.MAP,
+                PickConfig.ReturnNameEnum.DEFAULT,
+                PickConfig.SaveStyleEnum.DEFAULT), key)).get(0);
         PickConfig.reset();
         return map;
     }
@@ -127,7 +125,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
         if (null == e) return null;
         List<E> list = new ArrayList<>();
         list.add(e);
-        Map map = ((List<Map>) (batch(list, config.setReturnStyleEnum(PickBase.ReturnStyleEnum.MAP), key))).get(0);
+        Map map = ((List<Map>) (batch(list, config.setReturnStyleEnum(PickConfig.ReturnStyleEnum.MAP), key))).get(0);
         PickConfig.reset();
         return map;
     }
@@ -145,9 +143,9 @@ public class PickTool extends PickToolImpl implements PickFactory {
 
         if (null == map || 0 == map.size()) return null;
         Map maps = batchMap(map, new PickConfig(
-                PickBase.ReturnStyleEnum.MAP,
-                PickBase.ReturnNameEnum.DEFAULT,
-                PickBase.SaveStyleEnum.DEFAULT), key);
+                PickConfig.ReturnStyleEnum.MAP,
+                PickConfig.ReturnNameEnum.DEFAULT,
+                PickConfig.SaveStyleEnum.DEFAULT), key);
         PickConfig.reset();
         return maps;
     }
@@ -165,7 +163,7 @@ public class PickTool extends PickToolImpl implements PickFactory {
     public Map pickMap(Map map, PickConfig config, String... parameter) {
 
         if (null == map || 0 == map.size()) return null;
-        Map maps = batchMap(map, config.setReturnStyleEnum(PickBase.ReturnStyleEnum.MAP), parameter);
+        Map maps = batchMap(map, config.setReturnStyleEnum(PickConfig.ReturnStyleEnum.MAP), parameter);
         PickConfig.reset();
         return maps;
     }

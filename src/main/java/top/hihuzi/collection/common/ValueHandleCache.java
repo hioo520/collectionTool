@@ -1,6 +1,6 @@
-package top.hihuzi.collection.fill.common;
+package top.hihuzi.collection.common;
 
-import top.hihuzi.collection.fill.constant.FillConfig;
+import top.hihuzi.collection.config.Config;
 import top.hihuzi.collection.utils.StrUtils;
 
 import java.lang.reflect.Method;
@@ -8,29 +8,37 @@ import java.math.BigDecimal;
 
 
 /**
- * tips 塞值处理器(高效)
+ * tips 对对象进行注入值(高效)
  *
  * @author: hihuzi 2018/9/24 20:57
  */
 public class ValueHandleCache {
 
     /**
-     * tips 注入对对象注入值
+     * tips 对对象进行注入值
      *
      * @parameter: E e
      * @parameter: Method method
      * @parameter: String value
      * @parameter: String fieldType
-     * @parameter: FillEnum enums
+     * @parameter: Config config
      * @return:
      * @author: hihuzi 2018/7/19 10:26
      */
-    public static <E> void invokeValueCache(E e, Method method, String value, TypeEnum typeEnum, FillConfig config) throws Exception {
+    public static <E> void invokeValue(E e, Method method, String value, String fieldType, Config config, TypeEnum typeEnum) throws Exception {
 
+        if (fieldType != null) {
+            for (TypeEnum typeEnu : TypeEnum.values()) {
+                if (typeEnu.getValue().equals(fieldType)) {
+                    typeEnum = typeEnu;
+                    break;
+                }
+            }
+        }
         if (StrUtils.isNNoE(value)) {
             switch (typeEnum) {
                 case STRING:
-                    method.invoke(e, String.valueOf(value));
+                    method.invoke(e, value);
                     break;
                 case DATE:
                     method.invoke(e, config.getDateStyleEnum().getFormartStyle().parse(value));
@@ -85,6 +93,7 @@ public class ValueHandleCache {
                     break;
                 default:
                     System.out.println("类型错误" + typeEnum.toString());
+                    break;
             }
         } else {
             switch (typeEnum) {
@@ -122,128 +131,16 @@ public class ValueHandleCache {
     }
 
     /**
-     * tips 注入对对象注入值
-     *
-     * @parameter: E e
-     * @parameter: Method method
-     * @parameter: String value
-     * @parameter: String fieldType
-     * @parameter: FillConfig config
-     * @return:
-     * @author: hihuzi 2018/7/19 10:26
-     */
-    public static <E> void invokeValue(E e, Method method, String value, String fieldType, FillConfig config) throws Exception {
-
-        TypeEnum configs = null;
-        for (TypeEnum typeEnum : TypeEnum.values()) {
-            if (typeEnum.getValue().equals(fieldType)) {
-                configs = typeEnum;
-            }
-        }
-        if (StrUtils.isNNoE(value)) {
-            switch (configs) {
-                case STRING:
-                    method.invoke(e, value);
-                    break;
-                case DATE:
-                    method.invoke(e, config.getDateStyleEnum().getFormartStyle().parse(value));
-                    break;
-                case CHAR:
-                    method.invoke(e, value.toCharArray()[0]);
-                    break;
-                case BYTE:
-                    method.invoke(e, Byte.valueOf(value));
-                    break;
-                case BYTE_MIN:
-                    method.invoke(e, Byte.valueOf(value));
-                    break;
-                case LONG:
-                    method.invoke(e, Long.parseLong(value));
-                    break;
-                case LONG_MIN:
-                    method.invoke(e, Long.parseLong(value));
-                    break;
-                case SHORT:
-                    method.invoke(e, Short.parseShort(value));
-                    break;
-                case SHORT_MIN:
-                    method.invoke(e, Short.parseShort(value));
-                    break;
-                case FLOAT:
-                    method.invoke(e, Float.parseFloat(value));
-                    break;
-                case FLOAT_MIN:
-                    method.invoke(e, Float.parseFloat(value));
-                    break;
-                case DOUBLE:
-                    method.invoke(e, Double.parseDouble(value));
-                    break;
-                case DOUBLE_MIN:
-                    method.invoke(e, Double.parseDouble(value));
-                    break;
-                case INTEGER:
-                    method.invoke(e, Integer.parseInt(value));
-                    break;
-                case INT:
-                    method.invoke(e, Integer.parseInt(value));
-                    break;
-                case BOOLEAN:
-                    method.invoke(e, Boolean.parseBoolean(value));
-                    break;
-                case BOOLEAN_MIN:
-                    method.invoke(e, Boolean.parseBoolean(value));
-                    break;
-                case BIGDECIMAL:
-                    method.invoke(e, new BigDecimal(value));
-                    break;
-                default:
-                    System.out.println("类型错误" + fieldType);
-                    break;
-            }
-        } else {
-            switch (configs) {
-                case STRING:
-                    method.invoke(e, value);
-                    break;
-                case INT:
-                    method.invoke(e, 0);
-                    break;
-                case FLOAT_MIN:
-                    method.invoke(e, 0);
-                    break;
-                case LONG_MIN:
-                    method.invoke(e, 0);
-                    break;
-                case DOUBLE_MIN:
-                    method.invoke(e, 0);
-                    break;
-                case BOOLEAN_MIN:
-                    method.invoke(e, false);
-                    break;
-                case SHORT_MIN:
-                    method.invoke(e, (short) 0);
-                    break;
-                case BYTE_MIN:
-                    method.invoke(e, Byte.parseByte("0"));
-                    break;
-                case CHAR:
-                    break;
-                default:
-                    method.invoke(e, new Object[]{null});
-                    break;
-            }
-        }
-    }
-
-    /**
      * tips 只针对时间类型转化
      *
-     * @notice : 0 是预留数据类型 表示没有匹配
+     * @parameter: "Class<?>" clazz
+     * @parameter: Config config
+     * @parameter: Object obj
      * @author: hihuzi 2018/10/10 19:30
      */
-    public static Object processingTimeType(Class<?> type, FillConfig config, Object obj) {
+    public static Object processingTimeType(Class<?> clazz, Config config, Object obj) {
 
-        if (TypeEnum.DATE.getValue().equals(type.getSimpleName())) {
+        if (TypeEnum.DATE.getValue().equals(clazz.getSimpleName())) {
             return config.getDateStyleEnum().getFormartStyle().format(obj);
         }
         return obj;

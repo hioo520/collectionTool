@@ -1,6 +1,6 @@
 package top.hihuzi.collection.cache;
 
-import top.hihuzi.collection.fill.common.ValueHandleCache;
+import top.hihuzi.collection.common.ValueHandleCache;
 import top.hihuzi.collection.utils.StrUtils;
 
 import java.lang.reflect.Method;

@@ -4,9 +4,10 @@ import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.ParameterCache;
 import top.hihuzi.collection.cache.SecondCache;
 import top.hihuzi.collection.cache.TypeCache;
-import top.hihuzi.collection.fill.common.Invoke;
-import top.hihuzi.collection.fill.common.ValueHandleCache;
-import top.hihuzi.collection.fill.constant.FillConfig;
+import top.hihuzi.collection.common.Invoke;
+import top.hihuzi.collection.common.ValueHandleCache;
+import top.hihuzi.collection.fill.config.FillConfig;
+import top.hihuzi.collection.fill.factory.FillMethodFactory;
 import top.hihuzi.collection.utils.StrUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +20,7 @@ import java.util.*;
  *
  * @author: hihuzi 2018/9/23 16:03
  */
-class FillToolImpl {
+abstract class FillServiceImpl implements FillMethodFactory {
 
     /**
      * tips 缓存
@@ -83,7 +84,7 @@ class FillToolImpl {
             if (StrUtils.isNNoE(value)) {
                 TypeCache cache = ClassCache.getCache(clazz, name);
                 if (null != cache) {
-                    ValueHandleCache.invokeValueCache(e, cache.getMethodSet(), value, cache.getType(), config);
+                    ValueHandleCache.invokeValue(e, cache.getMethodSet(), value, null, config,cache.getType());
                 } else {
                     Invoke.injectionParameters(e, name, value, config);
                 }
@@ -91,7 +92,7 @@ class FillToolImpl {
                 if (config.getSaveStyleEnum().getHaving()) {
                     TypeCache cache = ClassCache.getCache(clazz, name);
                     if (null != cache) {
-                        ValueHandleCache.invokeValueCache(e, cache.getMethodSet(), value, cache.getType(), config);
+                        ValueHandleCache.invokeValue(e, cache.getMethodSet(), value, null, config,cache.getType());
                     } else {
                         Invoke.injectionParameters(e, name, value, config);
                     }
@@ -121,7 +122,7 @@ class FillToolImpl {
             if (StrUtils.isNNoE(value)) {
                 TypeCache cache = ClassCache.getCache(clazz, name);
                 if (null != cache) {
-                    ValueHandleCache.invokeValueCache(e, cache.getMethodSet(), value, cache.getType(), config);
+                    ValueHandleCache.invokeValue(e, cache.getMethodSet(), value, null, config,cache.getType());
                 } else {
                     Invoke.injectionParameters(e, name, value, config);
                 }
@@ -129,7 +130,7 @@ class FillToolImpl {
                 if (null != config && config.getSaveStyleEnum().getHaving()) {
                     TypeCache cache = ClassCache.getCache(clazz, name);
                     if (null != cache) {
-                        ValueHandleCache.invokeValueCache(e, cache.getMethodSet(), value, cache.getType(), config);
+                        ValueHandleCache.invokeValue(e, cache.getMethodSet(), value, null, config,cache.getType());
                     } else {
                         Invoke.injectionParameters(e, name, value, config);
                     }
@@ -239,7 +240,7 @@ class FillToolImpl {
         Object newClazz = null;
         Map<String, List<E>> m = null;
         Map<String, ParameterCache> tableNameMatchParameter = tableNameMatchParameter(list, e);
-        switch (config.getReturnStyleEnum()) {
+        switch (config.getReturnEnum()) {
             case DEFAULT:
             case LISR:
                 for (Map map : list) {
@@ -274,7 +275,7 @@ class FillToolImpl {
                     if (null != pCache) {
                         Map<String, TypeCache> ptCache = pCache.getCache();
                         TypeCache cache = ptCache.get(names);
-                        ValueHandleCache.invokeValueCache(newClazz, cache.getMethodSet(), values, cache.getType(), config);
+                        ValueHandleCache.invokeValue(newClazz, cache.getMethodSet(), values, null, config,cache.getType());
                     } else {
                         continue;
                     }
@@ -289,14 +290,14 @@ class FillToolImpl {
                 }
             }
         }
-        switch (config.getReturnStyleEnum()) {
+        switch (config.getReturnEnum()) {
             case MAP:
                 return m;
             case FILL_LIST:
                 int i = 0;
                 try {
                     for (E es : e) {
-                        config.getReturnStyleEnum().getList()[i].addAll(m.get(es.getClass().getSimpleName()));
+                        config.getReturnEnum().getList()[i].addAll(m.get(es.getClass().getSimpleName()));
                         i++;
                     }
                 } catch (Exception ex) {

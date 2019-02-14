@@ -1,41 +1,34 @@
-package top.hihuzi.collection.fill.constant;
+package top.hihuzi.collection.fill.config;
 
+import top.hihuzi.collection.config.Config;
 import top.hihuzi.collection.utils.Constants;
 
 import java.util.List;
 
 /**
- * tips: 填充工具控制器
+ * tips: 填充工具 配置工具
  *
  * @notices: 默认时间类型是 yyyy-MM-dd
  * @author: hihuzi 2018/9/30 10:08
  **/
-public class FillConfig implements FillBase {
+public class FillConfig implements Config {
 
-    /**
-     * 对于空值得管理
-     */
+
     private SaveStyleEnum saveStyleEnum;
 
-    /**
-     * 对于排序管理器
-     */
+
     private SortStyleEnum sortStyleEnum;
 
-    /**
-     * 对于时间管理器
-     */
+
     private DateStyleEnum dateStyleEnum;
 
-    /**
-     * 对于返回风格管理器
-     */
-    private ReturnStyleEnum returnStyleEnum;
 
-    public FillConfig(DateStyleEnum dateStyleEnum, ReturnStyleEnum returnStyleEnum) {
+    private ReturnEnum returnEnum;
+
+    public FillConfig(DateStyleEnum dateStyleEnum, ReturnEnum returnEnum) {
 
         this.dateStyleEnum = dateStyleEnum;
-        this.returnStyleEnum = returnStyleEnum;
+        this.returnEnum = returnEnum;
 
     }
 
@@ -48,7 +41,7 @@ public class FillConfig implements FillBase {
 
         SortStyleEnum.DEFAULT.setSort(new Integer[]{});
         DateStyleEnum.DEFAULT.dateFormat.remove();
-        ReturnStyleEnum.DEFAULT.setList(new List[]{});
+        ReturnEnum.DEFAULT.setList(new List[]{});
     }
 
     /**
@@ -84,9 +77,9 @@ public class FillConfig implements FillBase {
         this.dateStyleEnum = dateStyleEnum;
     }
 
-    public FillConfig(ReturnStyleEnum returnStyleEnum) {
+    public FillConfig(ReturnEnum returnEnum) {
 
-        this.returnStyleEnum = returnStyleEnum;
+        this.returnEnum = returnEnum;
     }
 
     public SaveStyleEnum getSaveStyleEnum() {
@@ -120,14 +113,20 @@ public class FillConfig implements FillBase {
         this.dateStyleEnum = dateStyleEnum;
     }
 
-    public ReturnStyleEnum getReturnStyleEnum() {
+    public ReturnEnum getReturnEnum() {
 
-        return null != returnStyleEnum ? returnStyleEnum : ReturnStyleEnum.DEFAULT;
+        return null != returnEnum ? returnEnum : ReturnEnum.DEFAULT;
     }
 
-    public void setReturnStyleEnum(ReturnStyleEnum returnStyleEnum) {
+    public void setReturnEnum(ReturnEnum returnEnum) {
 
-        this.returnStyleEnum = returnStyleEnum;
+        this.returnEnum = returnEnum;
+    }
+
+    @Override
+    public ReturnStyleEnum getReturnStyleEnum() {
+
+        return null;
     }
 
 }

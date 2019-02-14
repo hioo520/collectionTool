@@ -1,24 +1,24 @@
-package top.hihuzi.collection.fill.constant;
+package top.hihuzi.collection.config;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
- * tips 控制常量
+ * tips 规则菜单
  *
- * @author: hihuzi 2018/9/23 15:17
+ * @author: hihuzi 2019/2/14 9:51
  */
-public interface FillBase {
+public interface ConfigEnum {
 
     /**
-     * tips: 时间规则
+     * tips: 时间规则定制
      *
-     * @notice: 通用枚举
+     * @notice:默认 yyyy-MM-dd
      * @author: hihuzi 2018/9/29 14:54
      **/
     enum DateStyleEnum {
         /**
-         * 默认时间风格规则
+         * tips  默认时间风格规则
          */
         DEFAULT("");
 
@@ -41,8 +41,8 @@ public interface FillBase {
 
         public DateStyleEnum setFormartStyle(String formartStyle) {
 
-            SimpleDateFormat threadSimpleDateFormat = dateFormat.get();
-            if (null == threadSimpleDateFormat || !formartStyle.equals(threadSimpleDateFormat.toPattern())) {
+            SimpleDateFormat format = dateFormat.get();
+            if (null == format || !formartStyle.equals(format.toPattern())) {
                 dateFormat.set(new SimpleDateFormat(formartStyle));
             }
             return this;
@@ -50,9 +50,8 @@ public interface FillBase {
     }
 
     /**
-     * tips: 排序规则
+     * tips: 排序规则定制
      *
-     * @notice: 通用枚举
      * @author: hihuzi 2018/9/29 14:54
      **/
     enum SortStyleEnum {
@@ -81,9 +80,8 @@ public interface FillBase {
     }
 
     /**
-     * tips: 返回值为空或者""
+     * tips: 返回值(value)规则
      *
-     * @notice: 通用枚举
      * @author: hihuzi 2018/9/29 14:54
      **/
     enum SaveStyleEnum {
@@ -113,7 +111,6 @@ public interface FillBase {
         /**
          * tips: 判断是否存在Null empty "" "   "
          *
-         * @notice: 判断是否存在Null empty "" "   "
          * @author: hihuzi 2018/9/30 8:52
          **/
         public Boolean getHaving() {
@@ -124,12 +121,12 @@ public interface FillBase {
 
 
     /**
-     * tips: 返回值为空或者""
+     * tips: 返回数据泛型类型
      *
      * @notice: 通用枚举
      * @author: hihuzi 2018/9/29 14:54
      **/
-    enum ReturnStyleEnum {
+    enum ReturnEnum {
         /**
          * 默认和LIST返回一致
          */
@@ -155,7 +152,7 @@ public interface FillBase {
 
         private List[] list;
 
-        ReturnStyleEnum(List[] list) {
+        ReturnEnum(List[] list) {
 
             this.list = list;
         }
@@ -168,10 +165,114 @@ public interface FillBase {
             return list;
         }
 
-        public ReturnStyleEnum setList(List... list) {
+        public ReturnEnum setList(List... list) {
 
             this.list = list;
             return this;
         }}
+
+    /**
+     * tips: 返回类型枚举
+     *
+     * @author: hihuzi 2018/9/29 14:54
+     **/
+    enum ReturnStyleEnum {
+        /**
+         * value=1: 返回类型:List<Map>
+         *
+         * @author: hihuzi
+         */
+        DEFAULT(0),
+        /**
+         * value=0: 返回类型:List<Map>
+         *
+         * @author: hihuzi
+         */
+        LIST_MAP(1),
+        /**
+         * value=2: 返回类型:Map
+         *
+         * @author: hihuzi
+         */
+        MAP(2),
+        /**
+         * value=3: 返回类型:Set
+         *
+         * @author: hihuzi
+         */
+        SET(3);
+
+        private Integer key;
+
+        ReturnStyleEnum(Integer key) {
+
+            this.key = key;
+        }
+
+        public Integer getKey() {
+
+            return key;
+        }
+    }
+
+
+    /**
+     * tips: 自定义返回Key
+     *
+     * @notice: 通用枚举
+     * @author: hihuzi 2018/9/29 14:54
+     **/
+    enum ReturnNameEnum {
+        /**
+         * RenameKey="0":默认 属性名输出
+         * <p>
+         * RenameKey="XXXX":义可以的自定头缀
+         *
+         * @author: hihuzi
+         */
+        DEFAULT("0"),
+        /**
+         * RenameKey="1":首字母大写
+         *
+         * @author: hihuzi
+         */
+        INITIAL_CAPITAL("1"),
+        /**
+         * RenameKey="2":全小写
+         *
+         * @author: hihuzi
+         */
+        LOWER_CASE("2"),
+        /**
+         * RenameKey="3":全大写
+         *
+         * @author: hihuzi
+         */
+        UPPER_CASE("3"),
+        /**
+         * RenameKey="XXXX":义可以的自定头缀
+         *
+         * @author: hihuzi
+         */
+        CUSTOM_SUFFIX("");
+
+        private String key;
+
+        ReturnNameEnum(String key) {
+
+            this.key = key;
+        }
+
+        public String getKey() {
+
+            return key;
+        }
+
+        public ReturnNameEnum setKey(String key) {
+
+            this.key = key;
+            return this;
+        }
+    }
 
 }

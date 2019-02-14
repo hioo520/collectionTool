@@ -1,15 +1,13 @@
 package com.hihuzi.collection.fill.test;
 
 
-import top.hihuzi.collection.cache.ClassCache;
-import top.hihuzi.collection.cache.TypeCache;
-import top.hihuzi.collection.fill.FillFactory;
-import top.hihuzi.collection.fill.constant.FillBase;
-import top.hihuzi.collection.fill.constant.FillConfig;
-import top.hihuzi.collection.fill.core.FillTool;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
+import top.hihuzi.collection.cache.ClassCache;
+import top.hihuzi.collection.cache.TypeCache;
+import top.hihuzi.collection.fill.factory.FillFactory;
+import top.hihuzi.collection.fill.config.FillConfig;
 
 import java.util.*;
 
@@ -21,8 +19,6 @@ import java.util.*;
 public class FillFactoryTest implements Runnable {
 
     private MockHttpServletRequest request;
-
-    private FillFactory fillTool;
 
     private static Map map;
 
@@ -43,7 +39,6 @@ public class FillFactoryTest implements Runnable {
 
         request = new MockHttpServletRequest();
         request.setCharacterEncoding("utf-8");
-        fillTool = new FillTool();
     }
 
     /**
@@ -172,11 +167,11 @@ public class FillFactoryTest implements Runnable {
                 new FillConfig());
         System.out.println(Arrays.asList(map).toString());
         map = FillFactory.batch().fillEntity(request, new TestBean(),
-                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")));
+                new FillConfig(FillConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")));
         System.out.println(Arrays.asList(map).toString());
         request.setParameter("dateMax", "2012-12-12 22:21:20");
         map = FillFactory.batch().fillEntity(request, new TestBean(),
-                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
+                new FillConfig(FillConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
         System.out.println(Arrays.asList(map).toString());
     }
 
@@ -232,14 +227,14 @@ public class FillFactoryTest implements Runnable {
 
         map.put("dateMax", "2012-12-12 24:23:22");
         TestBean bean0 = FillFactory.batch().fillEntity(map, new TestBean(),
-                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
+                new FillConfig(FillConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
         System.out.println(bean0.toString() + "hashCode" + bean.hashCode());
 
 
         Map map1 = new HashMap(5);
         /**tips 从对象中取出map*/
         Map map2 = FillFactory.batch().fillMap(bean0, map1,
-                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")));
+                new FillConfig(FillConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd")));
         map2.forEach((o, o2) -> System.out.print(o + "-->" + o2));
     }
 
@@ -276,7 +271,7 @@ public class FillFactoryTest implements Runnable {
         map.put("doubleMin", "1.94");
         list.add(map);
         List<TestBean> bean = (List<TestBean>) FillFactory.batch().listToClass(list,
-                new FillConfig(FillBase.ReturnStyleEnum.FILL_CLASS), new TestBean());
+                new FillConfig(FillConfig.ReturnEnum.FILL_CLASS), new TestBean());
         for (TestBean testBean : bean) {
             System.out.println(testBean.toString());
         }
@@ -285,14 +280,14 @@ public class FillFactoryTest implements Runnable {
         map.put("dateMax", "2012!12@12#12-12:12");
         list0.add(map);
         List<TestBean> bean0 = (List<TestBean>) FillFactory.batch().listToClass(list0,
-                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss"), FillBase.ReturnStyleEnum.FILL_CLASS), new TestBean());
+                new FillConfig(FillConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss"), FillConfig.ReturnEnum.FILL_CLASS), new TestBean());
         System.out.println(bean.get(0).toString());
         System.out.println(bean0.get(0).toString());
 //        long start = System.currentTimeMillis();
 //        List<TestBean> bean3;
 //        for (int i = 0; i < 1000000; i++) {
 //            bean3 = FillFactory.batch().fillEntity(list, new TestBean(),
-//                    new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss")));
+//                    new FillConfig(EnumConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy!MM@dd#HH-mm:ss")));
 //        }
 //        long end = System.currentTimeMillis();
 //        System.err.println("------>一百万 耗时" + (end - start) / 1000 + "秒<------");
@@ -320,7 +315,7 @@ public class FillFactoryTest implements Runnable {
         System.out.println("");
         System.out.println("fillMap从对象中取出不为空的属性 并且时间自定义");
         map1 = FillFactory.batch().fillMap(bean, map1,
-                new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
+                new FillConfig(FillConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy-MM-dd HH:mm:ss")));
         map1.forEach((o, o2) -> System.out.print(o + "-->" + o2 + " "));
     }
 
@@ -406,17 +401,17 @@ public class FillFactoryTest implements Runnable {
         List<Map> map1 = (List<Map>) FillFactory.batch().listToClass(list,
                 new TestBean(), new TestBeanBean());
         List<Map> map2 = (List<Map>) FillFactory.batch().listToClass(list,
-                new FillConfig(FillBase.ReturnStyleEnum.LISR),
+                new FillConfig(FillConfig.ReturnEnum.LISR),
                 new TestBean(), new TestBeanBean());
         List<Map> map3 = (List<Map>) FillFactory.batch().listToClass(list,
-                new FillConfig(FillBase.ReturnStyleEnum.DEFAULT),
+                new FillConfig(FillConfig.ReturnEnum.DEFAULT),
                 new TestBean(), new TestBeanBean());
         System.out.println("测试 ---< 第一种返回结果是List<Map>");
 
 
         System.out.println("测试 ---< 第二种返回结果是Map<String, List>");
         Map<String, List> map4 = (Map<String, List>) FillFactory.batch().listToClass(list,
-                new FillConfig(FillBase.ReturnStyleEnum.MAP),
+                new FillConfig(FillConfig.ReturnEnum.MAP),
                 new TestBean(), new TestBeanBean());
         System.out.println("测试 ---< 第二种返回结果是Map<String, List>");
 
@@ -425,14 +420,14 @@ public class FillFactoryTest implements Runnable {
         List<TestBean> testBeans = new ArrayList<>();
         List<TestBeanBean> testBeanBean = new ArrayList<>();
         FillFactory.batch().listToClass(list,
-                new FillConfig(FillBase.ReturnStyleEnum.FILL_LIST.setList(testBeans, testBeanBean)),
+                new FillConfig(FillConfig.ReturnEnum.FILL_LIST.setList(testBeans, testBeanBean)),
                 new TestBean(), new TestBeanBean());
         System.out.println("测试 ---< 第三种返回结果是Map<String, List>");
 
 
         System.out.println("测试 ---< 第四种返回结果是Map<String, List>");
         List<TestBean> bean = (List<TestBean>) FillFactory.batch().listToClass(list,
-                new FillConfig(FillBase.ReturnStyleEnum.FILL_CLASS), new TestBean());
+                new FillConfig(FillConfig.ReturnEnum.FILL_CLASS), new TestBean());
         System.out.println("测试 ---< 第四种返回结果是Map<String, List>");
         long end = System.currentTimeMillis();
         System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
@@ -444,7 +439,7 @@ public class FillFactoryTest implements Runnable {
         TestBean bean = null;
         try {
             bean = FillFactory.batch().fillEntity(map, new TestBean(),
-                    new FillConfig(FillBase.DateStyleEnum.DEFAULT.setFormartStyle(this.tip)));
+                    new FillConfig(FillConfig.DateStyleEnum.DEFAULT.setFormartStyle(this.tip)));
             System.out.println(bean.toString());
         } catch (Exception e) {
             e.printStackTrace();
