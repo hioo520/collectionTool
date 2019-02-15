@@ -1,8 +1,8 @@
 package com.hihuzi.collection.sql;
 
 
-import com.hihuzi.collection.fill.test.TestBean;
-import com.hihuzi.collection.fill.test.TestBeanBean;
+import com.hihuzi.collection.fill.TestBean;
+import com.hihuzi.collection.fill.TestBeanBean;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
@@ -72,7 +72,7 @@ public class SQlFactoryTest {
                 new SQLConfig(SQLConfig.ReturnEnum.LISR),
                 new TestBean(), new TestBeanBean());
         List<Map> map3 = (List<Map>) SQLFactory.batch().listToEntity(list,
-                new SQLConfig(SQLConfig.ReturnEnum.DEFAULT),
+                new SQLConfig(SQLConfig.ReturnEnum.DEFAULT,SQLConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy")),
                 new TestBean(), new TestBeanBean());
         System.out.println("测试 ---< 第一种返回结果是List<Map>");
 

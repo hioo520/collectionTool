@@ -1,4 +1,4 @@
-package com.hihuzi.collection.fill.test;
+package com.hihuzi.collection.fill;
 
 
 import org.junit.Before;
@@ -404,7 +404,7 @@ public class FillFactoryTest implements Runnable {
                 new FillConfig(FillConfig.ReturnEnum.LISR),
                 new TestBean(), new TestBeanBean());
         List<Map> map3 = (List<Map>) FillFactory.batch().listToClass(list,
-                new FillConfig(FillConfig.ReturnEnum.DEFAULT),
+                new FillConfig(FillConfig.ReturnEnum.DEFAULT,FillConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy")),
                 new TestBean(), new TestBeanBean());
         System.out.println("测试 ---< 第一种返回结果是List<Map>");
 

@@ -1,4 +1,4 @@
-package com.hihuzi.collection.pick.test;
+package com.hihuzi.collection.pick;
 
 import lombok.Data;
 

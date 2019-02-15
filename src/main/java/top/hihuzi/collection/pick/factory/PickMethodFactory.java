@@ -86,7 +86,7 @@ public interface PickMethodFactory extends PickFactory {
      * @return: Map
      * @author: hihuzi 2018/8/3 17:09
      */
-    Map pickMap(Map map, String... key);
+    Map pickMap(Map map, String... key)throws Exception;
 
     /**
      * tips 从集合中取出特定Key(带返回控制)
@@ -97,7 +97,7 @@ public interface PickMethodFactory extends PickFactory {
      * @return: Map
      * @author: hihuzi 2018/8/3 17:09
      */
-    Map pickMap(Map map, PickConfig config, String... key);
+    Map pickMap(Map map, PickConfig config, String... key)throws Exception;
 
     /**
      * tips 从集合中取出特定key

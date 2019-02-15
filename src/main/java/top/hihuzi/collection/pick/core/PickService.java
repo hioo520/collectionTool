@@ -139,13 +139,15 @@ public class PickService extends PickServiceImpl {
      * @author: hihuzi 2018/8/3 17:09
      */
     @Override
-    public Map pickMap(Map map, String... key) {
+    public Map pickMap(Map map, String... parameter) throws Exception {
 
         if (null == map || 0 == map.size()) return null;
-        Map maps = batchMap(map, new PickConfig(
+        Map maps = ((List<Map>) batch(new ArrayList() {{
+            add(map);
+        }}, new PickConfig(
                 PickConfig.ReturnStyleEnum.MAP,
                 PickConfig.ReturnNameEnum.DEFAULT,
-                PickConfig.SaveStyleEnum.DEFAULT), key);
+                PickConfig.SaveStyleEnum.DEFAULT), parameter)).get(0);
         PickConfig.reset();
         return maps;
     }
@@ -160,10 +162,15 @@ public class PickService extends PickServiceImpl {
      * @author: hihuzi 2018/8/3 17:09
      */
     @Override
-    public Map pickMap(Map map, PickConfig config, String... parameter) {
+    public Map pickMap(Map map, PickConfig config, String... parameter) throws Exception {
 
         if (null == map || 0 == map.size()) return null;
-        Map maps = batchMap(map, config.setReturnStyleEnum(PickConfig.ReturnStyleEnum.MAP), parameter);
+        Map maps = ((List<Map>) batch(new ArrayList() {{
+            add(map);
+        }}, new PickConfig(
+                PickConfig.ReturnStyleEnum.MAP,
+                PickConfig.ReturnNameEnum.DEFAULT,
+                PickConfig.SaveStyleEnum.DEFAULT), parameter)).get(0);
         PickConfig.reset();
         return maps;
     }

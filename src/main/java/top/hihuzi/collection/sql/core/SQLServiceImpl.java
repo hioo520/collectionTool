@@ -4,6 +4,7 @@ import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.ParameterCache;
 import top.hihuzi.collection.cache.SecondCache;
 import top.hihuzi.collection.cache.TypeCache;
+import top.hihuzi.collection.common.Invoke;
 import top.hihuzi.collection.common.ValueHandleCache;
 import top.hihuzi.collection.sql.config.SQLConfig;
 import top.hihuzi.collection.sql.factory.SQLMethodFactory;
@@ -45,7 +46,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                         String values = String.valueOf(entry.getValue());
                         try {
                             TypeCache typeCache = tableNameMatchParameter.get(names).getCache().get(names);
-                            map1.put(typeCache.getParamterName(), values);
+                            map1.put(typeCache.getParamterName(), Invoke.processTimeType(typeCache.getParamtertype(), config, values));
                         } catch (Exception ex) {
                             continue;
                         }

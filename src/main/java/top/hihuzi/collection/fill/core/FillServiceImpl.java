@@ -2,7 +2,6 @@ package top.hihuzi.collection.fill.core;
 
 import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.ParameterCache;
-import top.hihuzi.collection.cache.SecondCache;
 import top.hihuzi.collection.cache.TypeCache;
 import top.hihuzi.collection.common.Invoke;
 import top.hihuzi.collection.common.ValueHandleCache;
@@ -251,7 +250,7 @@ abstract class FillServiceImpl implements FillMethodFactory {
                         String values = String.valueOf(entry.getValue());
                         try {
                             TypeCache typeCache = tableNameMatchParameter.get(names).getCache().get(names);
-                            map1.put(typeCache.getParamterName(), Invoke.processingTimeType(typeCache.getParamtertype(), config, values));
+                            map1.put(typeCache.getParamterName(), Invoke.processTimeType(typeCache.getParamtertype(), config, values));
                         } catch (Exception ex) {
                             continue;
                         }

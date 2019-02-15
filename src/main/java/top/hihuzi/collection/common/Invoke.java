@@ -158,7 +158,11 @@ public class Invoke {
 
         if (ValueHandleCache.TypeEnum.DATE.getValue().equals(type.getSimpleName())) {
             if (null == obj) return null;
-            return config.getDateStyleEnum().getFormartStyle().format(obj);
+            try {
+                return obj.toString().substring(0, config.getDateStyleEnum().getFormartStyle().toPattern().length());
+            } catch (Exception e) {
+                return obj;
+            }
         }
         if (ValueHandleCache.TypeEnum.STRING.getValue().equals(type.getSimpleName())) {
             if (config.getSaveStyleEnum().getHaving()) {
@@ -169,5 +173,6 @@ public class Invoke {
         }
         return obj;
     }
+
 
 }

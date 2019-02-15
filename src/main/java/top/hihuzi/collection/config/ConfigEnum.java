@@ -179,37 +179,26 @@ public interface ConfigEnum {
          *
          * @author: hihuzi
          */
-        DEFAULT(0),
+        DEFAULT,
         /**
          * value=0: 返回类型:List<Map>
          *
          * @author: hihuzi
          */
-        LIST_MAP(1),
+        LIST_MAP,
         /**
          * value=2: 返回类型:Map
          *
          * @author: hihuzi
          */
-        MAP(2),
+        MAP,
         /**
          * value=3: 返回类型:Set
          *
          * @author: hihuzi
          */
-        SET(3);
+        SET;
 
-        private Integer key;
-
-        ReturnStyleEnum(Integer key) {
-
-            this.key = key;
-        }
-
-        public Integer getKey() {
-
-            return key;
-        }
     }
 
 

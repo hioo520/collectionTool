@@ -1,4 +1,4 @@
-package com.hihuzi.collection.fill.test;
+package com.hihuzi.collection.fill;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

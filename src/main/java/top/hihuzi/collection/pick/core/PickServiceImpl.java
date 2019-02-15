@@ -4,6 +4,7 @@ package top.hihuzi.collection.pick.core;
 import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.TypeCache;
 import top.hihuzi.collection.common.Invoke;
+import top.hihuzi.collection.config.ConfigEnum;
 import top.hihuzi.collection.pick.config.PickConfig;
 import top.hihuzi.collection.pick.factory.PickMethodFactory;
 import top.hihuzi.collection.utils.StrUtils;
@@ -19,32 +20,6 @@ import java.util.*;
 abstract class PickServiceImpl implements PickMethodFactory {
 
     /**
-     * TIPS 集合Map 取出选定字段 默认 value为空时 保存
-     *
-     * @parameter: Map map
-     * @parameter: String[] strs
-     * @return: Map
-     * @author: hihuzi 2018/8/3 17:09
-     */
-    public Map batchMap(Map map, PickConfig config, String... str) {
-
-        if (null == map || 0 == map.size()) {
-            throw new IndexOutOfBoundsException("调用batch: 输入的是null! 或者为空值");
-        }
-        Map result = new HashMap<>(str.length);
-        for (String property : str) {
-            Object value = map.get(property);
-            achieveMap(result, property, value, config);
-//            if (StrUtils.isNNoEE(value) && !"".equals(String.valueOf(value))) {
-//                result.put(property, value);
-//            } else if (config.getSaveStyleEnum().getHaving()) {
-//                result.put(property, "");
-//            }
-        }
-        return result;
-    }
-
-    /**
      * tips 同一对象集合 返回选定字段 集合返回
      *
      * @parameter: List<E> list
@@ -55,23 +30,20 @@ abstract class PickServiceImpl implements PickMethodFactory {
      */
     public <T> Collection batch(List<T> list, PickConfig config, String... key) throws Exception {
 
-        if (list == null) {
-            throw new IndexOutOfBoundsException("调用batch: 输入的是null!");
-        }
         Class clacc = list.get(0).getClass();
-        Class clazz = list.get(0).getClass();
+        Class clazz = clacc;
         List<Map> lists = new ArrayList<>(list.size());
         if (clacc.getSimpleName().contains(Map.class.getSimpleName())) {
             List<String> strs = Arrays.asList(key);
             for (T t : list) {
                 Map map = (Map) t;
-                Map map1 = new HashMap(map.size());
+                Map map0 = new HashMap(map.size());
                 for (Object obj : map.keySet()) {
                     if (strs.contains(obj)) {
-                        achieveMap(map1, String.valueOf(obj), map.get(obj), config);
+                        achieveMap(map0, String.valueOf(obj), map.get(obj), config);
                     }
                 }
-                lists.add(map1);
+                lists.add(map0);
             }
             return lists;
         }
@@ -106,7 +78,8 @@ abstract class PickServiceImpl implements PickMethodFactory {
                 }
                 definitionReturn(list, config, sets, maps, map, property, invoke);
             }
-            if (0 == config.getReturnStyleEnum().getKey() || 1 == config.getReturnStyleEnum().getKey()) {
+            if (config.getReturnStyleEnum() == ConfigEnum.ReturnStyleEnum.DEFAULT
+                    || config.getReturnStyleEnum() == ConfigEnum.ReturnStyleEnum.LIST_MAP) {
                 lists.add(map);
             }
         }
@@ -123,7 +96,13 @@ abstract class PickServiceImpl implements PickMethodFactory {
         return null;
     }
 
-    private <T> void definitionReturn(List<T> list, PickConfig config, Set sets, Map maps, Map map, String property, Object invoke) throws Exception {
+    private <T> void definitionReturn(List<T> list,
+                                      PickConfig config,
+                                      Set sets,
+                                      Map maps,
+                                      Map map,
+                                      String property,
+                                      Object invoke) throws Exception {
 
         switch (config.getReturnStyleEnum()) {
             case DEFAULT:
@@ -196,7 +175,12 @@ abstract class PickServiceImpl implements PickMethodFactory {
      * @return:
      * @author: hihuzi  2018/10/18 11:43
      */
-    private <T> Object achieveInvoke(String name, T t, Class clazz, Method method, Object invoke, String property, PickConfig config) throws Exception {
+    private <T> Object achieveInvoke(String name, T t,
+                                     Class clazz,
+                                     Method method,
+                                     Object invoke,
+                                     String property,
+                                     PickConfig config) throws Exception {
 
         method = clazz.getMethod(name);
         method.setAccessible(true);
