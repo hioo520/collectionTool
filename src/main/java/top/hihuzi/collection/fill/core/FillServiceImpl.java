@@ -43,26 +43,24 @@ abstract class FillServiceImpl implements FillMethodFactory {
             String value = request.getParameter(name);
             if (StrUtils.isNNoEC(exclude)) {
                 if (!exclude.contains(name)) {
-                    if (StrUtils.isNNoE(value)) {
-                        map.put(name, value);
-                    } else {
-                        if (config.getSaveStyleEnum().getHaving()) {
-                            map.put(name, value);
-                        }
-                    }
+                    fillToMap(config, map, name, value);
                 }
             } else {
-                if (StrUtils.isNNoE(value)) {
-                    map.put(name, value);
-                } else {
-                    if (config.getSaveStyleEnum().getHaving()) {
-                        map.put(name, value);
-                    }
-                }
-
+                fillToMap(config, map, name, value);
             }
         }
         return map;
+    }
+
+    private void fillToMap(FillConfig config, Map map, String name, String value) {
+
+        if (StrUtils.isNNoE(value)) {
+            map.put(name, value);
+        } else {
+            if (config.getSaveStyleEnum().getHaving()) {
+                map.put(name, value);
+            }
+        }
     }
 
     /**
@@ -81,24 +79,24 @@ abstract class FillServiceImpl implements FillMethodFactory {
             String name = pars.nextElement().toString().trim();
             String value = request.getParameter(name);
             if (StrUtils.isNNoE(value)) {
-                TypeCache cache = ClassCache.getCache(clazz, name);
-                if (null != cache) {
-                    ValueHandleCache.invokeValue(e, cache.getMethodSet(), value, null, config, cache.getType());
-                } else {
-                    Invoke.injectionParameters(e, name, value, config);
-                }
+                processResult(e, config, clazz, name, value);
             } else {
                 if (config.getSaveStyleEnum().getHaving()) {
-                    TypeCache cache = ClassCache.getCache(clazz, name);
-                    if (null != cache) {
-                        ValueHandleCache.invokeValue(e, cache.getMethodSet(), value, null, config, cache.getType());
-                    } else {
-                        Invoke.injectionParameters(e, name, value, config);
-                    }
+                    processResult(e, config, clazz, name, value);
                 }
             }
         }
         return e;
+    }
+
+    private <E> void processResult(E e, FillConfig config, Class clazz, String name, String value) throws Exception {
+
+        TypeCache cache = ClassCache.getCache(clazz, name);
+        if (null != cache) {
+            ValueHandleCache.invokeValue(e, cache.getMethodSet(), value, null, config, cache.getType());
+        } else {
+            Invoke.injectionParameters(e, name, value, config);
+        }
     }
 
     /**
@@ -119,20 +117,10 @@ abstract class FillServiceImpl implements FillMethodFactory {
             String name = String.valueOf(entry.getKey());
             String value = String.valueOf(entry.getValue());
             if (StrUtils.isNNoE(value)) {
-                TypeCache cache = ClassCache.getCache(clazz, name);
-                if (null != cache) {
-                    ValueHandleCache.invokeValue(e, cache.getMethodSet(), value, null, config, cache.getType());
-                } else {
-                    Invoke.injectionParameters(e, name, value, config);
-                }
+                processResult(e, config, clazz, name, value);
             } else {
                 if (null != config && config.getSaveStyleEnum().getHaving()) {
-                    TypeCache cache = ClassCache.getCache(clazz, name);
-                    if (null != cache) {
-                        ValueHandleCache.invokeValue(e, cache.getMethodSet(), value, null, config, cache.getType());
-                    } else {
-                        Invoke.injectionParameters(e, name, value, config);
-                    }
+                    processResult(e, config, clazz, name, value);
                 }
             }
         }
@@ -162,15 +150,15 @@ abstract class FillServiceImpl implements FillMethodFactory {
         } else {
             Class<?> clazz = e.getClass();
             Field[] declaredFields = clazz.getDeclaredFields();
-            for (Field declaredField : declaredFields) {
-                declaredField.setAccessible(true);
-                Class<?> type = declaredField.getType();
-                Method method = clazz.getMethod(StrUtils.achieveGetFunction(declaredField.getName()));
+            for (Field field : declaredFields) {
+                field.setAccessible(true);
+                Class<?> type = field.getType();
+                Method method = clazz.getMethod(StrUtils.achieveGetFunction(field.getName()));
                 Object invoke = method.invoke(e);
-                ClassCache.get().add(e.getClass(), declaredField.getName(), type);
+                ClassCache.get().add(e.getClass(), field.getName(), type);
                 if (config.getSaveStyleEnum().getHaving() && null != invoke) {
                     invoke = ValueHandleCache.processingTimeType(type, config, invoke);
-                    map.put(declaredField.getName(), invoke);
+                    map.put(field.getName(), invoke);
                 }
             }
         }
@@ -178,8 +166,9 @@ abstract class FillServiceImpl implements FillMethodFactory {
     }
 
     /**
-     * tips tips 对LIST数据装填--> 对象 (针对数据库)与实体类名有区别 value -->t
+     * tips  对LIST数据装填--> 对象 (针对数据库)与实体类名有区别 value -->t
      *
+     * @notice: !!!待优化效率!!!
      * @parameter: List<String>
      * @parameter: E
      * @return: List<E>
@@ -189,7 +178,7 @@ abstract class FillServiceImpl implements FillMethodFactory {
 
         List<E> result = new ArrayList<>(list.size());
         List<String> field = new ArrayList<>(e.getClass().getDeclaredFields().length);
-        List<String> fieldsMap = new ArrayList<>(e.getClass().getDeclaredFields().length);
+        List<String> fieldsMap = new ArrayList<>(field.size());
         Class clazz = e.getClass();
         for (; clazz != Object.class; clazz = clazz.getSuperclass()) {
             Field[] fields = clazz.getDeclaredFields();
@@ -243,19 +232,18 @@ abstract class FillServiceImpl implements FillMethodFactory {
             case DEFAULT:
             case LISR:
                 for (Map map : list) {
-                    Map map1 = new HashMap(map.size());
+                    Map map0 = new HashMap(map.size());
                     for (Object obj : map.entrySet()) {
                         Map.Entry entry = (Map.Entry) obj;
                         String names = String.valueOf(entry.getKey());
                         String values = String.valueOf(entry.getValue());
-                        try {
-                            TypeCache typeCache = tableNameMatchParameter.get(names).getCache().get(names);
-                            map1.put(typeCache.getParamterName(), Invoke.processTimeType(typeCache.getParamtertype(), config, values));
-                        } catch (Exception ex) {
-                            continue;
+                        ParameterCache parameterCache = tableNameMatchParameter.get(names);
+                        if (null != parameterCache) {
+                            TypeCache typeCache = parameterCache.getCache().get(names);
+                            map0.put(typeCache.getParamterName(), Invoke.processTimeType(typeCache.getParamtertype(), config, values));
                         }
                     }
-                    lm.add(map1);
+                    lm.add(map0);
                 }
                 return lm;
             default:

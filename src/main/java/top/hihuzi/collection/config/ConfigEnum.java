@@ -1,14 +1,16 @@
 package top.hihuzi.collection.config;
 
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * tips 规则菜单
  *
  * @author: hihuzi 2019/2/14 9:51
  */
-public interface ConfigEnum {
+public interface ConfigEnum<E> {
 
     /**
      * tips: 时间规则定制
@@ -261,4 +263,78 @@ public interface ConfigEnum {
         }
     }
 
+    /**
+     * tips SQL+ 规则配置
+     *
+     * @author: hihuzi 2019/2/15 10:04
+     */
+    enum SQLEeum {
+
+        /**
+         * tips 唯一性 用于此条SQL 缓存(不设置存在数据紊乱(情况:出现同样检索只是SQL不同时缓存的SQL容易被覆盖))
+         *
+         * @author: hihuzi 2019/2/15 10:13
+         */
+        UNIQUE(null),
+        /**
+         * tips 待查询的class对象
+         *
+         * @author: hihuzi 2019/2/15 10:13
+         */
+        CLASS(null),
+
+        /**
+         * tips 名称的表昵称 提取表的昵称作为 属性的前缀
+         *
+         * @author: hihuzi 2019/2/15 10:15
+         */
+        NICKNAME(null),
+
+        /**
+         * tips 存在重复属性(也就是重复的列名)
+         *
+         * @author: hihuzi 2019/2/15 10:15
+         */
+        REPEAT(null),
+        /**
+         * tips 需要检索出来的属性(也就是待显示的列名)
+         *
+         * @author: hihuzi 2019/2/15 10:15
+         */
+        DISPLAY(null);
+
+        private String[] key;
+
+        SQLEeum(String... key) {
+
+            this.key = key;
+        }
+
+        public Map getMap() {
+
+            Map map = new HashMap();
+            for (SQLEeum value : SQLEeum.values()) {
+                map.put(value.name(), value.key);
+            }
+            return map;
+
+        }
+
+        public String[] get(SQLEeum sqlEeum) {
+
+            return key;
+        }
+
+        public SQLEeum set(String... key) {
+
+            this.key = key;
+            return this;
+        }
+
+        public <E> SQLEeum set(E... e) {
+
+            this.key = key;
+            return this;
+        }
+    }
 }

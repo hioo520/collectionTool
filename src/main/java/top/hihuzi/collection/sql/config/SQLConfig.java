@@ -13,25 +13,15 @@ import java.util.List;
  **/
 public class SQLConfig implements Config {
 
-    /**
-     * 对于空值得管理
-     */
+
     private SaveStyleEnum saveStyleEnum;
 
-    /**
-     * 对于排序管理器
-     */
     private ReturnNameEnum returnNameEnum;
 
-    /**
-     * 对于时间管理器
-     */
     private DateStyleEnum dateStyleEnum;
 
-    /**
-     * 对于返回风格管理器
-     */
     private ReturnEnum returnEnum;
+    private SQLEeum sqlEeum;
 
     public SQLConfig(DateStyleEnum dateStyleEnum, ReturnEnum returnEnum) {
 
@@ -96,6 +86,11 @@ public class SQLConfig implements Config {
         this.returnEnum = returnEnum;
     }
 
+    public SQLConfig(SQLEeum sqlEeum) {
+
+        this.sqlEeum = sqlEeum;
+    }
+
     public SaveStyleEnum getSaveStyleEnum() {
 
         return null != saveStyleEnum ? saveStyleEnum : SaveStyleEnum.DEFAULT;
@@ -137,6 +132,16 @@ public class SQLConfig implements Config {
     public void setReturnEnum(ReturnEnum returnEnum) {
 
         this.returnEnum = returnEnum;
+    }
+
+    public SQLEeum getSqlEeum() {
+
+        return sqlEeum;
+    }
+
+    public void setSqlEeum(SQLEeum sqlEeum) {
+
+        this.sqlEeum = sqlEeum;
     }
 
     @Override

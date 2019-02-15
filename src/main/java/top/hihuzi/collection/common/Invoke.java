@@ -85,21 +85,24 @@ public class Invoke {
      */
     public static <E> Map<String, ParameterCache> tableNameMatchParameter(Map list, E... e) {
 
+        addCache(list, e);
+        Map<String, ParameterCache> map = new HashMap<>(e.length);
+        for (E es : e) {
+            Map<String, ParameterCache> pCache = ClassCache.getPCache(es.getClass());
+            map.putAll(pCache);
+        }
+        return map;
+    }
+
+    /**
+     * tips 无线递归上级找属性(表和对象属性匹配)-->带缓存
+     *
+     * @author: hihuzi 2019/2/12 14:06
+     */
+    public static <E> Map<String, ParameterCache> tableNameMatchParameterSecondCache(Map list, E... e) {
+
         if (!isBeingCache(e)) {
-            for (E es : e) {
-                Class<?> clazz = es.getClass();
-                for (Object obj : list.keySet()) {
-                    for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
-                        for (Field field : clazz.getDeclaredFields()) {
-                            if (StrUtils.isEquals(String.valueOf(obj), field.getName())) {
-                                ClassCache.get().add(es.getClass(), field.getName(), null, String.valueOf(obj));
-                                break;
-                            }
-                        }
-                    }
-                    clazz = es.getClass();
-                }
-            }
+            addCache(list, e);
         }
         Map<String, ParameterCache> map = SecondCache.getCache(StrUtils.splicingObjectName(e));
         if (null == map) {
@@ -111,6 +114,30 @@ public class Invoke {
             SecondCache.addCache(StrUtils.splicingObjectName(e), map);
         }
         return map;
+    }
+
+    /**
+     * tips 加入缓存
+     *
+     * @author: hihuzi 2019/2/15 11:24
+     */
+    private static <E> void addCache(Map list, E... e) {
+
+
+        for (E es : e) {
+            Class<?> clazz = es.getClass();
+            for (Object obj : list.keySet()) {
+                for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
+                    for (Field field : clazz.getDeclaredFields()) {
+                        if (StrUtils.isEquals(String.valueOf(obj), field.getName())) {
+                            ClassCache.get().add(es.getClass(), field.getName(), null, String.valueOf(obj));
+                            break;
+                        }
+                    }
+                }
+                clazz = es.getClass();
+            }
+        }
     }
 
     /**
@@ -174,5 +201,26 @@ public class Invoke {
         return obj;
     }
 
+    /**
+     * tips 根据对象属性 驼峰 对应表
+     *
+     * @author: hihuzi 2019/2/15 11:24
+     */
+    private static <E> void getHumpToLine(Map list, E... e) {
+
+        Class<?> clazz = null;
+        for (E es : e) {
+            Map map = new HashMap();
+            clazz = es.getClass();
+            for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
+                for (Field field : clazz.getDeclaredFields()) {
+                    map.put(field.getName(), StrUtils.humpToLine(field.getName()));
+                }
+            }
+            clazz = es.getClass();
+            list.put(es.getClass().getSimpleName(), map);
+        }
+
+    }
 
 }

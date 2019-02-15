@@ -2,6 +2,8 @@ package top.hihuzi.collection.utils;
 
 
 import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * tips 判断是否有空的 对象 实体 集合类
@@ -25,6 +27,25 @@ public class StrUtils {
      * 处理驼峰 set
      */
     private static String HUMP = "[_|-|]";
+
+    private static Pattern humpPattern = Pattern.compile("[A-Z]");
+
+    /**
+     * 驼峰转下划线,效率比上面高
+     *
+     * @param str
+     * @return
+     */
+    public static String humpToLine(String str) {
+
+        Matcher matcher = humpPattern.matcher(str);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            matcher.appendReplacement(sb, "_" + matcher.group(0).toLowerCase());
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
+    }
 
     /**
      * tips 存在一个是  "" 或"  "或 null 返回 true  原名:isNullOrEmpty
@@ -199,7 +220,7 @@ public class StrUtils {
         StringBuffer buffer = new StringBuffer();
         for (E es : e) {
             buffer.append(es.getClass().getSimpleName());
-            if (i >= e.length-1) {
+            if (i >= e.length - 1) {
                 return String.valueOf(buffer);
             }
             buffer.append("-");
@@ -208,19 +229,19 @@ public class StrUtils {
         return String.valueOf(buffer);
     }
 
- /**
+    /**
      * tips 拼接对象名称
      *
      * @author: hihuzi 2019/2/13 17:03
      */
-    public static <E> String splicingObjectName(String mark,E... e) {
+    public static <E> String splicingObjectName(String mark, E... e) {
 
         int i = 0;
         StringBuffer buffer = new StringBuffer();
         buffer.append(mark);
         for (E es : e) {
             buffer.append(es.getClass().getSimpleName());
-            if (i >= e.length-1) {
+            if (i >= e.length - 1) {
                 return String.valueOf(buffer);
             }
             buffer.append("-");
