@@ -6,9 +6,9 @@ import com.hihuzi.collection.fill.TestBeanBean;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
+import top.hihuzi.collection.sql.config.SQLBean;
 import top.hihuzi.collection.sql.config.SQLConfig;
 import top.hihuzi.collection.sql.factory.SQLFactory;
-import top.hihuzi.collection.utils.StrUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -65,16 +65,16 @@ public class SQlFactoryTest {
     @Test
     public void listToEntity() throws Exception {
 
-        SQLConfig config = new SQLConfig();
-        config.getSqlEeum()
-                .UNIQUE.set(StrUtils.splicingObjectName(new TestBean(), new TestBeanBean()), "007")
-                .NICKNAME.set("tb", "bb")
-                .REPEAT.set("longMax")
-                .DISPLAY.set("longMax");
-
+        SQLBean bean = new SQLBean()
+                .addUnique(007)
+                .addClazz(new TestBean(), new TestBeanBean())
+                .addNickname("one", "two")
+                .addRepeat("one", "two")
+                .addDisplay("longMax")
+                .addDisplay("longMax", 1234);
+        SQLConfig config = new SQLConfig(SQLConfig.SQLEeum.DEFAULT.set(bean));
         Object sql = SQLFactory.batch().config(config);
-        List<Map> map0 = (List<Map>) SQLFactory.batch().listToEntity(list,config);
-
+        List<Map> map0 = (List<Map>) SQLFactory.batch().listToEntity(list, config);
 
 
         long start = System.currentTimeMillis();
@@ -107,7 +107,7 @@ public class SQlFactoryTest {
 
 
         System.out.println("测试 ---< 第四种返回结果是Map<String, List>");
-        List<TestBean> bean = (List<TestBean>) SQLFactory.batch().listToEntity(list,
+        List<TestBean> beans = (List<TestBean>) SQLFactory.batch().listToEntity(list,
                 new SQLConfig(SQLConfig.ReturnEnum.FILL_CLASS), new TestBean());
         System.out.println("测试 ---< 第四种返回结果是Map<String, List>");
         long end = System.currentTimeMillis();

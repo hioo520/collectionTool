@@ -4,6 +4,7 @@ import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.ParameterCache;
 import top.hihuzi.collection.cache.TypeCache;
 import top.hihuzi.collection.common.Invoke;
+import top.hihuzi.collection.common.PublicMethod;
 import top.hihuzi.collection.common.ValueHandleCache;
 import top.hihuzi.collection.fill.config.FillConfig;
 import top.hihuzi.collection.fill.factory.FillMethodFactory;
@@ -227,7 +228,7 @@ abstract class FillServiceImpl implements FillMethodFactory {
         List<Map> lm = new ArrayList<>(list.size());
         Object newClazz = null;
         Map<String, List<E>> m = null;
-        Map<String, ParameterCache> tableNameMatchParameter = Invoke.tableNameMatchParameter(list.get(0), e);
+        Map<String, ParameterCache> tableNameMatchParameter = PublicMethod.tableNameMatchParameter(list.get(0), e);
         switch (config.getReturnEnum()) {
             case DEFAULT:
             case LISR:
@@ -240,7 +241,7 @@ abstract class FillServiceImpl implements FillMethodFactory {
                         ParameterCache parameterCache = tableNameMatchParameter.get(names);
                         if (null != parameterCache) {
                             TypeCache typeCache = parameterCache.getCache().get(names);
-                            map0.put(typeCache.getParamterName(), Invoke.processTimeType(typeCache.getParamtertype(), config, values));
+                            map0.put(typeCache.getParamterName(), PublicMethod.processTimeType(typeCache.getParamtertype(), config, values));
                         }
                     }
                     lm.add(map0);

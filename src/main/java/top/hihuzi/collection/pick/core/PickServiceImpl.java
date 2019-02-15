@@ -3,7 +3,7 @@ package top.hihuzi.collection.pick.core;
 
 import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.TypeCache;
-import top.hihuzi.collection.common.Invoke;
+import top.hihuzi.collection.common.PublicMethod;
 import top.hihuzi.collection.config.ConfigEnum;
 import top.hihuzi.collection.pick.config.PickConfig;
 import top.hihuzi.collection.pick.factory.PickMethodFactory;
@@ -60,7 +60,7 @@ abstract class PickServiceImpl implements PickMethodFactory {
                     method = cache.getMethodGet();
                     method.setAccessible(true);
                     invoke = method.invoke(t);
-                    invoke = Invoke.processingTimeType(cache.getParamtertype(), config, invoke);
+                    invoke = PublicMethod.processingTimeType(cache.getParamtertype(), config, invoke);
                 } else {
                     try {
                         invoke = achieveInvoke(name, t, t.getClass(), method, invoke, property, config);
@@ -185,7 +185,7 @@ abstract class PickServiceImpl implements PickMethodFactory {
         method = clazz.getMethod(name);
         method.setAccessible(true);
         invoke = method.invoke(t);
-        invoke = Invoke.processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
+        invoke = PublicMethod.processingTimeType(clazz.getDeclaredField(property).getType(), config, invoke);
         ClassCache.get().add(t.getClass(), property);
         return invoke;
     }

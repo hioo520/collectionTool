@@ -2,8 +2,10 @@ package top.hihuzi.collection.sql.core;
 
 import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.TableCache;
+import top.hihuzi.collection.common.PublicMethod;
 import top.hihuzi.collection.sql.config.SQLConfig;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -62,10 +64,45 @@ public class SQLService extends SQLServiceImpl {
     @Override
     public <E> Object config(SQLConfig config) throws Exception {
 
-        Map sqls = config.getSqlEeum().getMap();
+        Map sqls =null;// config.getSqlEeum().get();
+        Class[] clazzs = (Class[]) sqls.get("CLASS");
+        Map nicknames = (Map) sqls.get("NICKNAME");
+        List repeats = (List) sqls.get("REPEAT");
+        List displays = (List) sqls.get("DISPLAY");
         TableCache caches = ClassCache.getTCache(String.valueOf(sqls.get("UNIQUE")));
         if (null == caches) {
-            /* TODO 根据驼峰 加入缓存 tableCache*/
+            StringBuffer sql = new StringBuffer(25);
+            if (null != displays && 0 != displays.size()) {
+
+                for (Class clazz : clazzs) {
+                    Map humpToLineMap = PublicMethod.getHumpToLine(clazz);
+                    Iterator iterator = humpToLineMap.entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry humpToLine = (Map.Entry) iterator.next();
+                        String param = String.valueOf(humpToLine.getKey());
+                        String table = String.valueOf(humpToLine.getValue());
+                        String mark = String.valueOf(nicknames.get(clazz.getName()));
+                        sql.append(mark + "." + table);
+                        sql.append(",");
+                    }
+
+                }
+
+            } else {
+                for (Class clazz : clazzs) {
+                    Map humpToLineMap = PublicMethod.getHumpToLine(clazz);
+                    Iterator iterator = humpToLineMap.entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        Map.Entry humpToLine = (Map.Entry) iterator.next();
+                        String param = String.valueOf(humpToLine.getKey());
+                        String table = String.valueOf(humpToLine.getValue());
+                        String mark = String.valueOf(nicknames.get(clazz.getName()));
+                        sql.append(mark + "." + table);
+                        sql.append(",");
+                    }
+
+                }
+            }
         }
         return null;
     }

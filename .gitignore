@@ -8,3 +8,4 @@ target/
 /.iml
 src/main/resources/
 collectionTool.iml
+.iml

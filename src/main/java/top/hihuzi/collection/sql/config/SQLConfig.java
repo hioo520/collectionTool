@@ -21,6 +21,7 @@ public class SQLConfig implements Config {
     private DateStyleEnum dateStyleEnum;
 
     private ReturnEnum returnEnum;
+
     private SQLEeum sqlEeum;
 
     public SQLConfig(DateStyleEnum dateStyleEnum, ReturnEnum returnEnum) {

@@ -4,7 +4,7 @@ import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.ParameterCache;
 import top.hihuzi.collection.cache.SecondCache;
 import top.hihuzi.collection.cache.TypeCache;
-import top.hihuzi.collection.common.Invoke;
+import top.hihuzi.collection.common.PublicMethod;
 import top.hihuzi.collection.common.ValueHandleCache;
 import top.hihuzi.collection.sql.config.SQLConfig;
 import top.hihuzi.collection.sql.factory.SQLMethodFactory;
@@ -34,24 +34,23 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
         List<Map> lm = new ArrayList<>(list.size());
         Object newClazz = null;
         Map<String, List<E>> m = null;
-        Map<String, ParameterCache> tableNameMatchParameter = tableNameMatchParameter(config,list, e);
+        Map<String, ParameterCache> tableNameMatchParameter = tableNameMatchParameter(config, list, e);
         switch (config.getReturnEnum()) {
             case DEFAULT:
             case LISR:
                 for (Map map : list) {
-                    Map map1 = new HashMap(map.size());
+                    Map map0 = new HashMap(map.size());
                     for (Object obj : map.entrySet()) {
                         Map.Entry entry = (Map.Entry) obj;
                         String names = String.valueOf(entry.getKey());
                         String values = String.valueOf(entry.getValue());
-                        try {
-                            TypeCache typeCache = tableNameMatchParameter.get(names).getCache().get(names);
-                            map1.put(typeCache.getParamterName(), Invoke.processTimeType(typeCache.getParamtertype(), config, values));
-                        } catch (Exception ex) {
-                            continue;
+                        ParameterCache parameterCache = tableNameMatchParameter.get(names);
+                        if (null != parameterCache) {
+                            TypeCache typeCache = parameterCache.getCache().get(names);
+                            map0.put(typeCache.getParamterName(), PublicMethod.processTimeType(typeCache.getParamtertype(), config, values));
                         }
                     }
-                    lm.add(map1);
+                    lm.add(map0);
                 }
                 return lm;
             default:
@@ -70,7 +69,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                     if (null != pCache) {
                         Map<String, TypeCache> ptCache = pCache.getCache();
                         TypeCache cache = ptCache.get(names);
-                        ValueHandleCache.invokeValue(newClazz, cache.getMethodSet(), values, null, config,cache.getType());
+                        ValueHandleCache.invokeValue(newClazz, cache.getMethodSet(), values, null, config, cache.getType());
                     } else {
                         continue;
                     }
@@ -112,7 +111,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
      *
      * @author: hihuzi 2019/2/12 14:06
      */
-    <E> Map<String, ParameterCache> tableNameMatchParameter(SQLConfig config,List<Map> list, E... e) {
+    <E> Map<String, ParameterCache> tableNameMatchParameter(SQLConfig config, List<Map> list, E... e) {
 
         if (!isBeingCache(e)) {
             for (E es : e) {
