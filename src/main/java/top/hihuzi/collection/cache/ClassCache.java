@@ -170,8 +170,8 @@ public class ClassCache {
             }
         } else {
             if (null != paramCache) {
-                if (paramCache.containsKey(clazz.getName())) {
-                    parameterCacheMap = paramCache.get(clazz.getName());
+                if (paramCache.containsKey(clazz.getSimpleName())) {
+                    parameterCacheMap = paramCache.get(clazz.getSimpleName());
                 } else {
                     parameterCacheMap = new HashMap(1);
                 }
