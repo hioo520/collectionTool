@@ -66,8 +66,8 @@ public class ClassCache {
         String sqlKey = null;
         if (clacc instanceof Class) {
             clazz = (Class<?>) clacc;
-            if (paramCache == null || paramCache.get(clazz.getName()) == null) return null;
-            return paramCache.get(clazz.getName());
+            if (paramCache == null || paramCache.get(clazz.getSimpleName()) == null) return null;
+            return paramCache.get(clazz.getSimpleName());
         }
         if (clacc instanceof String) {
             if (paramCache == null || paramCache.get(clacc) == null) return null;
@@ -81,9 +81,10 @@ public class ClassCache {
         Class<?> clazz = null;
         String sqlKey = null;
         if (clacc instanceof Class) {
+            clazz = (Class<?>) clacc;
             Map<String, ParameterCache> result = null;
-            if (null == paramCache || (result = paramCache.get(clazz.getName())) == null) return null;
-            return paramCache.get(clazz.getName()).get(paramterName);
+            if (null == paramCache || (result = paramCache.get(clazz.getSimpleName())) == null) return null;
+            return paramCache.get(clazz.getSimpleName()).get(paramterName);
         }
         if (clacc instanceof String) {
             Map<String, ParameterCache> result = null;
@@ -243,7 +244,7 @@ public class ClassCache {
 
         paramterMap.put(tableName, ParameterCache.add(clazz, paramterName, paramtertype, tableName));
         if (sqlKey == null) {
-            paramCache.put(sqlKey+clazz.getSimpleName(), paramterMap);
+            paramCache.put(clazz.getSimpleName(), paramterMap);
         } else {
             paramCache.put(sqlKey+clazz.getSimpleName(), paramterMap);
 
