@@ -1,6 +1,7 @@
 package com.hihuzi.collection.fill;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -11,6 +12,7 @@ import java.util.Date;
  * @author:hihuzi 2018/7/23 9:17
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 public class TestBean {
     private Boolean booleanMax;
     private Byte byteMax;

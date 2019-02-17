@@ -26,9 +26,9 @@ public class PublicMethod {
      */
     public static <E> Map getHumpToLine(E e) {
 
-        Map map = new HashMap(e.getClass().getDeclaredFields().length);
+        Map map = new HashMap(((Class) e).getDeclaredFields().length);
         Class<?> clazz = null;
-        clazz = e.getClass();
+        clazz = (Class) e;
         for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
             for (Field field : clazz.getDeclaredFields()) {
                 map.put(field.getName(), StrUtils.humpToLine(field.getName()));
@@ -105,7 +105,7 @@ public class PublicMethod {
                 for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
                     for (Field field : clazz.getDeclaredFields()) {
                         if (StrUtils.isEquals(String.valueOf(obj), field.getName())) {
-                            ClassCache.get().add(es.getClass(), field.getName(), null, String.valueOf(obj));
+                            ClassCache.get().add(es.getClass(), field.getName(), null, String.valueOf(obj),null);
                             break;
                         }
                     }

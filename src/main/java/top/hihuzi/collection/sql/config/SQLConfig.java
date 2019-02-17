@@ -38,6 +38,25 @@ public class SQLConfig implements Config {
 
     }
 
+    public SQLConfig(SQLEeum sqlEeum, DateStyleEnum dateStyleEnum) {
+
+        this.sqlEeum = sqlEeum;
+        this.dateStyleEnum = dateStyleEnum;
+
+    }
+
+    public SQLConfig(ReturnEnum returnEnum, SQLEeum sqlEeum) {
+
+        this.sqlEeum = sqlEeum;
+        this.returnEnum = returnEnum;
+    }
+
+    public SQLConfig(SQLEeum sqlEeum, ReturnEnum returnEnum) {
+
+        this.sqlEeum = sqlEeum;
+        this.returnEnum = returnEnum;
+    }
+
 
     /**
      * 重置枚举对象
@@ -47,6 +66,7 @@ public class SQLConfig implements Config {
 
         DateStyleEnum.DEFAULT.dateFormat.remove();
         ReturnEnum.DEFAULT.setList(new List[]{});
+        SQLEeum.DEFAULT.set(null);
     }
 
     /**

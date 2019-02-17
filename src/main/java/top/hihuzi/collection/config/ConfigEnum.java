@@ -168,7 +168,8 @@ public interface ConfigEnum<E> {
 
             this.list = list;
             return this;
-        }}
+        }
+    }
 
     /**
      * tips: 返回类型枚举
@@ -269,6 +270,13 @@ public interface ConfigEnum<E> {
      * @author: hihuzi 2019/2/15 10:04
      */
     enum SQLEeum {
+        /**
+         * tips 规则定制
+         *
+         * @author: hihuzi 2019/2/16 12:21
+         */
+
+
         DEFAULT(null);
 
         private SQLBean bean;
@@ -284,6 +292,10 @@ public interface ConfigEnum<E> {
             return this;
         }
 
+        public SQLBean get() {
+
+            return bean;
+        }
     }
 
 
@@ -292,6 +304,86 @@ public interface ConfigEnum<E> {
  * tips SQL+ 规则配置
  *
  * @author: hihuzi 2019/2/15 10:04
+ * <p>
+ * tips 唯一性 用于此条SQL 缓存(不设置存在数据紊乱(情况:出现同样检索只是SQL不同时缓存的SQL容易被覆盖))
+ * @author: hihuzi 2019/2/15 10:13
+ * <p>
+ * tips 待查询的class对象
+ * @author: hihuzi 2019/2/15 10:13
+ * <p>
+ * tips 名称的表昵称 提取表的昵称作为 属性的前缀
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 存在重复属性(也就是重复的列名)
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 需要检索出来的属性(也就是待显示的列名)
+ * @notice: 没有配置时 是查找全部
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 唯一性 用于此条SQL 缓存(不设置存在数据紊乱(情况:出现同样检索只是SQL不同时缓存的SQL容易被覆盖))
+ * @author: hihuzi 2019/2/15 10:13
+ * <p>
+ * tips 待查询的class对象
+ * @author: hihuzi 2019/2/15 10:13
+ * <p>
+ * tips 名称的表昵称 提取表的昵称作为 属性的前缀
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 存在重复属性(也就是重复的列名)
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 需要检索出来的属性(也就是待显示的列名)
+ * @notice: 没有配置时 是查找全部
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 唯一性 用于此条SQL 缓存(不设置存在数据紊乱(情况:出现同样检索只是SQL不同时缓存的SQL容易被覆盖))
+ * @author: hihuzi 2019/2/15 10:13
+ * <p>
+ * tips 待查询的class对象
+ * @author: hihuzi 2019/2/15 10:13
+ * <p>
+ * tips 名称的表昵称 提取表的昵称作为 属性的前缀
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 存在重复属性(也就是重复的列名)
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 需要检索出来的属性(也就是待显示的列名)
+ * @notice: 没有配置时 是查找全部
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 唯一性 用于此条SQL 缓存(不设置存在数据紊乱(情况:出现同样检索只是SQL不同时缓存的SQL容易被覆盖))
+ * @author: hihuzi 2019/2/15 10:13
+ * <p>
+ * tips 待查询的class对象
+ * @author: hihuzi 2019/2/15 10:13
+ * <p>
+ * tips 名称的表昵称 提取表的昵称作为 属性的前缀
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 存在重复属性(也就是重复的列名)
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 需要检索出来的属性(也就是待显示的列名)
+ * @notice: 没有配置时 是查找全部
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 唯一性 用于此条SQL 缓存(不设置存在数据紊乱(情况:出现同样检索只是SQL不同时缓存的SQL容易被覆盖))
+ * @author: hihuzi 2019/2/15 10:13
+ * <p>
+ * tips 待查询的class对象
+ * @author: hihuzi 2019/2/15 10:13
+ * <p>
+ * tips 名称的表昵称 提取表的昵称作为 属性的前缀
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 存在重复属性(也就是重复的列名)
+ * @author: hihuzi 2019/2/15 10:15
+ * <p>
+ * tips 需要检索出来的属性(也就是待显示的列名)
+ * @notice: 没有配置时 是查找全部
+ * @author: hihuzi 2019/2/15 10:15
  * <p>
  * tips 唯一性 用于此条SQL 缓存(不设置存在数据紊乱(情况:出现同样检索只是SQL不同时缓存的SQL容易被覆盖))
  * @author: hihuzi 2019/2/15 10:13

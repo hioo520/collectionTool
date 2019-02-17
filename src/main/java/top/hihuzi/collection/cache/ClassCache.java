@@ -60,18 +60,39 @@ public class ClassCache {
         return result.get(paramterName);
     }
 
-    public static Map<String, ParameterCache> getPCache(Class<?> clazz) {
+    public static Map<String, ParameterCache> getPCache(Object clacc) {
 
-        if (paramCache == null || paramCache.get(clazz.getName()) == null) return null;
-        return paramCache.get(clazz.getName());
+        Class<?> clazz = null;
+        String sqlKey = null;
+        if (clacc instanceof Class) {
+            clazz = (Class<?>) clacc;
+            if (paramCache == null || paramCache.get(clazz.getName()) == null) return null;
+            return paramCache.get(clazz.getName());
+        }
+        if (clacc instanceof String) {
+            if (paramCache == null || paramCache.get(clacc) == null) return null;
+            return paramCache.get(clacc);
+        }
+        return null;
     }
 
-    public static ParameterCache getPCache(Class<?> clazz, String paramterName) {
+    public static ParameterCache getPCache(Object clacc, String paramterName) {
 
-        Map<String, ParameterCache> result = null;
-        if (null == paramCache || (result = paramCache.get(clazz.getName())) == null) return null;
-        return paramCache.get(clazz.getName()).get(paramterName);
+        Class<?> clazz = null;
+        String sqlKey = null;
+        if (clacc instanceof Class) {
+            Map<String, ParameterCache> result = null;
+            if (null == paramCache || (result = paramCache.get(clazz.getName())) == null) return null;
+            return paramCache.get(clazz.getName()).get(paramterName);
+        }
+        if (clacc instanceof String) {
+            Map<String, ParameterCache> result = null;
+            if (null == paramCache || (result = paramCache.get(clacc)) == null) return null;
+            return paramCache.get(clacc).get(paramterName);
+        }
+        return null;
     }
+
 
     public static TableCache getTCache(String sqlKey) {
 
@@ -131,20 +152,34 @@ public class ClassCache {
     public void add(Class<?> clazz,
                     String paramterName,
                     Class<?> paramtertype,
-                    String tableName) {
+                    String tableName,
+                    String sqlKey) {
 
         Map<String, ParameterCache> parameterCacheMap = null;
-        if (null != paramCache) {
-            if (paramCache.containsKey(clazz.getName())) {
-                parameterCacheMap = paramCache.get(clazz.getName());
+        if (sqlKey != null) {
+            if (null != paramCache) {
+                if (paramCache.containsKey(sqlKey+clazz.getSimpleName())) {
+                    parameterCacheMap = paramCache.get(sqlKey+clazz.getSimpleName());
+                } else {
+                    parameterCacheMap = new HashMap(1);
+                }
             } else {
+                paramCache = new HashMap<>(20);
                 parameterCacheMap = new HashMap(1);
             }
         } else {
-            paramCache = new HashMap<>(20);
-            parameterCacheMap = new HashMap(1);
+            if (null != paramCache) {
+                if (paramCache.containsKey(clazz.getName())) {
+                    parameterCacheMap = paramCache.get(clazz.getName());
+                } else {
+                    parameterCacheMap = new HashMap(1);
+                }
+            } else {
+                paramCache = new HashMap<>(20);
+                parameterCacheMap = new HashMap(1);
+            }
         }
-        joinTheCache(clazz, paramterName, parameterCacheMap, paramtertype, tableName);
+        joinTheCache(clazz, paramterName, parameterCacheMap, paramtertype, tableName, sqlKey);
     }
 
     /**
@@ -204,10 +239,15 @@ public class ClassCache {
      * @author: hihuzi 2018/9/24 18:09
      */
     private void joinTheCache(Class<?> clazz, String paramterName, Map<String, ParameterCache> paramterMap,
-                              Class<?> paramtertype, String tableName) {
+                              Class<?> paramtertype, String tableName, String sqlKey) {
 
         paramterMap.put(tableName, ParameterCache.add(clazz, paramterName, paramtertype, tableName));
-        paramCache.put(clazz.getName(), paramterMap);
+        if (sqlKey == null) {
+            paramCache.put(sqlKey+clazz.getSimpleName(), paramterMap);
+        } else {
+            paramCache.put(sqlKey+clazz.getSimpleName(), paramterMap);
+
+        }
     }
 
     public static ClassCache get() {

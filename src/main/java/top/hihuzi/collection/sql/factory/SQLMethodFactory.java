@@ -1,5 +1,6 @@
 package top.hihuzi.collection.sql.factory;
 
+import top.hihuzi.collection.sql.config.SQLBean;
 import top.hihuzi.collection.sql.config.SQLConfig;
 
 import java.util.List;
@@ -42,6 +43,6 @@ public abstract class SQLMethodFactory implements SQLFactory {
      * @notice: 返回值  "List<Map>" "Map<String,List<E>" "list<E>"
      * @author: hihuzi 2019/2/14 9:08
      */
-    public abstract <E> Object config(SQLConfig config) throws Exception;
+    public abstract <E> Object getSQL(SQLBean config) throws Exception;
 
 }

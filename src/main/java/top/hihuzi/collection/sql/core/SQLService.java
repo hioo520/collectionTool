@@ -3,7 +3,10 @@ package top.hihuzi.collection.sql.core;
 import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.TableCache;
 import top.hihuzi.collection.common.PublicMethod;
+import top.hihuzi.collection.sql.config.SQLBean;
 import top.hihuzi.collection.sql.config.SQLConfig;
+import top.hihuzi.collection.utils.MD5;
+import top.hihuzi.collection.utils.StrUtils;
 
 import java.util.Iterator;
 import java.util.List;
@@ -41,7 +44,7 @@ public class SQLService extends SQLServiceImpl {
     public <E> Object listToEntity(List<Map> list, SQLConfig config) throws Exception {
 
         if (null == list || 0 == list.size()) return null;
-        Object b = listToEntityDefault(list, config, null);
+        Object b = listToEntityDefault(list, config);
         SQLConfig.reset();
         return b;
     }
@@ -62,49 +65,9 @@ public class SQLService extends SQLServiceImpl {
     }
 
     @Override
-    public <E> Object config(SQLConfig config) throws Exception {
+    public <E> Object getSQL(SQLBean config) throws Exception {
 
-        Map sqls =null;// config.getSqlEeum().get();
-        Class[] clazzs = (Class[]) sqls.get("CLASS");
-        Map nicknames = (Map) sqls.get("NICKNAME");
-        List repeats = (List) sqls.get("REPEAT");
-        List displays = (List) sqls.get("DISPLAY");
-        TableCache caches = ClassCache.getTCache(String.valueOf(sqls.get("UNIQUE")));
-        if (null == caches) {
-            StringBuffer sql = new StringBuffer(25);
-            if (null != displays && 0 != displays.size()) {
-
-                for (Class clazz : clazzs) {
-                    Map humpToLineMap = PublicMethod.getHumpToLine(clazz);
-                    Iterator iterator = humpToLineMap.entrySet().iterator();
-                    while (iterator.hasNext()) {
-                        Map.Entry humpToLine = (Map.Entry) iterator.next();
-                        String param = String.valueOf(humpToLine.getKey());
-                        String table = String.valueOf(humpToLine.getValue());
-                        String mark = String.valueOf(nicknames.get(clazz.getName()));
-                        sql.append(mark + "." + table);
-                        sql.append(",");
-                    }
-
-                }
-
-            } else {
-                for (Class clazz : clazzs) {
-                    Map humpToLineMap = PublicMethod.getHumpToLine(clazz);
-                    Iterator iterator = humpToLineMap.entrySet().iterator();
-                    while (iterator.hasNext()) {
-                        Map.Entry humpToLine = (Map.Entry) iterator.next();
-                        String param = String.valueOf(humpToLine.getKey());
-                        String table = String.valueOf(humpToLine.getValue());
-                        String mark = String.valueOf(nicknames.get(clazz.getName()));
-                        sql.append(mark + "." + table);
-                        sql.append(",");
-                    }
-
-                }
-            }
-        }
-        return null;
+        return getSQLDefault(config);
     }
 
 }

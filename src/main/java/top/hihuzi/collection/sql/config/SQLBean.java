@@ -1,13 +1,12 @@
 package top.hihuzi.collection.sql.config;
 
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import top.hihuzi.collection.utils.MD5;
+
+import java.util.*;
 
 /**
- * tips collection
+ * tips sql+ 规则定制
  *
  * @author: hihuzi 2019/2/15 17:13
  */
@@ -26,7 +25,7 @@ public class SQLBean {
      *
      * @author: hihuzi 2019/2/15 10:13
      */
-    private List<Class> clazz;
+    private List<Class<?>> clazz;
 
     /**
      * tips 名称的表昵称 提取表的昵称作为 属性的前缀
@@ -34,6 +33,8 @@ public class SQLBean {
      * @author: hihuzi 2019/2/15 10:15
      */
     private Map<String, String> nickname;
+
+    private List<String> nick;
 
     /**
      * tips 存在重复属性(也就是重复的列名)
@@ -50,7 +51,7 @@ public class SQLBean {
      */
     private List<String> display;
 
-    public SQLBean(String unique, List<Class> clazz, Map nickname, List<String> repeat, List<String> display) {
+    public SQLBean(String unique, List<Class<?>> clazz, Map nickname, List<String> repeat, List<String> display) {
 
         this.unique = unique;
         this.clazz = clazz;
@@ -75,14 +76,18 @@ public class SQLBean {
         return this;
     }
 
-    public List<Class> getClazz() {
+    public List<Class<?>> getClazz() {
 
         return clazz;
     }
 
     public <E> SQLBean addClazz(E... e) {
 
-        this.clazz = (List<Class>) Arrays.asList(e);
+        List<Class<?>> list = new ArrayList<>();
+        for (E es : e) {
+            list.add(es.getClass());
+        }
+        this.clazz = list;
         return this;
     }
 
@@ -93,13 +98,7 @@ public class SQLBean {
 
     public <E> SQLBean addNickname(E... e) {
 
-        Map map = new HashMap();
-        List<String> list = (List<String>) Arrays.asList(e);
-        for (int i = 0; i < this.clazz.size(); i++) {
-            map.put(clazz.getClass().getName(), list.get(i));
-
-        }
-        this.nickname = nickname;
+        nick = (List<String>) Arrays.asList(e);
         return this;
     }
 
@@ -123,6 +122,47 @@ public class SQLBean {
 
         this.display = (List<String>) Arrays.asList(e);
         return this;
+    }
+
+    public SQLBean build() {
+
+        Map<String, String> map = null;
+        if (1 == this.clazz.size()) {
+            map = new HashMap<>(1);
+            map.put(this.clazz.get(0).getName(), nick != null ? nick.get(0) : "");
+            this.nickname = map;
+            return this;
+        }
+        if (null == this.clazz || this.clazz.size() == 0) {
+            new RuntimeException("缺少带查询表对应的对象 addClass 为空");
+        }
+        if (null == this.nick || this.nick.size() == 0) {
+            new RuntimeException("缺少带查询表对应的昵称 addNickname 为空");
+        }
+        map = new HashMap<>(this.clazz.size());
+        if (null == this.nick) {
+            for (int i = 0; i < this.clazz.size(); i++) {
+                map.put(this.clazz.get(i).getName(), "");
+            }
+            this.nickname = map;
+            return this;
+        }
+        for (int i = 0; i < this.clazz.size(); i++) {
+            map.put(this.clazz.get(i).getName(), i <= nick.size() - 1 ? nick.get(i) : "");
+        }
+
+        this.nickname = map;
+        return this;
+    }
+
+    public String key() {
+
+        if (this.unique != null) {
+            return this.unique.toString();
+        }
+        String s = String.valueOf(this.clazz) + String.valueOf(this.display) + String.valueOf(this.nick) + String.valueOf(this.repeat);
+        return MD5.StringToMd5(s);
+
     }
 
 }

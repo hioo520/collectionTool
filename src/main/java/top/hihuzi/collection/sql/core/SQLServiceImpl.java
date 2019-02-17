@@ -1,20 +1,16 @@
 package top.hihuzi.collection.sql.core;
 
-import top.hihuzi.collection.cache.ClassCache;
-import top.hihuzi.collection.cache.ParameterCache;
-import top.hihuzi.collection.cache.SecondCache;
-import top.hihuzi.collection.cache.TypeCache;
+import top.hihuzi.collection.cache.*;
 import top.hihuzi.collection.common.PublicMethod;
 import top.hihuzi.collection.common.ValueHandleCache;
+import top.hihuzi.collection.sql.config.SQLBean;
 import top.hihuzi.collection.sql.config.SQLConfig;
 import top.hihuzi.collection.sql.factory.SQLMethodFactory;
+import top.hihuzi.collection.utils.MD5;
 import top.hihuzi.collection.utils.StrUtils;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * tips sql+增强工具(带缓存)
@@ -31,10 +27,25 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
      */
     <E> Object listToEntityDefault(List<Map> list, SQLConfig config, E... e) throws Exception {
 
+        if (config.getSqlEeum() == null) {
+
+            System.out.println("请先配置 SQLconfig 的 SQLenum");
+            return null;
+        }
+        SQLBean sqlBean = config.getSqlEeum().get();
         List<Map> lm = new ArrayList<>(list.size());
         Object newClazz = null;
         Map<String, List<E>> m = null;
-        Map<String, ParameterCache> tableNameMatchParameter = tableNameMatchParameter(config, list, e);
+        if (0 == e.length) {
+            e = (E[]) config.getSqlEeum().get().getClazz().toArray();
+        } else {
+            Class[] ee = new Class[e.length];
+            for (int i = 0; i < e.length; i++) {
+                ee[i] = e[i].getClass();
+            }
+            e = (E[]) ee;
+        }
+        Map<String, ParameterCache> tableNameMatchParameter = tableNameMatchParameter(config, list.get(0), e);
         switch (config.getReturnEnum()) {
             case DEFAULT:
             case LISR:
@@ -47,7 +58,13 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                         ParameterCache parameterCache = tableNameMatchParameter.get(names);
                         if (null != parameterCache) {
                             TypeCache typeCache = parameterCache.getCache().get(names);
-                            map0.put(typeCache.getParamterName(), PublicMethod.processTimeType(typeCache.getParamtertype(), config, values));
+                            String paramterName = typeCache.getParamterName();
+                            if (sqlBean.getRepeat().contains(paramterName)) {
+                                map0.put(typeCache.getClazz().getSimpleName() + "." + paramterName, PublicMethod.processTimeType(typeCache.getParamtertype(), config, values));
+                            } else {
+                                map0.put(paramterName, PublicMethod.processTimeType(typeCache.getParamtertype(), config, values));
+
+                            }
                         }
                     }
                     lm.add(map0);
@@ -57,15 +74,16 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                 m = new HashMap<>(e.length);
                 break;
         }
+        String sqlKey = config.getSqlEeum().get().key();
         for (E es : e) {
-            Class<?> clazz = es.getClass();
+            Class<?> clazz = (Class<?>) es;
             for (Map map : list) {
                 newClazz = clazz.getDeclaredConstructor().newInstance();
                 for (Object obj : map.entrySet()) {
                     Map.Entry entry = (Map.Entry) obj;
                     String names = String.valueOf(entry.getKey());
                     String values = String.valueOf(entry.getValue());
-                    ParameterCache pCache = ClassCache.getPCache(clazz, names);
+                    ParameterCache pCache = ClassCache.getPCache(sqlKey + ((Class) es).getSimpleName(), names);
                     if (null != pCache) {
                         Map<String, TypeCache> ptCache = pCache.getCache();
                         TypeCache cache = ptCache.get(names);
@@ -91,7 +109,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                 int i = 0;
                 try {
                     for (E es : e) {
-                        config.getReturnEnum().getList()[i].addAll(m.get(es.getClass().getSimpleName()));
+                        config.getReturnEnum().getList()[i].addAll(m.get(((Class) es).getSimpleName()));
                         i++;
                     }
                 } catch (Exception ex) {
@@ -100,7 +118,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                 }
                 return true;
             case FILL_CLASS:
-                return m.get(e[0].getClass().getSimpleName());
+                return m.get(((Class) e[0]).getSimpleName());
             default:
                 return null;
         }
@@ -111,43 +129,98 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
      *
      * @author: hihuzi 2019/2/12 14:06
      */
-    <E> Map<String, ParameterCache> tableNameMatchParameter(SQLConfig config, List<Map> list, E... e) {
+    <E> Map<String, ParameterCache> tableNameMatchParameter(SQLConfig config, Map list, E... e) {
 
-        if (!isBeingCache(e)) {
+        String sqlKey = config.getSqlEeum().get().key();
+        Map nickname = config.getSqlEeum().get().getNickname();
+        if (!isBeingCache(sqlKey)) {
             for (E es : e) {
-                Class<?> clazz = es.getClass();
-                for (Object obj : list.get(0).keySet()) {
+                Class clazz = (Class) es;
+                for (Object obj : list.keySet()) {
                     for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
                         for (Field field : clazz.getDeclaredFields()) {
-                            if (StrUtils.isEquals(String.valueOf(obj), field.getName())) {
-                                ClassCache.get().add(StrUtils.splicingObjectName(e), field.getName(), String.valueOf(obj));
+                            StringBuffer nick = new StringBuffer(25);
+                            String mark = String.valueOf(nickname.get(((Class) es).getName()));
+                            if (null != nickname && !"".equals(mark.trim())) {
+                                nick.append(mark + ".");
+                            }
+                            nick.append(field.getName());
+                            if (StrUtils.isEquals(String.valueOf(obj), nick.toString())) {
+                                ClassCache.get().add((Class<?>) es, field.getName(), null, String.valueOf(obj), sqlKey);
+                                ClassCache.get().add(sqlKey, field.getName(), String.valueOf(obj));
+
                                 break;
                             }
                         }
                     }
-                    clazz = es.getClass();
+                    clazz = (Class) es;
                 }
             }
         }
-        Map<String, ParameterCache> map = SecondCache.getCache(StrUtils.splicingObjectName(e));
+        Map<String, ParameterCache> map = SecondCache.getCache(sqlKey);
         if (null == map) {
             map = new HashMap(e.length);
             for (E es : e) {
-                Map<String, ParameterCache> pCache = ClassCache.getPCache(es.getClass());
+                Map<String, ParameterCache> pCache = ClassCache.getPCache(sqlKey + ((Class) es).getSimpleName());
                 map.putAll(pCache);
             }
-            SecondCache.addCache(StrUtils.splicingObjectName(e), map);
+            SecondCache.addCache(sqlKey, map);
         }
         return map;
     }
 
-    private <E> boolean isBeingCache(E... e) {
+    private <E> boolean isBeingCache(String sqlKey) {
 
-        for (E es : e) {
-            Map<String, ParameterCache> pCache = ClassCache.getPCache(es.getClass());
-            if (null == pCache) return false;
-        }
+        TableCache pCache = ClassCache.getTCache(sqlKey);
+        if (null == pCache) return false;
         return true;
+    }
+
+    String getSQLDefault(SQLBean config) {
+
+        StringBuffer sql = new StringBuffer(500);
+        String caches = SQLCache.get().getCache(config.key());
+        if (null == caches) {
+            int j = 0;
+            for (Class clazz : config.getClazz()) {
+                Map humpToLineMap = PublicMethod.getHumpToLine(clazz);
+                Iterator iterator = humpToLineMap.entrySet().iterator();
+                int i = 0, size = humpToLineMap.size();
+                while (iterator.hasNext()) {
+                    Map.Entry humpToLine = (Map.Entry) iterator.next();
+                    String param = String.valueOf(humpToLine.getKey());
+                    String table = String.valueOf(humpToLine.getValue());
+                    String mark = String.valueOf(config.getNickname().get(clazz.getName()));
+                    if (null == config.getDisplay()) {
+                        if (null != config.getNickname() && !"".equals(mark.trim())) {
+                            sql.append(mark + ".");
+                        }
+                        sql.append(table);
+                        if (i < size - 1)
+                            sql.append(",");
+                    } else if (0 != config.getDisplay().size()) {
+                        if (config.getDisplay().contains(param)) {
+                            if (null != config.getNickname() && !"".equals(mark.trim())) {
+                                sql.append(mark + ".");
+                            }
+                            sql.append(table);
+                            if (i < size - 1 && i < config.getDisplay().size() - 1)
+                                sql.append(",");
+                        }
+                    }
+
+                    i++;
+                }
+                if (1 == size) break;
+                if (j < config.getClazz().size() - 1)
+                    sql.append(",");
+                j++;
+
+            }
+        }
+
+        SQLCache.get().addCache(config.key(), String.valueOf(sql));
+        return String.valueOf(sql);
     }
 
 }
