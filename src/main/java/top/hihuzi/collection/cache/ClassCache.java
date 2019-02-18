@@ -37,6 +37,12 @@ public class ClassCache {
      */
     private static Map<String, TableCache> tableCache = null;
 
+    /**
+     * tips 单例
+     *@author: hihuzi 2019/2/18 9:24
+     */
+    private static ClassCache classCache = null;
+
 
     /**
      * tips 从缓存中取出数据(TypeCache)
@@ -98,7 +104,7 @@ public class ClassCache {
     public static TableCache getTCache(String sqlKey) {
 
         TableCache result = null;
-        if (null == ClassCache.tableCache || (result = ClassCache.tableCache.get(sqlKey)) == null) return null;
+        if (null == tableCache || (result = tableCache.get(sqlKey)) == null) return null;
         return result;
     }
 
@@ -159,8 +165,8 @@ public class ClassCache {
         Map<String, ParameterCache> parameterCacheMap = null;
         if (sqlKey != null) {
             if (null != paramCache) {
-                if (paramCache.containsKey(sqlKey+clazz.getSimpleName())) {
-                    parameterCacheMap = paramCache.get(sqlKey+clazz.getSimpleName());
+                if (paramCache.containsKey(sqlKey + clazz.getSimpleName())) {
+                    parameterCacheMap = paramCache.get(sqlKey + clazz.getSimpleName());
                 } else {
                     parameterCacheMap = new HashMap(1);
                 }
@@ -170,8 +176,8 @@ public class ClassCache {
             }
         } else {
             if (null != paramCache) {
-                if (paramCache.containsKey(clazz.getName())) {
-                    parameterCacheMap = paramCache.get(clazz.getName());
+                if (paramCache.containsKey(clazz.getSimpleName())) {
+                    parameterCacheMap = paramCache.get(clazz.getSimpleName());
                 } else {
                     parameterCacheMap = new HashMap(1);
                 }
@@ -246,14 +252,17 @@ public class ClassCache {
         if (sqlKey == null) {
             paramCache.put(clazz.getSimpleName(), paramterMap);
         } else {
-            paramCache.put(sqlKey+clazz.getSimpleName(), paramterMap);
+            paramCache.put(sqlKey + clazz.getSimpleName(), paramterMap);
 
         }
     }
 
     public static ClassCache get() {
 
-        return CacheClazz.CLASS_CACHE;
+        if (null == classCache)
+            return CacheClazz.CLASS_CACHE;
+        else
+            return classCache;
     }
 
     private ClassCache() {

@@ -45,9 +45,20 @@ public class SQLCache {
     public static SQLCache get() {
 
         if (null == sqlCache) {
-            sqlCache = new SQLCache();
+            sqlCache = CacheClacc.CLASS_CACHE;
         }
         return sqlCache;
+    }
+
+    /**
+     * tips 内部类(延时加载)
+     *
+     * @author: hihuzi 2018/9/24 17:16
+     */
+    private static class CacheClacc {
+
+        private static final SQLCache CLASS_CACHE = new SQLCache();
+
     }
 
 }

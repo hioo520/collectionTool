@@ -6,7 +6,6 @@ import top.hihuzi.collection.common.ValueHandleCache;
 import top.hihuzi.collection.sql.config.SQLBean;
 import top.hihuzi.collection.sql.config.SQLConfig;
 import top.hihuzi.collection.sql.factory.SQLMethodFactory;
-import top.hihuzi.collection.utils.MD5;
 import top.hihuzi.collection.utils.StrUtils;
 
 import java.lang.reflect.Field;
@@ -27,11 +26,6 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
      */
     <E> Object listToEntityDefault(List<Map> list, SQLConfig config, E... e) throws Exception {
 
-        if (config.getSqlEeum() == null) {
-
-            System.out.println("请先配置 SQLconfig 的 SQLenum");
-            return null;
-        }
         SQLBean sqlBean = config.getSqlEeum().get();
         List<Map> lm = new ArrayList<>(list.size());
         Object newClazz = null;
@@ -133,16 +127,19 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
 
         String sqlKey = config.getSqlEeum().get().key();
         Map nickname = config.getSqlEeum().get().getNickname();
+        List<String> repeat = config.getSqlEeum().get().getRepeat();
         if (!isBeingCache(sqlKey)) {
-            for (E es : e) {
-                Class clazz = (Class) es;
-                for (Object obj : list.keySet()) {
+            for (Object obj : list.keySet()) {
+                for (E es : e) {
+                    Class clazz = (Class) es;
                     for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
                         for (Field field : clazz.getDeclaredFields()) {
-                            StringBuffer nick = new StringBuffer(25);
                             String mark = String.valueOf(nickname.get(((Class) es).getName()));
+                            StringBuffer nick = new StringBuffer(field.getName().length() + mark.length() + 2);
                             if (null != nickname && !"".equals(mark.trim())) {
-                                nick.append(mark + ".");
+                                if (repeat.contains(field.getName())) {
+                                    nick.append(mark);
+                                }
                             }
                             nick.append(field.getName());
                             if (StrUtils.isEquals(String.valueOf(obj), nick.toString())) {
@@ -196,6 +193,9 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                             sql.append(mark + ".");
                         }
                         sql.append(table);
+                        if (config.getRepeat() != null && config.getRepeat().contains(table)) {
+                            sql.append(" " + mark + table);
+                        }
                         if (i < size - 1)
                             sql.append(",");
                     } else if (0 != config.getDisplay().size()) {
@@ -204,7 +204,10 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                                 sql.append(mark + ".");
                             }
                             sql.append(table);
-                            if (i < size - 1 && i < config.getDisplay().size() - 1)
+                            if (config.getRepeat().contains(param)) {
+                                sql.append(" " + mark + table);
+                            }
+                            if (i < size - 1 && i <= config.getDisplay().size() - 1)
                                 sql.append(",");
                         }
                     }
