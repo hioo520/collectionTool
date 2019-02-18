@@ -6,9 +6,7 @@ import top.hihuzi.collection.common.ValueHandleCache;
 import top.hihuzi.collection.sql.config.SQLBean;
 import top.hihuzi.collection.sql.config.SQLConfig;
 import top.hihuzi.collection.sql.factory.SQLMethodFactory;
-import top.hihuzi.collection.utils.StrUtils;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -126,34 +124,6 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
     <E> Map<String, ParameterCache> tableNameMatchParameter(SQLConfig config, Map list, E... e) {
 
         String sqlKey = config.getSqlEeum().get().key();
-        Map nickname = config.getSqlEeum().get().getNickname();
-        List<String> repeat = config.getSqlEeum().get().getRepeat();
-        if (!isBeingCache(sqlKey)) {
-            for (Object obj : list.keySet()) {
-                for (E es : e) {
-                    Class clazz = (Class) es;
-                    for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
-                        for (Field field : clazz.getDeclaredFields()) {
-                            String mark = String.valueOf(nickname.get(((Class) es).getName()));
-                            StringBuffer nick = new StringBuffer(field.getName().length() + mark.length() + 2);
-                            if (null != nickname && !"".equals(mark.trim())) {
-                                if (repeat.contains(field.getName())) {
-                                    nick.append(mark);
-                                }
-                            }
-                            nick.append(field.getName());
-                            if (StrUtils.isEquals(String.valueOf(obj), nick.toString())) {
-                                ClassCache.get().add((Class<?>) es, field.getName(), null, String.valueOf(obj), sqlKey);
-                                ClassCache.get().add(sqlKey, field.getName(), String.valueOf(obj));
-
-                                break;
-                            }
-                        }
-                    }
-                    clazz = (Class) es;
-                }
-            }
-        }
         Map<String, ParameterCache> map = SecondCache.getCache(sqlKey);
         if (null == map) {
             map = new HashMap(e.length);
@@ -166,13 +136,12 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
         return map;
     }
 
-    private <E> boolean isBeingCache(String sqlKey) {
-
-        TableCache pCache = ClassCache.getTCache(sqlKey);
-        if (null == pCache) return false;
-        return true;
-    }
-
+    /**
+     * tips 生成SQL 自动 添加  对象的 缓存 和 ParameterCache 和 ClassCache
+     *
+     * @notice:
+     * @author: hihuzi 2019/2/18 14:07
+     */
     String getSQLDefault(SQLBean config) {
 
         StringBuffer sql = new StringBuffer(500);
@@ -195,6 +164,9 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                         sql.append(table);
                         if (config.getRepeat() != null && config.getRepeat().contains(param)) {
                             sql.append(" " + mark + table);
+                            ClassCache.get().add((Class<?>) clazz, param, null, mark + table, config.key());
+                        } else {
+                            ClassCache.get().add((Class<?>) clazz, param, null, table, config.key());
                         }
                         if (i < size - 1)
                             sql.append(",");
@@ -206,6 +178,9 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                             sql.append(table);
                             if (config.getRepeat() != null && config.getRepeat().contains(param)) {
                                 sql.append(" " + mark + table);
+                                ClassCache.get().add((Class<?>) clazz, param, null, mark + table, config.key());
+                            } else {
+                                ClassCache.get().add((Class<?>) clazz, param, null, table, config.key());
                             }
                             if (i < size - 1 && i <= config.getDisplay().size() - 1)
                                 sql.append(",");
@@ -223,7 +198,6 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
         } else {
             sql.append(caches);
         }
-
         SQLCache.get().addCache(config.key(), String.valueOf(sql));
         return String.valueOf(sql);
     }

@@ -50,7 +50,11 @@ public class SQLBean {
      * @author: hihuzi 2019/2/15 10:15
      */
     private List<String> display;
-
+    /**
+     * tips 名称的表昵称 (暂存区)
+     *
+     * @author: hihuzi 2019/2/15 10:15
+     */
     public SQLBean(String unique, List<Class<?>> clazz, Map nickname, List<String> repeat, List<String> display) {
 
         this.unique = unique;
@@ -123,7 +127,6 @@ public class SQLBean {
         this.display = (List<String>) Arrays.asList(e);
         return this;
     }
-
     public SQLBean build() {
 
         Map<String, String> map = null;
