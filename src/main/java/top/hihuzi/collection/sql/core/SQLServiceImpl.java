@@ -177,7 +177,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
 
         StringBuffer sql = new StringBuffer(500);
         String caches = SQLCache.get().getCache(config.key());
-        if (null == caches) {
+        if (null == caches || "".equals(caches)) {
             int j = 0;
             for (Class clazz : config.getClazz()) {
                 Map humpToLineMap = PublicMethod.getHumpToLine(clazz);
@@ -193,7 +193,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                             sql.append(mark + ".");
                         }
                         sql.append(table);
-                        if (config.getRepeat() != null && config.getRepeat().contains(table)) {
+                        if (config.getRepeat() != null && config.getRepeat().contains(param)) {
                             sql.append(" " + mark + table);
                         }
                         if (i < size - 1)
@@ -204,7 +204,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                                 sql.append(mark + ".");
                             }
                             sql.append(table);
-                            if (config.getRepeat() != null &&config.getRepeat().contains(param)) {
+                            if (config.getRepeat() != null && config.getRepeat().contains(param)) {
                                 sql.append(" " + mark + table);
                             }
                             if (i < size - 1 && i <= config.getDisplay().size() - 1)
@@ -220,6 +220,8 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                 j++;
 
             }
+        } else {
+            sql.append(caches);
         }
 
         SQLCache.get().addCache(config.key(), String.valueOf(sql));
