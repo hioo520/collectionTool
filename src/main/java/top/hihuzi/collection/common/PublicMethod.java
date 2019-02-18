@@ -32,6 +32,7 @@ public class PublicMethod {
         for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
             for (Field field : clazz.getDeclaredFields()) {
                 map.put(field.getName(), StrUtils.humpToLine(field.getName()));
+                ClassCache.get().add((Class<?>) e, field.getName(), field.getType());
             }
         }
         return map;

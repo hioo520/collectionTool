@@ -1,12 +1,9 @@
 package com.hihuzi.collection.sql;
 
 
-import com.hihuzi.collection.fill.TestBean;
-import com.hihuzi.collection.fill.TestBeanBean;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.mock.web.MockHttpServletRequest;
-import top.hihuzi.collection.config.ConfigEnum;
 import top.hihuzi.collection.sql.config.SQLBean;
 import top.hihuzi.collection.sql.config.SQLConfig;
 import top.hihuzi.collection.sql.factory.SQLFactory;
@@ -484,65 +481,65 @@ public class SQlFactoryTest {
     @Test
     public void listToEntity() throws Exception {
         Map map = new HashMap();
-        map.put("so.na_me", "女儿-小丽丽");
-        map.put("so.hi_ght", "1.99");
-        map.put("so.id", "123456789");
-        map.put("so.a_ge", "24");
-        map.put("so.s_ex", "女");
-        map.put("fa.na_me", "爸爸");
-        map.put("fa.hi_ght", "2.03");
-        map.put("fa.a_ge", "28");
-        map.put("fa.s_ex", "男");
-        map.put("fa.birthday", "2012-12-12");
+        map.put("sona_me", "女儿-小丽丽");
+        map.put("sohi_ght", "1.99");
+        map.put("id", "123456789");
+        map.put("soa_ge", "24");
+        map.put("sos_ex", "女");
+        map.put("fana_me", "爸爸");
+        map.put("fahi_ght", "2.03");
+        map.put("faa_ge", "28");
+        map.put("fas_ex", "男");
+        map.put("birthday", "2012-12-12");
         for (int i = 0; i < 2; i++) {
             list.add(map);
         }
         SQLBean bean = new SQLBean()
                 .addUnique("007")
                 .addClazz(new Son(), new Father())
-                .addNickname("SO", "FA")
+                .addNickname("so", "fa")
                 .addRepeat("naMe", "aGe", "sEx", "hiGht")
-                .addDisplay("name", "age", "sex", "hight", "id")
+//                .addDisplay("naMe", "aGe", "sEx", "hiGht","id")
                 .build();
         Object sql = SQLFactory.batch().getSQL(bean);
+        System.out.println(sql.toString());
+
+        List<Map> map0 = (List<Map>) SQLFactory.batch().listToEntity(list,
+                new SQLConfig(SQLConfig.SQLEeum.DEFAULT.set(bean)),new Son(), new Father());
 
         SQLConfig config = new SQLConfig(SQLConfig.SQLEeum.DEFAULT.set(bean));
-        List<Map> map0 = (List<Map>) SQLFactory.batch().listToEntity(list, config);
-
 
         long start = System.currentTimeMillis();
         System.out.println("测试 ---> 第一种返回结果是List<Map>");
         List<Map> map1 = (List<Map>) SQLFactory.batch().listToEntity(list,
-                new TestBean(), new TestBeanBean());
+                config);
         List<Map> map2 = (List<Map>) SQLFactory.batch().listToEntity(list,
-                new SQLConfig(SQLConfig.SQLEeum.DEFAULT.set(bean)),
-                new SQLConfig(SQLConfig.ReturnEnum.LISR),
-                new TestBean(), new TestBeanBean());
+                new SQLConfig(SQLConfig.SQLEeum.DEFAULT.set(bean),SQLConfig.ReturnEnum.LISR),new Son(), new Father());
         List<Map> map3 = (List<Map>) SQLFactory.batch().listToEntity(list,
-                new SQLConfig(SQLConfig.ReturnEnum.DEFAULT, SQLConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy")),
-                new TestBean(), new TestBeanBean());
+                new SQLConfig(SQLConfig.ReturnEnum.DEFAULT,
+                        SQLConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy"),
+                        SQLConfig.SQLEeum.DEFAULT.set(bean)),
+                new Son(), new Father());
         System.out.println("测试 ---< 第一种返回结果是List<Map>");
 
 
         System.out.println("测试 ---< 第二种返回结果是Map<String, List>");
         Map<String, List> map4 = (Map<String, List>) SQLFactory.batch().listToEntity(list,
-                new SQLConfig(SQLConfig.ReturnEnum.MAP),
-                new TestBean(), new TestBeanBean());
+                new SQLConfig(SQLConfig.SQLEeum.DEFAULT.set(bean),SQLConfig.ReturnEnum.MAP),new Son(), new Father());
         System.out.println("测试 ---< 第二种返回结果是Map<String, List>");
 
 
         System.out.println("测试 ---< 第三种返回结果是Map<String, List>");
-        List<TestBean> testBeans = new ArrayList<>();
-        List<TestBeanBean> testBeanBean = new ArrayList<>();
+        List<Son> testBeans = new ArrayList<>();
+        List<Father> testBeanBean = new ArrayList<>();
         SQLFactory.batch().listToEntity(list,
-                new SQLConfig(SQLConfig.ReturnEnum.FILL_LIST.setList(testBeans, testBeanBean)),
-                new TestBean(), new TestBeanBean());
+                new SQLConfig(SQLConfig.SQLEeum.DEFAULT.set(bean),SQLConfig.ReturnEnum.FILL_LIST.setList(testBeans, testBeanBean)),new Son(), new Father());
         System.out.println("测试 ---< 第三种返回结果是Map<String, List>");
 
 
         System.out.println("测试 ---< 第四种返回结果是Map<String, List>");
-        List<TestBean> beans = (List<TestBean>) SQLFactory.batch().listToEntity(list,
-                new SQLConfig(SQLConfig.ReturnEnum.FILL_CLASS), new TestBean());
+        List<Son> beans = (List<Son>) SQLFactory.batch().listToEntity(list,
+                new SQLConfig(SQLConfig.SQLEeum.DEFAULT.set(bean),SQLConfig.ReturnEnum.FILL_CLASS),new Son());
         System.out.println("测试 ---< 第四种返回结果是Map<String, List>");
         long end = System.currentTimeMillis();
         System.err.println("------>一千万 耗时" + (end - start) / 1000 + "秒<------");
