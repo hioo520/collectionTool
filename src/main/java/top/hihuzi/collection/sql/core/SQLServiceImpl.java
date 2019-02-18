@@ -204,7 +204,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                                 sql.append(mark + ".");
                             }
                             sql.append(table);
-                            if (config.getRepeat().contains(param)) {
+                            if (config.getRepeat() != null &&config.getRepeat().contains(param)) {
                                 sql.append(" " + mark + table);
                             }
                             if (i < size - 1 && i <= config.getDisplay().size() - 1)
