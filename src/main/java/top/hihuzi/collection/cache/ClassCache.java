@@ -72,8 +72,8 @@ public class ClassCache {
         String sqlKey = null;
         if (clacc instanceof Class) {
             clazz = (Class<?>) clacc;
-            if (paramCache == null || paramCache.get(clazz.getSimpleName()) == null) return null;
-            return paramCache.get(clazz.getSimpleName());
+            if (paramCache == null || paramCache.get(clazz.getName()) == null) return null;
+            return paramCache.get(clazz.getName());
         }
         if (clacc instanceof String) {
             if (paramCache == null || paramCache.get(clacc) == null) return null;
@@ -89,8 +89,8 @@ public class ClassCache {
         if (clacc instanceof Class) {
             clazz = (Class<?>) clacc;
             Map<String, ParameterCache> result = null;
-            if (null == paramCache || (result = paramCache.get(clazz.getSimpleName())) == null) return null;
-            return paramCache.get(clazz.getSimpleName()).get(paramterName);
+            if (null == paramCache || (result = paramCache.get(clazz.getName())) == null) return null;
+            return paramCache.get(clazz.getName()).get(paramterName);
         }
         if (clacc instanceof String) {
             Map<String, ParameterCache> result = null;
@@ -176,8 +176,8 @@ public class ClassCache {
             }
         } else {
             if (null != paramCache) {
-                if (paramCache.containsKey(clazz.getSimpleName())) {
-                    parameterCacheMap = paramCache.get(clazz.getSimpleName());
+                if (paramCache.containsKey(clazz.getName())) {
+                    parameterCacheMap = paramCache.get(clazz.getName());
                 } else {
                     parameterCacheMap = new HashMap(1);
                 }
@@ -250,7 +250,7 @@ public class ClassCache {
 
         paramterMap.put(tableName, ParameterCache.add(clazz, paramterName, paramtertype, tableName));
         if (sqlKey == null) {
-            paramCache.put(clazz.getSimpleName(), paramterMap);
+            paramCache.put(clazz.getName(), paramterMap);
         } else {
             paramCache.put(sqlKey + clazz.getSimpleName(), paramterMap);
 

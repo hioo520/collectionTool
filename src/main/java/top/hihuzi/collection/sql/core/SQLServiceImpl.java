@@ -38,7 +38,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
             }
             e = (E[]) ee;
         }
-        Map<String, ParameterCache> tableNameMatchParameter = tableNameMatchParameter(config, list.get(0), e);
+        Map<String, ParameterCache> tableNameMatchParameter = PublicMethod.tableNameMatchParameter(config, list.get(0), e);
         switch (config.getReturnEnum()) {
             case DEFAULT:
             case LISR:
@@ -81,8 +81,6 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                         Map<String, TypeCache> ptCache = pCache.getCache();
                         TypeCache cache = ptCache.get(names);
                         ValueHandleCache.invokeValue(newClazz, cache.getMethodSet(), values, null, config, cache.getType());
-                    } else {
-                        continue;
                     }
                 }
                 List<E> lis = m.get(newClazz.getClass().getSimpleName());
@@ -116,25 +114,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
         }
     }
 
-    /**
-     * tips 无线递归上级找属性(表和对象属性匹配)
-     *
-     * @author: hihuzi 2019/2/12 14:06
-     */
-    <E> Map<String, ParameterCache> tableNameMatchParameter(SQLConfig config, Map list, E... e) {
 
-        String sqlKey = config.getSqlEeum().get().key();
-        Map<String, ParameterCache> map = SecondCache.getCache(sqlKey);
-        if (null == map) {
-            map = new HashMap(e.length);
-            for (E es : e) {
-                Map<String, ParameterCache> pCache = ClassCache.getPCache(sqlKey + ((Class) es).getSimpleName());
-                map.putAll(pCache);
-            }
-            SecondCache.addCache(sqlKey, map);
-        }
-        return map;
-    }
 
     /**
      * tips 生成SQL 自动 添加  对象的 缓存 和 ParameterCache 和 ClassCache

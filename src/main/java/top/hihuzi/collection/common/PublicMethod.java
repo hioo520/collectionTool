@@ -4,12 +4,11 @@ import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.ParameterCache;
 import top.hihuzi.collection.cache.SecondCache;
 import top.hihuzi.collection.config.Config;
+import top.hihuzi.collection.sql.config.SQLConfig;
 import top.hihuzi.collection.utils.StrUtils;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,50 +38,19 @@ public class PublicMethod {
     }
 
     /**
-     * tips String[] 转换 List<String>
-     *
-     * @author: hihuzi 2019/2/15 11:24
-     */
-    public static <E> List stringTransformList(String... str) {
-
-        List<String> strings = null;
-        if (null == str) {
-            return null;
-        } else {
-            strings = Arrays.asList(str);
-        }
-        return strings;
-    }
-
-    /**
      * tips 无线递归上级找属性(表和对象属性匹配)
      *
      * @author: hihuzi 2019/2/12 14:06
      */
     public static <E> Map<String, ParameterCache> tableNameMatchParameter(Map list, E... e) {
 
-        addCache(list, e);
-        Map<String, ParameterCache> map = new HashMap<>(e.length);
-        for (E es : e) {
-            Map<String, ParameterCache> pCache = ClassCache.getPCache(es.getClass());
-            map.putAll(pCache);
-        }
-        return map;
-    }
-
-    /**
-     * tips 无线递归上级找属性(表和对象属性匹配)-->带缓存
-     *
-     * @author: hihuzi 2019/2/12 14:06
-     */
-    public static <E> Map<String, ParameterCache> tableNameMatchParameterSecondCache(Map list, E... e) {
-
         if (!isBeingCache(e)) {
+
             addCache(list, e);
         }
         Map<String, ParameterCache> map = SecondCache.getCache(StrUtils.splicingObjectName(e));
-        if (null == map) {
-            map = new HashMap(e.length);
+        if (null == map || 0 == map.size()) {
+            map=new HashMap<>(e.length);
             for (E es : e) {
                 Map<String, ParameterCache> pCache = ClassCache.getPCache(es.getClass());
                 map.putAll(pCache);
@@ -93,27 +61,23 @@ public class PublicMethod {
     }
 
     /**
-     * tips 加入缓存
+     * tips 无线递归上级找属性(表和对象属性匹配)(带缓存)
      *
-     * @author: hihuzi 2019/2/15 11:24
+     * @author: hihuzi 2019/2/12 14:06
      */
-    private static <E> void addCache(Map list, E... e) {
+    public static <E> Map<String, ParameterCache> tableNameMatchParameter(SQLConfig config, Map list, E... e) {
 
-
-        for (E es : e) {
-            Class<?> clazz = es.getClass();
-            for (Object obj : list.keySet()) {
-                for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
-                    for (Field field : clazz.getDeclaredFields()) {
-                        if (StrUtils.isEquals(String.valueOf(obj), field.getName())) {
-                            ClassCache.get().add(es.getClass(), field.getName(), null, String.valueOf(obj),null);
-                            break;
-                        }
-                    }
-                }
-                clazz = es.getClass();
+        String sqlKey = config.getSqlEeum().get().key();
+        Map<String, ParameterCache> map = SecondCache.getCache(sqlKey);
+        if (null == map) {
+            map = new HashMap(e.length);
+            for (E es : e) {
+                Map<String, ParameterCache> pCache = ClassCache.getPCache(sqlKey + ((Class) es).getSimpleName());
+                map.putAll(pCache);
             }
+            SecondCache.addCache(sqlKey, map);
         }
+        return map;
     }
 
     /**
@@ -129,6 +93,30 @@ public class PublicMethod {
             if (null == pCache) return false;
         }
         return true;
+    }
+
+    /**
+     * tips 加入缓存(TypeCache)
+     *
+     * @author: hihuzi 2019/2/15 11:24
+     */
+    private static <E> void addCache(Map list, E... e) {
+
+        for (E es : e) {
+            Class<?> clazz = es.getClass();
+            for (Object obj : list.keySet()) {
+                for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
+                    for (Field field : clazz.getDeclaredFields()) {
+                        if (StrUtils.isEquals(String.valueOf(obj), field.getName())) {
+                            ClassCache.get().add(es.getClass(), field.getName(), field.getType());
+                            ClassCache.get().add(es.getClass(), field.getName(), field.getType(), String.valueOf(obj), null);
+                            break;
+                        }
+                    }
+                }
+                clazz = es.getClass();
+            }
+        }
     }
 
     /**

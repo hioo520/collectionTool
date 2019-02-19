@@ -265,8 +265,6 @@ abstract class FillServiceImpl implements FillMethodFactory {
                         Map<String, TypeCache> ptCache = pCache.getCache();
                         TypeCache cache = ptCache.get(names);
                         ValueHandleCache.invokeValue(newClazz, cache.getMethodSet(), values, null, config, cache.getType());
-                    } else {
-                        continue;
                     }
                 }
                 List<E> lis = m.get(newClazz.getClass().getSimpleName());
