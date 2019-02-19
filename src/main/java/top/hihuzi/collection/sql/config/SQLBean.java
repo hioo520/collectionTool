@@ -1,6 +1,7 @@
 package top.hihuzi.collection.sql.config;
 
 
+import top.hihuzi.collection.exception.NoticeException;
 import top.hihuzi.collection.utils.MD5;
 
 import java.util.*;
@@ -50,6 +51,7 @@ public class SQLBean {
      * @author: hihuzi 2019/2/15 10:15
      */
     private List<String> display;
+
     /**
      * tips 名称的表昵称 (暂存区)
      *
@@ -127,7 +129,8 @@ public class SQLBean {
         this.display = (List<String>) Arrays.asList(e);
         return this;
     }
-    public SQLBean build() {
+
+    public SQLBean build() throws NoticeException {
 
         Map<String, String> map = null;
         if (1 == this.clazz.size()) {
@@ -137,10 +140,7 @@ public class SQLBean {
             return this;
         }
         if (null == this.clazz || this.clazz.size() == 0) {
-            new RuntimeException("缺少带查询表对应的对象 addClass 为空");
-        }
-        if (null == this.nick || this.nick.size() == 0) {
-            new RuntimeException("缺少带查询表对应的昵称 addNickname 为空");
+            throw new NoticeException("缺少带查询表对应的对象 addClass 为空");
         }
         map = new HashMap<>(this.clazz.size());
         if (null == this.nick) {

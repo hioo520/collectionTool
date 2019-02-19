@@ -5,6 +5,7 @@ import top.hihuzi.collection.cache.ClassCache;
 import top.hihuzi.collection.cache.TypeCache;
 import top.hihuzi.collection.common.PublicMethod;
 import top.hihuzi.collection.config.ConfigEnum;
+import top.hihuzi.collection.exception.NoticeException;
 import top.hihuzi.collection.pick.config.PickConfig;
 import top.hihuzi.collection.pick.factory.PickMethodFactory;
 import top.hihuzi.collection.utils.StrUtils;
@@ -120,7 +121,7 @@ abstract class PickServiceImpl implements PickMethodFactory {
                 }
                 break;
             default:
-                throw new Exception("数据输出超出范围 参考PickEnum定义" + list.toString());
+                throw new NoticeException("数据输出超出范围 参考PickEnum定义" + list.toString());
         }
     }
 
@@ -132,7 +133,7 @@ abstract class PickServiceImpl implements PickMethodFactory {
      * @return:
      * @author: hihuzi 2018/9/28 16:03
      */
-    private void achieveMap(Map map, String key, Object invoke, PickConfig config) {
+    private void achieveMap(Map map, String key, Object invoke, PickConfig config) throws Exception {
 
 
         if (null != invoke) {
@@ -149,7 +150,7 @@ abstract class PickServiceImpl implements PickMethodFactory {
      * @return:
      * @author: hihuzi 2018/9/28 16:03
      */
-    private String achieveKey(String property, PickConfig config) {
+    private String achieveKey(String property, PickConfig config) throws Exception {
 
         switch (config.getReturnNameEnum()) {
             case DEFAULT:
@@ -163,9 +164,8 @@ abstract class PickServiceImpl implements PickMethodFactory {
             case CUSTOM_SUFFIX:
                 return config.getReturnNameEnum().getKey() + property;
             default:
-                break;
+                throw new NoticeException("命名风格未定义或者错误");
         }
-        return null;
     }
 
     /**

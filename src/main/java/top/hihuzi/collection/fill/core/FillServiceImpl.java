@@ -6,6 +6,7 @@ import top.hihuzi.collection.cache.TypeCache;
 import top.hihuzi.collection.common.Invoke;
 import top.hihuzi.collection.common.PublicMethod;
 import top.hihuzi.collection.common.ValueHandleCache;
+import top.hihuzi.collection.exception.NoticeException;
 import top.hihuzi.collection.fill.config.FillConfig;
 import top.hihuzi.collection.fill.factory.FillMethodFactory;
 import top.hihuzi.collection.utils.StrUtils;
@@ -289,8 +290,7 @@ abstract class FillServiceImpl implements FillMethodFactory {
                         i++;
                     }
                 } catch (Exception ex) {
-                    System.out.println("从新配置list顺序有误");
-                    return false;
+                    throw new NoticeException("从新配置list顺序有误");
                 }
                 return true;
             case FILL_CLASS:

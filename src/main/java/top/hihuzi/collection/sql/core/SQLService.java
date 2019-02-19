@@ -1,14 +1,8 @@
 package top.hihuzi.collection.sql.core;
 
-import top.hihuzi.collection.cache.ClassCache;
-import top.hihuzi.collection.cache.TableCache;
-import top.hihuzi.collection.common.PublicMethod;
 import top.hihuzi.collection.sql.config.SQLBean;
 import top.hihuzi.collection.sql.config.SQLConfig;
-import top.hihuzi.collection.utils.MD5;
-import top.hihuzi.collection.utils.StrUtils;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

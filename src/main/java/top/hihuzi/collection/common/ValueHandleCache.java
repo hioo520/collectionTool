@@ -1,6 +1,7 @@
 package top.hihuzi.collection.common;
 
 import top.hihuzi.collection.config.Config;
+import top.hihuzi.collection.exception.NoticeException;
 import top.hihuzi.collection.utils.StrUtils;
 
 import java.lang.reflect.Method;
@@ -92,8 +93,7 @@ public class ValueHandleCache {
                     method.invoke(e, new BigDecimal(value));
                     break;
                 default:
-                    System.out.println("类型错误" + typeEnum.toString());
-                    break;
+                    throw new NoticeException("类型错误" + typeEnum.toString());
             }
         } else {
             switch (typeEnum) {

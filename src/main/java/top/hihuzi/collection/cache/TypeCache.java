@@ -1,6 +1,7 @@
 package top.hihuzi.collection.cache;
 
 import top.hihuzi.collection.common.ValueHandleCache;
+import top.hihuzi.collection.exception.NoticeException;
 import top.hihuzi.collection.utils.StrUtils;
 
 import java.lang.reflect.Method;
@@ -113,7 +114,11 @@ public class TypeCache {
                 }
             }
         }
-        System.out.println(this.clazz + "中无此" + paramterName + "属性,从而无法确定参数类型");
+
+        try {
+            throw new NoticeException(this.clazz + "中无此" + paramterName + "属性,从而无法确定参数类型");
+        } catch (NoticeException e) {
+        }
         return null;
     }
 
@@ -155,7 +160,10 @@ public class TypeCache {
                 }
             }
         }
-        System.out.println(this.clazz + " 中无此" + paramter + "属性,从而无法确定方法类型");
+        try {
+            throw new NoticeException(this.clazz + "中无此" + paramterName + "属性,从而无法确定参数类型");
+        } catch (NoticeException e) {
+        }
         return null;
     }
 

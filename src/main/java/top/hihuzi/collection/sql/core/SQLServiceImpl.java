@@ -3,6 +3,7 @@ package top.hihuzi.collection.sql.core;
 import top.hihuzi.collection.cache.*;
 import top.hihuzi.collection.common.PublicMethod;
 import top.hihuzi.collection.common.ValueHandleCache;
+import top.hihuzi.collection.exception.NoticeException;
 import top.hihuzi.collection.sql.config.SQLBean;
 import top.hihuzi.collection.sql.config.SQLConfig;
 import top.hihuzi.collection.sql.factory.SQLMethodFactory;
@@ -105,8 +106,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                         i++;
                     }
                 } catch (Exception ex) {
-                    System.out.println("从新配置list顺序有误");
-                    return false;
+                    throw new NoticeException("从新配置list顺序有误");
                 }
                 return true;
             case FILL_CLASS:
