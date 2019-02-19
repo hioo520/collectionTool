@@ -115,7 +115,6 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
     }
 
 
-
     /**
      * tips 生成SQL 自动 添加  对象的 缓存 和 ParameterCache 和 ClassCache
      *
@@ -132,7 +131,10 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                 Map humpToLineMap = PublicMethod.getHumpToLine(clazz);
                 Iterator iterator = humpToLineMap.entrySet().iterator();
                 int i = 0, size = humpToLineMap.size();
-                int times = PublicMethod.achieveTimes(clazz, config.getDisplay());
+                int times = 0;
+                if (null != config.getDisplay() && config.getDisplay().size() != 0) {
+                    times = PublicMethod.achieveTimes(clazz, config.getDisplay());
+                }
                 while (iterator.hasNext()) {
                     Map.Entry humpToLine = (Map.Entry) iterator.next();
                     String param = String.valueOf(humpToLine.getKey());

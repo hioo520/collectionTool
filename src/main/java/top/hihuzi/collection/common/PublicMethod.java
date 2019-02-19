@@ -169,7 +169,7 @@ public class PublicMethod {
     /**
      * tips 获取对象中和待展示的数据重复的个数
      *
-     * @author: hihuzi 2019/2/19 17:35
+     * @author: hihuzi 2019/2/19 17:39
      */
     public static int achieveTimes(Class clazz, List<String> display) {
 
