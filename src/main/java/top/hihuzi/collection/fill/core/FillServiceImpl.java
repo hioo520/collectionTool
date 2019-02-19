@@ -186,7 +186,7 @@ abstract class FillServiceImpl implements FillMethodFactory {
             Field[] fields = clazz.getDeclaredFields();
             for (Field value : fields) {
                 field.add(value.getName());
-                ClassCache.get().add(e.getClass(), value.getName());
+                ClassCache.get().add(e.getClass(), value.getName(),value.getType());
             }
         }
         int i = 0;
