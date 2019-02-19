@@ -132,6 +132,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                 Map humpToLineMap = PublicMethod.getHumpToLine(clazz);
                 Iterator iterator = humpToLineMap.entrySet().iterator();
                 int i = 0, size = humpToLineMap.size();
+                int times = PublicMethod.achieveTimes(clazz, config.getDisplay());
                 while (iterator.hasNext()) {
                     Map.Entry humpToLine = (Map.Entry) iterator.next();
                     String param = String.valueOf(humpToLine.getKey());
@@ -162,8 +163,10 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                             } else {
                                 ClassCache.get().add((Class<?>) clazz, param, null, table, config.key());
                             }
-                            if (i < size - 1 && i <= config.getDisplay().size() - 1)
+                            if (i < size - 1 && 0 < times) {
                                 sql.append(",");
+                                times--;
+                            }
                         }
                     }
 

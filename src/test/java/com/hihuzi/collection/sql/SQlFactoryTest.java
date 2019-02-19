@@ -93,7 +93,7 @@ public class SQlFactoryTest {
         SQLBean bean222 = new SQLBean()
 //                .addUnique("007")
                 .addClazz(new Son(), new Father(), new Mother())
-                .addNickname("EE", "FF", "")
+                .addNickname("EE", "FF")
                 .addDisplay("naMe", "aGe", "sEx", "hiGht", "id")
                 .build();
         Object sql222 = SQLFactory.batch().getSQL(bean222);
@@ -145,7 +145,7 @@ public class SQlFactoryTest {
         Object sql66 = SQLFactory.batch().getSQL(bean66);
         System.out.println(sql66);
         SQLBean bean77 = new SQLBean()
-                .addUnique("007")
+//                .addUnique("007")
                 .addClazz(new Son(), new Father(), new Mother())
                 .build();
         Object sql77 = SQLFactory.batch().getSQL(bean77);
@@ -268,28 +268,29 @@ public class SQlFactoryTest {
     public void listToEntity3() throws Exception {
 
         Map map = new HashMap();
-        map.put("so.na_me", "女儿-小丽丽");
-        map.put("so.hi_ght", "1.99");
-        map.put("so.id", "123456789");
-        map.put("so.a_ge", "24");
-        map.put("so.s_ex", "女");
-        map.put("fa.na_me", "爸爸");
-        map.put("fa.hi_ght", "2.03");
-        map.put("fa.a_ge", "28");
-        map.put("fa.s_ex", "男");
-        map.put("fa.birthday", "2012-12-12");
+         map.put("sona_me", "女儿-小丽丽");
+         map.put("sohi_ght", "1.99");
+         map.put("id", "123456789");
+         map.put("soa_ge", "24");
+         map.put("sos_ex", "女");
+         map.put("fana_me", "爸爸");
+         map.put("fahi_ght", "2.03");
+         map.put("faa_ge", "28");
+         map.put("fas_ex", "男");
+         map.put("birthday", "2012-12-12");
         for (int i = 0; i < 2; i++) {
             list.add(map);
         }
         SQLBean bean = new SQLBean()
 //                .addUnique("007")
-                .addClazz(new Son(), new Father())
-                .addNickname("so", "fa")
+                .addClazz(new Son(), new Father(),new Mother())
+                .addNickname("so", "fa","mo")
                 .addRepeat("naMe", "aGe", "sEx", "hiGht")
-                .addDisplay("naMe", "aGe", "sEx", "hiGht", "id")
+//                .addDisplay( "sEx", "hiGht", "id")
+                .addDisplay( "sEx", "id")
                 .build();
         Object sql = SQLFactory.batch().getSQL(bean);
-
+         System.out.println(sql);
         SQLConfig config = new SQLConfig(SQLConfig.SQLEeum.DEFAULT.set(bean));
         config.setReturnEnum(SQLConfig.ReturnEnum.DEFAULT);
         config.setDateStyleEnum(SQLConfig.DateStyleEnum.DEFAULT.setFormartStyle("yyyy MM"));

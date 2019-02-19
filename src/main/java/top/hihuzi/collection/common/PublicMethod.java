@@ -9,6 +9,7 @@ import top.hihuzi.collection.utils.StrUtils;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -50,7 +51,7 @@ public class PublicMethod {
         }
         Map<String, ParameterCache> map = SecondCache.getCache(StrUtils.splicingObjectName(e));
         if (null == map || 0 == map.size()) {
-            map=new HashMap<>(e.length);
+            map = new HashMap<>(e.length);
             for (E es : e) {
                 Map<String, ParameterCache> pCache = ClassCache.getPCache(es.getClass());
                 map.putAll(pCache);
@@ -165,5 +166,21 @@ public class PublicMethod {
         return obj;
     }
 
+    /**
+     * tips 获取对象中和待展示的数据重复的个数
+     *
+     * @author: hihuzi 2019/2/19 17:35
+     */
+    public static int achieveTimes(Class clazz, List<String> display) {
+
+
+        int i = 0;
+        for (Field declaredField : clazz.getDeclaredFields()) {
+            if (display.contains(declaredField.getName())) {
+                i++;
+            }
+        }
+        return i;
+    }
 
 }
