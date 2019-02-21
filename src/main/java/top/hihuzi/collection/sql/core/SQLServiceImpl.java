@@ -165,7 +165,7 @@ public abstract class SQLServiceImpl extends SQLMethodFactory {
                             } else {
                                 ClassCache.get().add((Class<?>) clazz, param, null, table, config.key());
                             }
-                            if (i < size - 1 && 0 < times) {
+                            if (i < size - 1 && 0 < times-1) {
                                 sql.append(",");
                                 times--;
                             }

@@ -173,11 +173,12 @@ public class PublicMethod {
      */
     public static int achieveTimes(Class clazz, List<String> display) {
 
-
         int i = 0;
-        for (Field declaredField : clazz.getDeclaredFields()) {
-            if (display.contains(declaredField.getName())) {
-                i++;
+        for (; Object.class != clazz; clazz = clazz.getSuperclass()) {
+            for (Field declaredField : clazz.getDeclaredFields()) {
+                if (display.contains(declaredField.getName())) {
+                    i++;
+                }
             }
         }
         return i;
