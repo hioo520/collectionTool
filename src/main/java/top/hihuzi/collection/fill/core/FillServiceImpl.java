@@ -34,7 +34,7 @@ abstract class FillServiceImpl implements FillMethodFactory {
      */
     Map fillDefault(HttpServletRequest request, FillConfig config, String... key) {
 
-        Map map = new HashMap(key.length);
+        Map map = new HashMap(request.getParameterMap().size());
         List<String> exclude = null;
         if (StrUtils.isNNoE(key)) {
             exclude = Arrays.asList(key);
@@ -81,24 +81,14 @@ abstract class FillServiceImpl implements FillMethodFactory {
             String name = pars.nextElement().toString().trim();
             String value = request.getParameter(name);
             if (StrUtils.isNNoE(value)) {
-                processResult(e, config, clazz, name, value);
+                Invoke.processResult(e, config, clazz, name, value);
             } else {
                 if (config.getSaveStyleEnum().getHaving()) {
-                    processResult(e, config, clazz, name, value);
+                    Invoke.processResult(e, config, clazz, name, value);
                 }
             }
         }
         return e;
-    }
-
-    private <E> void processResult(E e, FillConfig config, Class clazz, String name, String value) throws Exception {
-
-        TypeCache cache = ClassCache.getCache(clazz, name);
-        if (null != cache) {
-            ValueHandleCache.invokeValue(e, cache.getMethodSet(), value, null, config, cache.getType());
-        } else {
-            Invoke.injectionParameters(e, name, value, config);
-        }
     }
 
     /**
@@ -119,10 +109,10 @@ abstract class FillServiceImpl implements FillMethodFactory {
             String name = String.valueOf(entry.getKey());
             String value = String.valueOf(entry.getValue());
             if (StrUtils.isNNoE(value)) {
-                processResult(e, config, clazz, name, value);
+                Invoke.processResult(e, config, clazz, name, value);
             } else {
                 if (null != config && config.getSaveStyleEnum().getHaving()) {
-                    processResult(e, config, clazz, name, value);
+                    Invoke.processResult(e, config, clazz, name, value);
                 }
             }
         }
