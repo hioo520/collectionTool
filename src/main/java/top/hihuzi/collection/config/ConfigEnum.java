@@ -22,7 +22,7 @@ public interface ConfigEnum<E> {
         /**
          * tips  默认时间风格规则
          */
-        DEFAULT("");
+        DEFAULT(null);
 
         private String value;
 
@@ -60,7 +60,7 @@ public interface ConfigEnum<E> {
         /**
          * 默认排序规则
          */
-        DEFAULT(new Integer[]{});
+        DEFAULT(null);
 
         private Integer[] sort;
 
@@ -219,31 +219,31 @@ public interface ConfigEnum<E> {
          *
          * @author: hihuzi
          */
-        DEFAULT("0"),
+        DEFAULT(null),
         /**
          * RenameKey="1":首字母大写
          *
          * @author: hihuzi
          */
-        INITIAL_CAPITAL("1"),
+        INITIAL_CAPITAL(null),
         /**
          * RenameKey="2":全小写
          *
          * @author: hihuzi
          */
-        LOWER_CASE("2"),
+        LOWER_CASE(null),
         /**
          * RenameKey="3":全大写
          *
          * @author: hihuzi
          */
-        UPPER_CASE("3"),
+        UPPER_CASE(null),
         /**
          * RenameKey="XXXX":义可以的自定头缀
          *
          * @author: hihuzi
          */
-        CUSTOM_SUFFIX("");
+        CUSTOM_SUFFIX(null);
 
         private String key;
 

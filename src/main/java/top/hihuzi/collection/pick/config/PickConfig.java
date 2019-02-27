@@ -52,7 +52,7 @@ public class PickConfig implements Config {
      * @author: hihuzi 2018/9/30 8:59
      **/
     public PickConfig() {
-
+        reset();
     }
 
     public PickConfig(SaveStyleEnum saveStyleEnum) {

@@ -217,8 +217,8 @@ abstract class FillServiceImpl implements FillMethodFactory {
     <E> Object listToClassDefault(List<Map> list, FillConfig config, E... e) throws Exception {
 
         List<Map> lm = new ArrayList<>(list.size());
-        Object newClazz = null;
-        Map<String, List<E>> m = null;
+        Object newClazz ;
+        Map<String, List<E>> m ;
         Map<String, ParameterCache> tableNameMatchParameter = PublicMethod.tableNameMatchParameter(list.get(0), e);
         switch (config.getReturnEnum()) {
             case DEFAULT:
